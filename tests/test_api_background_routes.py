@@ -265,3 +265,5 @@ def test_personas_persist_endpoint(client: TestClient, tmp_path: Path):
     )
     assert r.status_code == 200
     assert r.json()["slug"] == "sustainability_buyer"
+    assert "committed_sha" in r.json()
+    assert (tmp_path / "kb" / "personas" / "interest" / "sustainability_buyer.md").exists()

@@ -29,6 +29,8 @@ from intel_engine.personas.reader import load_personas
 from intel_engine.schemas.theme import ThemeReport
 from intel_engine.settings import kb_root
 from intel_engine.themes.writer import write_and_commit_theme_report
+from intel_engine.personas.writer import write_and_commit_persona
+from intel_engine.schemas.persona import PersonaDefinition
 
 app = FastAPI(title="Boldr Intel Engine", version="0.1.0")
 
@@ -380,10 +382,6 @@ async def themes_persist(req: PersistThemeReportRequest) -> dict:
     return {"committed_sha": sha, "week_end": report.week_end}
 
 
-from intel_engine.personas.writer import write_and_commit_persona
-from intel_engine.schemas.persona import PersonaDefinition as _PersonaDef
-
-
 class PersistPersonaRequest(BaseModel):
     persona: dict
     approver: str = "n8n"
@@ -391,7 +389,17 @@ class PersistPersonaRequest(BaseModel):
 
 @app.post("/personas/persist")
 async def personas_persist(req: PersistPersonaRequest) -> dict:
-    persona = _PersonaDef(**req.persona)
+    persona = PersonaDefinition(**req.persona)
     repo_root = Path(kb_root()).parent
-    sha = write_and_commit_persona(persona, approver=req.approver, repo_root=repo_root)
+    try:
+        sha = write_and_commit_persona(persona, approver=req.approver, repo_root=repo_root)
+    except subprocess.CalledProcessError as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Git commit failed: {e.stderr.decode() if e.stderr else e}",
+        ) from e
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail=f"Persona persist failed: {e}"
+        ) from e
     return {"committed_sha": sha, "slug": persona.slug}
