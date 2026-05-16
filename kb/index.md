@@ -2,7 +2,7 @@
 
 Generated automatically. Do not edit by hand — re-run `scripts/generate_index.py`.
 
-Total active entries: 60
+Total active entries: 61
 
 ## faq
 
@@ -57,6 +57,7 @@ Total active entries: 60
 - **synth-what-is-the-warranty-period-on-97b1c0** — What is the warranty period on the watch? Does it cover the movement and the strap separately  _(themes: warranty, coverage)_
 - **synth-what-is-your-return-policy-can-fa5771** — What is your return policy? Can I return the watch if it doesn't fit my wrist  _(themes: returns, sizing_fit)_
 - **synth-what-luminous-material-do-you-04e40c** — What luminous material do you use on the dial? Is it Super-LumiNova? Is it safe  _(themes: materials_safety)_
+- **synth-what-personalisation-options-d-761be4** — What personalisation options do you offer for gifting? I want to make it special  _(themes: engraving, gifting, personalisation)_
 - **synth-what-s-the-practical-differenc-a2ba43** — What's the practical difference between your titanium case and a standard stainless steel watch? Is titanium really ligh  _(themes: materials, specifications, model_comparison)_
 - **synth-your-site-says-the-watch-is-hy-2a4a9d** — Your site says the watch is hypoallergenic. Does that apply to the strap as well or just the case  _(themes: materials_safety, hypoallergenic)_
 
