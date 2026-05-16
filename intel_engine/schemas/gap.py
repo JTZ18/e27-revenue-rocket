@@ -1,5 +1,5 @@
 """Knowledge-gap schemas."""
-from datetime import datetime
+from datetime import UTC, datetime
 from enum import Enum
 
 from pydantic import BaseModel, Field
@@ -25,7 +25,7 @@ class Gap(BaseModel):
     missing_info: list[str]
     themes_detected: list[str] = Field(default_factory=list)
     persona_hints: list[str] = Field(default_factory=list)
-    created_at: datetime = Field(default_factory=lambda: datetime.now())
+    created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
     status: GapStatus = GapStatus.open
     resolution: GapResolution | None = None
     drafted_kb_slug: str | None = None

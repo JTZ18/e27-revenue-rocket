@@ -1,10 +1,13 @@
 """Test schemas validate correctly."""
-from datetime import datetime, timezone
+from datetime import UTC, date, datetime
 
 import pytest
 from pydantic import ValidationError
 
 from intel_engine.schemas.event import Channel, CommonEvent, Customer
+from intel_engine.schemas.gap import Gap, GapStatus
+from intel_engine.schemas.kb import KBDomain, KBEntry, KBFrontmatter, KBStatus
+from intel_engine.schemas.traversal import Confidence, TraversalResult
 
 
 def test_common_event_minimal_fields():
@@ -13,7 +16,7 @@ def test_common_event_minimal_fields():
         source=Channel.google_sheet,
         customer=Customer(id="anon_c042", name="Sarah K."),
         body="Are your watches MRI-safe?",
-        ts=datetime(2026, 5, 16, 14, 23, 11, tzinfo=timezone.utc),
+        ts=datetime(2026, 5, 16, 14, 23, 11, tzinfo=UTC),
     )
     assert event.subject is None
     assert event.attachments == []
@@ -27,7 +30,7 @@ def test_common_event_rejects_empty_body():
             source=Channel.gmail,
             customer=Customer(id="anon_c042", name="Sarah K."),
             body="",
-            ts=datetime.now(timezone.utc),
+            ts=datetime.now(UTC),
         )
 
 
@@ -36,13 +39,6 @@ def test_common_event_channels_enum():
     assert Channel.gmail.value == "gmail"
     assert Channel.instagram_dm.value == "instagram_dm"
     assert Channel.whatsapp.value == "whatsapp"
-
-
-from datetime import date
-
-from intel_engine.schemas.gap import Gap, GapStatus
-from intel_engine.schemas.kb import KBEntry, KBFrontmatter, KBStatus, KBDomain
-from intel_engine.schemas.traversal import Confidence, TraversalResult
 
 
 def test_kb_frontmatter_required_fields():
@@ -101,6 +97,49 @@ def test_traversal_result_cannot_answer_requires_missing_info():
     )
     assert result.can_answer_fully is False
     assert result.draft_reply is None
+
+
+def test_kb_entry_round_trip():
+    entry = KBEntry(
+        frontmatter=KBFrontmatter(
+            slug="bpa-free-straps",
+            title="Are Boldr FKM rubber straps BPA-free?",
+            domain=KBDomain.spec,
+            themes=["materials_safety"],
+            sources=["faq_v3"],
+            last_verified=date(2026, 5, 16),
+        ),
+        body="Yes. All Boldr FKM rubber and silicone straps are 100% BPA-free.",
+    )
+    md = entry.to_markdown()
+    restored = KBEntry.from_markdown(md)
+    assert restored == entry
+
+
+def test_traversal_result_validator_can_answer_fully_requires_draft_reply():
+    with pytest.raises(ValidationError):
+        TraversalResult(
+            pages_read=["kb/faqs/bpa-straps.md"],
+            can_answer_fully=True,
+            missing_info=[],
+            draft_reply=None,
+            themes_detected=["materials_safety"],
+            persona_hints=[],
+            confidence=Confidence.high,
+        )
+
+
+def test_traversal_result_validator_cannot_answer_fully_rejects_draft_reply():
+    with pytest.raises(ValidationError):
+        TraversalResult(
+            pages_read=["kb/faqs/bpa-straps.md"],
+            can_answer_fully=False,
+            missing_info=["MRI compatibility unknown"],
+            draft_reply="some text",
+            themes_detected=["materials_safety"],
+            persona_hints=[],
+            confidence=Confidence.low,
+        )
 
 
 def test_gap_default_status_is_open():

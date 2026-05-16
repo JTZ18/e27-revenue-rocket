@@ -17,7 +17,10 @@ class TraversalResult(BaseModel):
     can_answer_fully: bool
     missing_info: list[str] = Field(
         default_factory=list,
-        description="What the agent would need to know to answer fully; non-empty iff can_answer_fully=False",
+        description=(
+            "What the agent would need to know to answer fully; "
+            "non-empty iff can_answer_fully=False"
+        ),
     )
     draft_reply: str | None = Field(
         default=None,
