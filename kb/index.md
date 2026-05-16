@@ -2,7 +2,7 @@
 
 Generated automatically. Do not edit by hand — re-run `scripts/generate_index.py`.
 
-Total active entries: 37
+Total active entries: 38
 
 ## faq
 
@@ -25,6 +25,7 @@ Total active entries: 37
 - **synth-i-need-the-watch-urgently-as-a-ea2850** — I need the watch urgently as a birthday gift. Do you offer express shipping and how much does it cost  _(themes: shipping)_
 - **synth-i-own-both-the-expedition-and-865f26** — I own both the Expedition and the Journey. Can I swap straps between the two models  _(themes: strap_interchangeability, compatibility)_
 - **synth-i-received-my-order-bld-46048-7c1714** — I received my order BLD-46048 but the strap colour is wrong — I ordered olive green but received black  _(themes: fulfillment_error, wrong_item)_
+- **synth-i-returned-my-order-bld-23434-f50788** — I returned my order BLD-23434 two weeks ago. I haven't received my refund yet. Can you check  _(themes: refunds, returns, order_status)_
 - **synth-i-saw-a-limited-edition-collab-7be137** — I saw a limited edition collab on your Instagram. Is it still available or sold out  _(themes: limited_edition)_
 - **synth-i-want-to-gift-this-to-my-10-y-e7b5a7** — I want to gift this to my 10-year-old nephew. Are the materials safe for children? Any certifications  _(themes: materials_safety, gifting)_
 - **synth-i-want-to-use-the-watch-for-sw-0ac468** — I want to use the watch for swimming. Do you sell a rubber or silicone strap that's suitable  _(themes: water_resistance, materials, swimming)_
