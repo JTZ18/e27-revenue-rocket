@@ -15,6 +15,11 @@ def _env_isolation(monkeypatch, tmp_path):
     (tmp_path / "kb").mkdir()
     (tmp_path / "gap-log").mkdir()
 
+    # Clear cached path lookups so env changes are respected
+    from intel_engine.settings import gap_log_root, kb_root
+    kb_root.cache_clear()
+    gap_log_root.cache_clear()
+
 
 @pytest.fixture
 def fixtures_dir() -> Path:
