@@ -2,7 +2,7 @@
 
 Generated automatically. Do not edit by hand — re-run `scripts/generate_index.py`.
 
-Total active entries: 42
+Total active entries: 43
 
 ## faq
 
@@ -18,6 +18,7 @@ Total active entries: 42
 - **synth-hi-what-lug-width-does-the-exp-4edb1a** — Hi, what lug width does the Expedition 40mm use? I want to buy a third-party strap  _(themes: sizing, strap_interchangeability)_
 - **synth-how-deep-is-the-engraving-i-wa-5a85e4** — How deep is the engraving? I want to make sure it's visible and won't fade over time  _(themes: engraving, durability)_
 - **synth-how-well-do-boldr-watches-hold-3ebaa8** — How well do Boldr watches hold their resale value compared to other micro-brands  _(themes: Resale value of titanium watches)_
+- **synth-i-bought-the-leather-strap-how-cdc315** — I bought the leather strap. How should I care for it? Can it get wet  _(themes: strap_care, materials)_
 - **synth-i-do-trail-running-and-occasio-6d273c** — I do trail running and occasional rock climbing. Which model would you recommend and what's the shock resistance rating  _(themes: extreme_sports, shock_resistance, durability)_
 - **synth-i-found-the-same-watch-cheaper-c075f7** — I found the same watch cheaper on another site. Do you offer price matching  _(themes: pricing)_
 - **synth-i-have-a-20cm-wrist-will-the-s-fd6086** — I have a 20cm wrist. Will the standard strap length fit me, or do I need an extended strap  _(themes: sizing)_
