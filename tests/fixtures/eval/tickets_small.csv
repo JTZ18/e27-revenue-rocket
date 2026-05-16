@@ -1,0 +1,6 @@
+ticket_id,date_received,customer_name,customer_email,order_id,channel,question_type,subject,message_body,status,answered_by_kb,requires_escalation,buyer_persona,agent_notes
+TKT-9001,2025-11-15 10:00,Sarah K,sarah@example.com,,email,materials_safety,BPA question,Are your straps BPA-free?,open,yes,no,health_conscious,
+TKT-9002,2025-11-15 11:00,Liam J,liam@example.com,,instagram_dm,materials_safety,Dye question,Are the strap dyes safe on skin?,open,yes,no,health_conscious,
+TKT-9003,2025-11-16 09:00,Oliver G,oliver@example.com,,email,servicing,Older model,Do you service 2019 models?,open,yes,no,owner_aftercare,
+TKT-9004,2025-11-16 10:00,Caleb H,caleb@example.com,,chat,product_general,Price match,Do you price match?,open,yes,no,prospect,
+TKT-9005,2025-11-17 14:00,Lily S,lily@example.com,,chat,knowledge_gap,MRI safety,Is the movement MRI safe?,open,no,yes,niche_buyer,
