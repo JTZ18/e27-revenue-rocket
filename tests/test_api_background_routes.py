@@ -231,4 +231,7 @@ def test_themes_persist_endpoint(client: TestClient, tmp_path: Path, monkeypatch
         },
     )
     assert r.status_code == 200
-    assert r.json()["week_end"] == "2026-05-17"
+    body = r.json()
+    assert body["week_end"] == "2026-05-17"
+    assert "committed_sha" in body
+    assert (repo / "kb" / "themes" / "2026-05-17.md").exists()

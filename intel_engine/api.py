@@ -366,5 +366,15 @@ class PersistThemeReportRequest(BaseModel):
 async def themes_persist(req: PersistThemeReportRequest) -> dict:
     report = ThemeReport(**req.report)
     repo_root = Path(kb_root()).parent
-    sha = write_and_commit_theme_report(report, repo_root=repo_root)
+    try:
+        sha = write_and_commit_theme_report(report, repo_root=repo_root)
+    except subprocess.CalledProcessError as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Git commit failed: {e.stderr.decode() if e.stderr else e}",
+        ) from e
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail=f"Theme report persist failed: {e}"
+        ) from e
     return {"committed_sha": sha, "week_end": report.week_end}
