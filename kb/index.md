@@ -2,10 +2,11 @@
 
 Generated automatically. Do not edit by hand — re-run `scripts/generate_index.py`.
 
-Total active entries: 55
+Total active entries: 56
 
 ## faq
 
+- **synth-are-all-your-straps-vegan-frie-ebfe7d** — Are all your straps vegan-friendly? I don't use any animal products and want to make sure the leather alternative is gen  _(themes: vegan_friendly, materials_safety, sustainability)_
 - **synth-are-the-dyes-used-in-the-colou-573829** — Are the dyes used in the coloured straps non-toxic? I tend to sweat a lot and don't want dye bleeding onto my skin  _(themes: materials_safety)_
 - **synth-can-you-explain-the-main-diffe-584501** — Can you explain the main differences between the Expedition and Journey models? I can't decide which to buy  _(themes: model_comparison)_
 - **synth-do-you-collaborate-with-indepe-53f78d** — Do you collaborate with independent watchmakers for limited editions? I'm a collector and interested in unique pieces  _(themes: limited_edition, collaboration)_
