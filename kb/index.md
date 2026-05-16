@@ -2,7 +2,7 @@
 
 Generated automatically. Do not edit by hand — re-run `scripts/generate_index.py`.
 
-Total active entries: 43
+Total active entries: 44
 
 ## faq
 
@@ -26,6 +26,7 @@ Total active entries: 43
 - **synth-i-m-going-on-a-high-altitude-t-e09cfe** — I'm going on a high-altitude trek. Will the watch perform normally at 5,000m above sea level  _(themes: altitude_performance)_
 - **synth-i-m-ordering-from-the-uk-will-33bac0** — I'm ordering from the UK. Will I have to pay customs duties on top of the shipping cost  _(themes: international_shipping, duties_taxes)_
 - **synth-i-m-trying-to-apply-discount-c-10c144** — I'm trying to apply discount code BOLDR10 at checkout but it says it's invalid. Can you help  _(themes: checkout, discount_code)_
+- **synth-i-made-a-mistake-in-my-deliver-c63ae3** — I made a mistake in my delivery address for order BLD-28289. Can I update it before it ships  _(themes: order_management, shipping)_
 - **synth-i-need-the-watch-urgently-as-a-ea2850** — I need the watch urgently as a birthday gift. Do you offer express shipping and how much does it cost  _(themes: shipping)_
 - **synth-i-own-both-the-expedition-and-865f26** — I own both the Expedition and the Journey. Can I swap straps between the two models  _(themes: strap_interchangeability, compatibility)_
 - **synth-i-received-my-order-bld-46048-7c1714** — I received my order BLD-46048 but the strap colour is wrong — I ordered olive green but received black  _(themes: fulfillment_error, wrong_item)_
