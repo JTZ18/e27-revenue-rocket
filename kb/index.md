@@ -2,7 +2,7 @@
 
 Generated automatically. Do not edit by hand — re-run `scripts/generate_index.py`.
 
-Total active entries: 35
+Total active entries: 36
 
 ## faq
 
@@ -26,6 +26,7 @@ Total active entries: 35
 - **synth-i-own-both-the-expedition-and-865f26** — I own both the Expedition and the Journey. Can I swap straps between the two models  _(themes: strap_interchangeability, compatibility)_
 - **synth-i-received-my-order-bld-46048-7c1714** — I received my order BLD-46048 but the strap colour is wrong — I ordered olive green but received black  _(themes: fulfillment_error, wrong_item)_
 - **synth-i-saw-a-limited-edition-collab-7be137** — I saw a limited edition collab on your Instagram. Is it still available or sold out  _(themes: limited_edition)_
+- **synth-i-want-to-gift-this-to-my-10-y-e7b5a7** — I want to gift this to my 10-year-old nephew. Are the materials safe for children? Any certifications  _(themes: materials_safety, gifting)_
 - **synth-i-want-to-use-the-watch-for-sw-0ac468** — I want to use the watch for swimming. Do you sell a rubber or silicone strap that's suitable  _(themes: water_resistance, materials, swimming)_
 - **synth-if-i-order-today-with-engravin-df6404** — If I order today with engraving, how long will it take to ship? I need it by next Friday  _(themes: engraving, shipping, turnaround)_
 - **synth-is-the-movement-resistant-to-m-2e3633** — Is the movement resistant to magnetic fields? I work near MRI equipment  _(themes: movement_specs, materials_safety)_
