@@ -2,12 +2,13 @@
 
 Generated automatically. Do not edit by hand — re-run `scripts/generate_index.py`.
 
-Total active entries: 30
+Total active entries: 31
 
 ## faq
 
 - **synth-are-the-dyes-used-in-the-colou-573829** — Are the dyes used in the coloured straps non-toxic? I tend to sweat a lot and don't want dye bleeding onto my skin  _(themes: materials_safety)_
 - **synth-do-you-offer-gift-wrapping-or-7d9268** — Do you offer gift wrapping or a gift box option? I'm buying this as a wedding gift  _(themes: gifting)_
+- **synth-does-the-expedition-work-with-3e4238** — Does the Expedition work with standard NATO straps? What size do I need  _(themes: strap_interchangeability, sizing)_
 - **synth-hello-could-you-tell-me-what-g-a0b768** — Hello, could you tell me what grade of titanium is used in the case? I've seen Grade 2 and Grade 5 mentioned online and   _(themes: materials, specifications)_
 - **synth-hi-i-placed-order-bld-93810-ab-cafa54** — Hi, I placed order BLD-93810 about 10 days ago and haven't received it yet. Can you check the status  _(themes: order_status, shipping)_
 - **synth-hi-my-watch-battery-has-died-h-df68c6** — Hi, my watch battery has died. How much does a battery replacement cost and how do I send it in  _(themes: servicing, aftercare)_
