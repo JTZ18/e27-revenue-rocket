@@ -2,12 +2,13 @@
 
 Generated automatically. Do not edit by hand — re-run `scripts/generate_index.py`.
 
-Total active entries: 21
+Total active entries: 22
 
 ## faq
 
 - **synth-are-the-dyes-used-in-the-colou-573829** — Are the dyes used in the coloured straps non-toxic? I tend to sweat a lot and don't want dye bleeding onto my skin  _(themes: materials_safety)_
 - **synth-hi-i-placed-order-bld-93810-ab-cafa54** — Hi, I placed order BLD-93810 about 10 days ago and haven't received it yet. Can you check the status  _(themes: order_status, shipping)_
+- **synth-hi-what-lug-width-does-the-exp-4edb1a** — Hi, what lug width does the Expedition 40mm use? I want to buy a third-party strap  _(themes: sizing, strap_interchangeability)_
 - **synth-i-found-the-same-watch-cheaper-c075f7** — I found the same watch cheaper on another site. Do you offer price matching  _(themes: pricing)_
 - **synth-i-have-a-20cm-wrist-will-the-s-fd6086** — I have a 20cm wrist. Will the standard strap length fit me, or do I need an extended strap  _(themes: sizing)_
 - **synth-i-have-a-boldr-expedition-from-9104e7** — I have a Boldr Expedition from 2019. Do you still service older models? Is it the same price  _(themes: servicing, aftercare)_
