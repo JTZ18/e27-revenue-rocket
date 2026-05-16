@@ -17,13 +17,13 @@ def _render(brief: MarketingBrief) -> str:
         "## Insights",
         "",
     ]
-    for ins in brief.insights:
-        segments = ", ".join(ins.persona_segments) or "(all)"
+    for insight in brief.insights:
+        segments = ", ".join(insight.persona_segments) or "(all)"
         lines.extend(
             [
-                f"### {ins.theme}  ({ins.ticket_count} tickets — {segments})",
+                f"### {insight.theme}  ({insight.ticket_count} tickets — {segments})",
                 "",
-                ins.observation,
+                insight.observation,
                 "",
             ]
         )
@@ -47,13 +47,13 @@ def write_and_commit_brief(brief: MarketingBrief, repo_root: Path) -> str:
     out_path.write_text(_render(brief))
 
     env = os.environ.copy()
-    subprocess.run(["git", "add", str(out_path)], cwd=repo_root, env=env, check=True)
+    subprocess.run(["git", "add", str(out_path)], cwd=repo_root, env=env, check=True, capture_output=True)
     subprocess.run(
         [
             "git", "-c", "commit.gpgsign=false", "commit",
             "-m", f"briefs: monthly marketing brief {brief.month}",
         ],
-        cwd=repo_root, env=env, check=True,
+        cwd=repo_root, env=env, check=True, capture_output=True,
     )
     sha = subprocess.run(
         ["git", "rev-parse", "--short", "HEAD"],

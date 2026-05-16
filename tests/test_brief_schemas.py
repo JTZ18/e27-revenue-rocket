@@ -42,3 +42,27 @@ def test_brief_recommendation_target_is_constrained():
             expected_impact="y",
             evidence_themes=["z"],
         )
+
+
+def test_marketing_brief_rejects_invalid_month():
+    with pytest.raises(ValidationError):
+        MarketingBrief(
+            month="2026-5",
+            headline="x",
+            insights=[
+                BriefInsight(
+                    theme="t",
+                    ticket_count=1,
+                    persona_segments=["p"],
+                    observation="o",
+                )
+            ],
+            recommendations=[
+                BriefRecommendation(
+                    target="product_page",
+                    action="a",
+                    expected_impact="i",
+                    evidence_themes=["t"],
+                )
+            ],
+        )

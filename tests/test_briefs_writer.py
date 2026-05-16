@@ -53,4 +53,14 @@ def test_writer_renders_and_commits(tmp_path: Path):
     text = out.read_text()
     assert "May highlights" in text
     assert "Promote BPA-free badge" in text
+    assert "## Insights" in text
+    assert "## Recommendations" in text
+    assert "**[product_page]** Promote BPA-free badge" in text
+    assert "Expected impact: Reduce CS load" in text
     assert sha
+
+    log = subprocess.run(
+        ["git", "log", "--oneline"],
+        cwd=repo, capture_output=True, text=True, check=True,
+    ).stdout
+    assert "briefs: monthly marketing brief 2026-05" in log
