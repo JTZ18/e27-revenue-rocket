@@ -54,3 +54,80 @@ async def test_traverse_endpoint(fixtures_dir, monkeypatch):
     body = r.json()
     assert body["can_answer_fully"] is True
     assert body["confidence"] == "high"
+
+
+from datetime import date
+from unittest.mock import patch
+
+from intel_engine.schemas.gap import Gap, GapResolution, GapStatus
+from intel_engine.schemas.kb import KBDomain, KBEntry, KBFrontmatter
+
+
+@pytest.mark.asyncio
+async def test_create_gap_endpoint(monkeypatch, tmp_path):
+    monkeypatch.setenv("GAP_LOG_ROOT", str(tmp_path))
+
+    payload = {
+        "source_event_id": "evt_xyz",
+        "customer_question": "Are Boldr watches MRI-safe?",
+        "missing_info": ["MRI compatibility unknown"],
+        "themes_detected": ["materials_safety"],
+        "persona_hints": [],
+    }
+    async with AsyncClient(
+        transport=ASGITransport(app=app), base_url="http://test"
+    ) as ac:
+        r = await ac.post("/gap", json=payload)
+    assert r.status_code == 200
+    body = r.json()
+    assert body["status"] == "open"
+    assert body["gap_id"].startswith("gap_")
+
+
+@pytest.mark.asyncio
+async def test_draft_kb_entry_endpoint(monkeypatch, tmp_path, fixtures_dir):
+    monkeypatch.setenv("GAP_LOG_ROOT", str(tmp_path))
+    monkeypatch.setenv("KB_ROOT", str(fixtures_dir / "sample_kb"))
+
+    # Pre-write a resolved gap
+    from intel_engine.gap.logger import write_gap
+
+    gap = Gap(
+        gap_id="gap_resolve",
+        source_event_id="evt_a",
+        customer_question="Are Boldr watches MRI-safe?",
+        missing_info=["MRI"],
+        themes_detected=["materials_safety"],
+        status=GapStatus.resolved,
+        resolution=GapResolution(
+            resolved_by="sarah@b.com",
+            resolution_text="Titanium is non-magnetic; watches are MRI-safe.",
+            resolved_at=datetime(2026, 5, 16, tzinfo=UTC),
+        ),
+    )
+    write_gap(gap)
+
+    mock_entry = KBEntry(
+        frontmatter=KBFrontmatter(
+            slug="mri-safe",
+            title="MRI-safe?",
+            domain=KBDomain.spec,
+            themes=["materials_safety"],
+            sources=["gap_resolve"],
+            last_verified=date(2026, 5, 16),
+        ),
+        body="Yes. Titanium is non-magnetic.",
+    )
+    with patch(
+        "intel_engine.api.draft_kb_entry",
+        new=AsyncMock(return_value=mock_entry),
+    ):
+        async with AsyncClient(
+            transport=ASGITransport(app=app), base_url="http://test"
+        ) as ac:
+            r = await ac.post("/draft-kb-entry", json={"gap_id": "gap_resolve"})
+
+    assert r.status_code == 200
+    body = r.json()
+    assert body["frontmatter"]["slug"] == "mri-safe"
+    assert body["frontmatter"]["domain"] == "spec"

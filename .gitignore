@@ -9,3 +9,10 @@ __pycache__/
 dist/
 build/
 node_modules/
+.claude/
+.omc/
+.coverage
+context/
+CLAUDE.md
+main.py
+.n8n_data/
