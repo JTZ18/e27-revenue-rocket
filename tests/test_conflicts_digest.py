@@ -24,6 +24,25 @@ def test_slack_blocks_has_one_section_per_conflict():
         ],
     )
     blocks = to_slack_blocks(digest)
-    section_count = sum(1 for b in blocks if b.get("type") == "section")
-    # header + 2 conflicts × 2 sections each (body + actions header) = at least 5
-    assert section_count >= 3
+    # header + summary + 2 conflicts * (section + actions) = 6
+    assert len(blocks) == 6
+    action_blocks = [b for b in blocks if b.get("type") == "actions"]
+    assert len(action_blocks) == 2
+    action_ids = [
+        elem["action_id"]
+        for b in action_blocks
+        for elem in b.get("elements", [])
+        if "action_id" in elem
+    ]
+    assert len(action_ids) == len(set(action_ids)), "action_ids must be unique"
+
+
+def test_slack_blocks_empty_digest():
+    digest = ConflictDigest(
+        week_end="2026-05-17",
+        conflicts=[],
+    )
+    blocks = to_slack_blocks(digest)
+    assert len(blocks) == 2  # header + summary only
+    action_blocks = [b for b in blocks if b.get("type") == "actions"]
+    assert len(action_blocks) == 0

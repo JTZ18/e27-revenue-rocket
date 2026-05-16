@@ -6,7 +6,7 @@ from intel_engine.schemas.conflict import ConflictDigest, KBConflict
 
 def _format_kb(entries: list[dict]) -> str:
     return "\n".join(
-        f"[{e['domain']}] {e['path']} — {e['title']}: {e.get('excerpt', '')[:200]}"
+        f"[{e.get('domain', 'UNKNOWN')}] {e.get('path', 'UNKNOWN')} — {e.get('title', 'UNKNOWN')}: {e.get('excerpt', '')[:200]}"
         for e in entries
     )
 
@@ -18,6 +18,7 @@ async def detect_conflicts(
 ) -> ConflictDigest:
     system = load_prompt("conflict-detector-agent")
     user = (
+        f"Week ending: {week_end}\n"
         f"=== KB ENTRIES ({len(kb_entries)} active) ===\n"
         f"{_format_kb(kb_entries)}\n\n"
         f"Detect conflicts now."

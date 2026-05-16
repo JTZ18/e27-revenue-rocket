@@ -35,7 +35,7 @@ async def test_detect_conflicts_returns_digest(monkeypatch, tmp_path: Path):
     with patch(
         "intel_engine.agents.conflict_detector.LLMClient.complete_json",
         new=AsyncMock(return_value=mock),
-    ):
+    ) as mock_complete:
         digest = await detect_conflicts(
             kb_entries=kb_summary,
             week_end="2026-05-17",
@@ -43,3 +43,8 @@ async def test_detect_conflicts_returns_digest(monkeypatch, tmp_path: Path):
 
     assert digest.count == 1
     assert digest.conflicts[0].canonical_proposal.endswith("rate-cards/engraving.md")
+
+    _, kwargs = mock_complete.call_args
+    assert "PROMPT" in kwargs["system"]
+    assert "2026-05-17" in kwargs["user"]
+    assert "kb/faqs/engraving-old.md" in kwargs["user"]
