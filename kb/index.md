@@ -2,7 +2,7 @@
 
 Generated automatically. Do not edit by hand — re-run `scripts/generate_index.py`.
 
-Total active entries: 34
+Total active entries: 35
 
 ## faq
 
@@ -24,6 +24,7 @@ Total active entries: 34
 - **synth-i-m-trying-to-apply-discount-c-10c144** — I'm trying to apply discount code BOLDR10 at checkout but it says it's invalid. Can you help  _(themes: checkout, discount_code)_
 - **synth-i-need-the-watch-urgently-as-a-ea2850** — I need the watch urgently as a birthday gift. Do you offer express shipping and how much does it cost  _(themes: shipping)_
 - **synth-i-own-both-the-expedition-and-865f26** — I own both the Expedition and the Journey. Can I swap straps between the two models  _(themes: strap_interchangeability, compatibility)_
+- **synth-i-received-my-order-bld-46048-7c1714** — I received my order BLD-46048 but the strap colour is wrong — I ordered olive green but received black  _(themes: fulfillment_error, wrong_item)_
 - **synth-i-saw-a-limited-edition-collab-7be137** — I saw a limited edition collab on your Instagram. Is it still available or sold out  _(themes: limited_edition)_
 - **synth-i-want-to-use-the-watch-for-sw-0ac468** — I want to use the watch for swimming. Do you sell a rubber or silicone strap that's suitable  _(themes: water_resistance, materials, swimming)_
 - **synth-if-i-order-today-with-engravin-df6404** — If I order today with engraving, how long will it take to ship? I need it by next Friday  _(themes: engraving, shipping, turnaround)_
