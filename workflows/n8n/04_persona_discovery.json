@@ -1,0 +1,67 @@
+{
+  "name": "04_persona_discovery",
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "documentId": "={{ $env.TICKETS_SHEET_ID }}",
+        "sheetName": "tickets_input",
+        "options": {}
+      },
+      "name": "Read tickets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [480, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const rows = items.map(item => ({\n  ticket_id: item.json.ticket_id,\n  message_body: item.json.message_body\n}));\nreturn [{ json: { tickets: rows } }];"
+      },
+      "name": "Shape payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [720, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.INTEL_ENGINE_URL }}/personas/discover",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {"timeout": 120000}
+      },
+      "name": "POST /personas/discover",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [960, 300]
+    },
+    {
+      "parameters": {
+        "channel": "={{ $env.SLACK_CS_CHANNEL }}",
+        "text": "Persona proposals ready for review",
+        "otherOptions": {
+          "blocks": "={{ JSON.stringify($json.proposals.map((p, i) => ({type:'section', text:{type:'mrkdwn', text:`*${i+1}. [${p.axis}/${p.slug}]* ${p.label}\n_Signals:_ ${p.signals.join(', ')}\n_Examples:_ ${p.example_ticket_ids.join(', ')}\n${p.rationale}`}}))) }}"
+        }
+      },
+      "name": "Slack: post proposals",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [1200, 300]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {"main": [[{"node": "Read tickets", "type": "main", "index": 0}]]},
+    "Read tickets": {"main": [[{"node": "Shape payload", "type": "main", "index": 0}]]},
+    "Shape payload": {"main": [[{"node": "POST /personas/discover", "type": "main", "index": 0}]]},
+    "POST /personas/discover": {"main": [[{"node": "Slack: post proposals", "type": "main", "index": 0}]]}
+  },
+  "settings": {}
+}
