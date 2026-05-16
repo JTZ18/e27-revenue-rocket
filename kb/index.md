@@ -2,10 +2,11 @@
 
 Generated automatically. Do not edit by hand — re-run `scripts/generate_index.py`.
 
-Total active entries: 9
+Total active entries: 10
 
 ## faq
 
+- **synth-i-found-the-same-watch-cheaper-c075f7** — I found the same watch cheaper on another site. Do you offer price matching  _(themes: pricing)_
 - **synth-i-have-a-boldr-expedition-from-9104e7** — I have a Boldr Expedition from 2019. Do you still service older models? Is it the same price  _(themes: servicing, aftercare)_
 - **synth-is-the-movement-resistant-to-m-2e3633** — Is the movement resistant to magnetic fields? I work near MRI equipment  _(themes: movement_specs, materials_safety)_
 
