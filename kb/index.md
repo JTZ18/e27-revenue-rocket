@@ -2,13 +2,14 @@
 
 Generated automatically. Do not edit by hand — re-run `scripts/generate_index.py`.
 
-Total active entries: 54
+Total active entries: 55
 
 ## faq
 
 - **synth-are-the-dyes-used-in-the-colou-573829** — Are the dyes used in the coloured straps non-toxic? I tend to sweat a lot and don't want dye bleeding onto my skin  _(themes: materials_safety)_
 - **synth-can-you-explain-the-main-diffe-584501** — Can you explain the main differences between the Expedition and Journey models? I can't decide which to buy  _(themes: model_comparison)_
 - **synth-do-you-collaborate-with-indepe-53f78d** — Do you collaborate with independent watchmakers for limited editions? I'm a collector and interested in unique pieces  _(themes: limited_edition, collaboration)_
+- **synth-do-you-have-a-strap-recycling-5bc21e** — Do you have a strap recycling or take-back programme? I have three old straps I'd like to dispose of responsibly  _(themes: sustainability)_
 - **synth-do-you-offer-gift-wrapping-or-7d9268** — Do you offer gift wrapping or a gift box option? I'm buying this as a wedding gift  _(themes: gifting)_
 - **synth-do-your-straps-have-a-quick-re-c859b3** — Do your straps have a quick-release mechanism or do I need tools to swap them  _(themes: strap_interchangeability, swapping_mechanism)_
 - **synth-does-the-expedition-work-with-3e4238** — Does the Expedition work with standard NATO straps? What size do I need  _(themes: strap_interchangeability, sizing)_
