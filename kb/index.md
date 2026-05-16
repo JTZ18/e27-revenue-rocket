@@ -2,7 +2,11 @@
 
 Generated automatically. Do not edit by hand — re-run `scripts/generate_index.py`.
 
-Total active entries: 7
+Total active entries: 8
+
+## faq
+
+- **synth-is-the-movement-resistant-to-m-2e3633** — Is the movement resistant to magnetic fields? I work near MRI equipment  _(themes: movement_specs, materials_safety)_
 
 ## persona
 
