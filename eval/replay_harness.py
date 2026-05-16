@@ -106,6 +106,7 @@ async def run_replay(
             )
     finally:
         _write_csv(out_csv, steps)
+        snapshot.restore()
 
     answered = sum(1 for s in steps if s.can_answer_fully)
     return ReplayRun(
