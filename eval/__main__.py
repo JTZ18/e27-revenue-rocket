@@ -9,6 +9,10 @@ Usage:
     uv run python -m eval calibration     # human vs LLM-judge agreement
     uv run python -m eval all             # everything in order
 """
+from dotenv import load_dotenv
+
+load_dotenv()
+
 import argparse
 import asyncio
 import csv

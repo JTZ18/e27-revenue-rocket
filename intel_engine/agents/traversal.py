@@ -50,6 +50,6 @@ async def traverse(event: CommonEvent) -> TraversalResult:
         f"{kb_block}"
     )
 
-    client = LLMClient(provider=LLMProvider.minimax)
+    client = LLMClient(provider=LLMProvider.openrouter)
     raw = await client.complete_json(system=system_prompt, user=user_message)
     return TraversalResult.model_validate(raw)
