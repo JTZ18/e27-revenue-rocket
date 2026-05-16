@@ -521,9 +521,27 @@ Explicitly out of MVP, included in `docs/ROADMAP.md` and the architecture slide:
 
 ## 14. Open Items Before Implementation
 
-None blocking. All design decisions resolved across the brainstorming sessions. Implementation plan to be created via `superpowers:writing-plans`.
+None blocking. All design decisions resolved across the brainstorming sessions.
 
-The implementation phasing will cover:
+### 14.1 Implementation plan decomposition
+
+The 14 phases of work below have been decomposed into **four sequential implementation plans** (recommended by `superpowers:writing-plans` scope check). Each plan produces working, testable software on its own — so if time runs out mid-build, the most-recently-completed plan is still a defensible submission.
+
+| Plan | Scope | Phases | Status |
+|---|---|---|---|
+| **Plan 1: Foundation + Hero Loop** | Repo scaffold, KB seeding, n8n setup, Google Sheet trigger, Common Event Schema, wiki-traversal agent, Gmail Drafts, gap loop with Slack approval, auto-commit to Git | 1–6 | **In progress** — plan being written |
+| **Plan 2: Evaluation Harness** | Replay harness, longitudinal curve with Git-SHA provenance, hand-rate + LLM-judge quality, ground-truth accuracy metrics | 7–8 | To be written after Plan 1 |
+| **Plan 3: Background Loops** | Cold-start persona discovery, drift detector, weekly theme clusterer, monthly marketing brief, weekly KB conflict digest | 9–10 | To be written after Plan 1 |
+| **Plan 4: Sentiment + Polish** | External sentiment loop (last30days `--plan.json`), read-only Next.js dashboard, video production assets, handout docs (README/ARCHITECTURE/EVAL/ROADMAP) | 11–14 | To be written after Plans 1–3 |
+
+**Dependencies:** Plan 1 is the critical path. Plans 2 and 3 can be parallelised once Plan 1 is complete. Plan 4 depends on all three.
+
+**Phasing rationale:** Plan 1 alone produces the most important demo asset (the hero loop firing end-to-end). Plans 2–4 are enhancements that fill out the "five loops" story and produce the headline evaluation curve.
+
+### 14.2 Original phase list (preserved for traceability)
+
+The 14 implementation phases the plans collectively cover:
+
 1. Repo + KB seeding (parse provided data into structured markdown)
 2. n8n workflow scaffold + Google Sheet trigger + Common Event Schema
 3. Wiki-traversal agent + structured output contract
