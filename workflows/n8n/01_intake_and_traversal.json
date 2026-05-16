@@ -2,62 +2,89 @@
   "name": "01 — Intake and Traversal",
   "nodes": [
     {
-      "id": "gs-trigger",
-      "name": "Google Sheets Trigger",
-      "type": "n8n-nodes-base.googleSheetsTrigger",
-      "position": [250, 300],
       "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1WYHDhCgrkqXoWb7Ir2j1yQrF6oNhrwCNEZWHWCODj7M",
+          "mode": "list",
+          "cachedResultName": "Boldr-demo",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1WYHDhCgrkqXoWb7Ir2j1yQrF6oNhrwCNEZWHWCODj7M/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1WYHDhCgrkqXoWb7Ir2j1yQrF6oNhrwCNEZWHWCODj7M/edit?gid=0#gid=0",
+          "mode": "url"
+        },
         "event": "rowAdded",
-        "sheetName": "tickets_input",
         "options": {}
       },
+      "id": "d4fb31e5-0508-425b-8945-844372a794ac",
+      "name": "Google Sheets Trigger",
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "position": [
+        -944,
+        -176
+      ],
+      "typeVersion": 1,
       "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "",
-          "name": "Google Sheets account"
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "fRVRGhN3d1FrM44i",
+          "name": "Google Sheets Trigger account"
         }
       }
     },
     {
-      "id": "normalize",
+      "parameters": {
+        "functionCode": "const row = $input.first().json;\nreturn [{\n  json: {\n    event_id: `evt_${row.ticket_id}_${Date.now()}`,\n    source: 'google_sheet',\n    channel_meta: { row_index: row.__row_number || 0 },\n    customer: { id: `anon_${row.ticket_id}`, name: row.customer_name },\n    subject: row.subject || null,\n    body: row.body,\n    ts: row.received_at || new Date().toISOString(),\n    attachments: []\n  }\n}];"
+      },
+      "id": "f5c94def-8a54-4df7-b906-e9e5be1f6434",
       "name": "Normalise to CommonEvent",
       "type": "n8n-nodes-base.function",
-      "position": [450, 300],
-      "parameters": {
-        "jsCode": "const row = $input.first().json;\nreturn [{\n  json: {\n    event_id: `evt_${row.ticket_id}_${Date.now()}`,\n    source: 'google_sheet',\n    channel_meta: { row_index: row.__row_number || 0 },\n    customer: { id: `anon_${row.ticket_id}`, name: row.customer_name },\n    subject: row.subject || null,\n    body: row.body,\n    ts: row.received_at || new Date().toISOString(),\n    attachments: []\n  }\n}];"
-      }
+      "position": [
+        -752,
+        -176
+      ],
+      "typeVersion": 1
     },
     {
-      "id": "post-traverse",
-      "name": "POST /traverse",
-      "type": "n8n-nodes-base.httpRequest",
-      "position": [650, 300],
       "parameters": {
         "method": "POST",
         "url": "http://host.docker.internal:8000/traverse",
         "sendBody": true,
-        "contentType": "json",
-        "body": "={{ $json }}",
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
         "options": {}
-      }
+      },
+      "id": "66d536bb-0a8e-46db-b767-fea3767bcc94",
+      "name": "POST /traverse",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -544,
+        -176
+      ],
+      "typeVersion": 4.4
     },
     {
-      "id": "if-answerable",
-      "name": "answerable?",
-      "type": "n8n-nodes-base.if",
-      "position": [850, 300],
       "parameters": {
         "conditions": {
           "options": {
             "caseSensitive": true,
             "leftValue": "",
-            "typeValidation": "strict"
+            "typeValidation": "strict",
+            "version": 3
           },
           "conditions": [
             {
               "id": "cond-1",
               "leftValue": "={{ $json.can_answer_fully }}",
-              "rightValue": "true",
+              "rightValue": true,
               "operator": {
                 "type": "boolean",
                 "operation": "equals"
@@ -65,109 +92,90 @@
             }
           ],
           "combinator": "and"
-        }
-      }
+        },
+        "options": {}
+      },
+      "id": "7d1f12b4-d0a3-4f43-909f-57b717bfe986",
+      "name": "answerable?",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        -352,
+        -176
+      ],
+      "typeVersion": 2.3
     },
     {
-      "id": "gmail-draft",
+      "parameters": {
+        "resource": "draft",
+        "subject": "Test",
+        "message": "={{ $json.draft_reply }}",
+        "options": {}
+      },
+      "id": "d47ff970-4560-4440-99d6-c0513ab79004",
       "name": "Create Gmail Draft",
       "type": "n8n-nodes-base.gmail",
-      "position": [1050, 200],
-      "parameters": {
-        "operation": "createDraft",
-        "to": "={{ $('Normalise to CommonEvent').item.json.customer.name }} <customer@example.com>",
-        "subject": "Re: {{ $('Normalise to CommonEvent').item.json.subject || 'Your enquiry' }}",
-        "message": "={{ $('POST /traverse').item.json.draft_reply }}",
-        "options": {
-          "labelIds": ["agent-drafts"]
-        }
-      },
+      "position": [
+        -144,
+        -272
+      ],
+      "typeVersion": 2.2,
+      "webhookId": "40218fc3-e32f-4953-85d6-917726f3367e",
       "credentials": {
         "gmailOAuth2": {
-          "id": "",
+          "id": "Vjzm96zvD0s6G4q9",
           "name": "Gmail account"
         }
       }
     },
     {
-      "id": "post-gap",
-      "name": "POST /gap",
-      "type": "n8n-nodes-base.httpRequest",
-      "position": [1050, 400],
       "parameters": {
         "method": "POST",
         "url": "http://host.docker.internal:8000/gap",
         "sendBody": true,
-        "contentType": "json",
-        "body": "={ \"source_event_id\": \"{{ $('Normalise to CommonEvent').item.json.event_id }}\", \"customer_question\": \"{{ $('Normalise to CommonEvent').item.json.body }}\", \"missing_info\": {{ JSON.stringify($json.missing_info) }}, \"themes_detected\": {{ JSON.stringify($json.themes_detected) }}, \"persona_hints\": {{ JSON.stringify($json.persona_hints) }} }",
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"source_event_id\": \"{{ $('Normalise to CommonEvent').item.json.event_id }}\",\n  \"customer_question\": \"{{ $('Normalise to CommonEvent').item.json.body }}\",\n  \"missing_info\": {{ JSON.stringify($json.missing_info) }},\n  \"themes_detected\": {{ JSON.stringify($json.themes_detected) }},\n  \"persona_hints\": {{ JSON.stringify($json.persona_hints) }}\n}",
         "options": {}
-      }
+      },
+      "id": "ff6b7698-a77d-4b6d-a616-d0809e949a1c",
+      "name": "POST /gap",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -144,
+        -80
+      ],
+      "typeVersion": 4.4
     },
     {
-      "id": "slack-gap-card",
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "#boldr-intel-demo",
+          "mode": "name"
+        },
+        "messageType": "block",
+        "blocksUi": "={\n    \"blocks\": [\n      {\n        \"type\": \"header\",\n        \"text\": {\n          \"type\": \"plain_text\",\n          \"text\": \"New Knowledge Gap\",\n          \"emoji\": true\n        }\n      },\n      {\n        \"type\": \"section\",\n        \"text\": {\n          \"type\": \"mrkdwn\",\n          \"text\": \"*Customer question:*\\n>{{ $json.customer_question }}\"\n        }\n      },\n      {\n        \"type\": \"section\",\n        \"text\": {\n          \"type\": \"mrkdwn\",\n          \"text\": \"*Missing info:*\\n>{{ $json.missing_info[0] }}\"\n        }\n      },\n      {\n        \"type\": \"section\",\n        \"text\": {\n          \"type\": \"mrkdwn\",\n          \"text\": \"*Gap ID:* `{{ $json.gap_id }}`\\n*Themes:* {{ $json.themes_detected.join(', ') }}\\n*Persona hints:* {{ $json.persona_hints.join(', ') }}\"\n        }\n      },\n      {\n        \"type\": \"actions\",\n        \"elements\": [\n          {\n            \"type\": \"button\",\n            \"text\": {\n              \"type\": \"plain_text\",\n              \"text\": \"Resolve this gap\",\n              \"emoji\": true\n            },\n            \"style\": \"primary\",\n            \"value\": \"{{ $json.gap_id }}\",\n            \"action_id\": \"resolve_gap\"\n          }\n        ]\n      }\n    ]\n  }",
+        "text": "New knowledge gap — please resolve",
+        "otherOptions": {}
+      },
+      "id": "b6bf6ecd-8d2a-4753-94e0-734cebf4cc44",
       "name": "Post Slack Gap Card",
       "type": "n8n-nodes-base.slack",
-      "position": [1250, 400],
-      "parameters": {
-        "operation": "post",
-        "channel": "={{ $env.SLACK_APPROVAL_CHANNEL }}",
-        "text": "*New Knowledge Gap*\n*Customer:* {{ $('Normalise to CommonEvent').item.json.customer.name }}\n*Question:* {{ $('Normalise to CommonEvent').item.json.body }}\n*Gap ID:* {{ $json.gap_id }}",
-        "blocksUi": {
-          "blocksValues": [
-            {
-              "type": "header",
-              "text": {
-                "type": "plain_text",
-                "text": "New Knowledge Gap"
-              }
-            },
-            {
-              "type": "section",
-              "text": {
-                "type": "mrkdwn",
-                "text": "*Customer:* {{ $('Normalise to CommonEvent').item.json.customer.name }}\n*Question:* {{ $('Normalise to CommonEvent').item.json.body }}"
-              }
-            },
-            {
-              "type": "section",
-              "text": {
-                "type": "mrkdwn",
-                "text": "*Missing info:*\n{{ $json.missing_info.join('\\n• ') }}"
-              }
-            },
-            {
-              "type": "section",
-              "text": {
-                "type": "mrkdwn",
-                "text": "*Themes:* {{ $json.themes_detected.join(', ') }}\n*Persona:* {{ $json.persona_hints.join(', ') }}\n*Gap ID:* `{{ $json.gap_id }}`"
-              }
-            },
-            {
-              "type": "actions",
-              "elements": [
-                {
-                  "type": "button",
-                  "text": {
-                    "type": "plain_text",
-                    "text": "Resolve this gap"
-                  },
-                  "style": "primary",
-                  "value": "{{ $json.gap_id }}",
-                  "action_id": "resolve_gap"
-                }
-              ]
-            }
-          ]
-        }
-      },
+      "position": [
+        64,
+        -80
+      ],
+      "typeVersion": 2.4,
+      "webhookId": "f2303709-3051-4a2c-ab12-e4107316a2d0",
       "credentials": {
         "slackApi": {
-          "id": "",
+          "id": "o4gmQxd8X3OYj32m",
           "name": "Slack account"
         }
       }
     }
   ],
+  "pinData": {},
   "connections": {
     "Google Sheets Trigger": {
       "main": [
@@ -232,8 +240,16 @@
       ]
     }
   },
+  "active": false,
   "settings": {
-    "executionOrder": "v1"
+    "executionOrder": "v1",
+    "binaryMode": "separate"
   },
-  "staticData": null
+  "versionId": "06c24fc7-5f1e-4ac4-903c-7bfd5755aa9a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d751af066a0d8cdd4f0b598e2ce0c7875a49828569f2d1a9540a608562505420"
+  },
+  "id": "03d5AP3F2I8FWpom",
+  "tags": []
 }
