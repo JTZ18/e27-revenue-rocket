@@ -313,5 +313,5 @@ def test_kb_summary_endpoint(client: TestClient, tmp_path: Path, monkeypatch):
     r = client.get("/kb/summary")
     assert r.status_code == 200
     body = r.json()
-    assert body["count"] >= 1
+    assert body["count"] == 1
     assert any(e["title"] == "BPA?" for e in body["entries"])
