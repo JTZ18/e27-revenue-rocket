@@ -28,6 +28,7 @@ from intel_engine.conflicts.digest import to_slack_blocks
 from intel_engine.personas.reader import load_personas
 from intel_engine.schemas.theme import ThemeReport
 from intel_engine.settings import kb_root
+from intel_engine.themes.writer import write_and_commit_theme_report
 
 app = FastAPI(title="Boldr Intel Engine", version="0.1.0")
 
@@ -355,3 +356,15 @@ async def conflicts_digest(req: ConflictsRequest) -> dict:
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Conflict detection failed: {e}") from e
+
+
+class PersistThemeReportRequest(BaseModel):
+    report: dict
+
+
+@app.post("/themes/persist")
+async def themes_persist(req: PersistThemeReportRequest) -> dict:
+    report = ThemeReport(**req.report)
+    repo_root = Path(kb_root()).parent
+    sha = write_and_commit_theme_report(report, repo_root=repo_root)
+    return {"committed_sha": sha, "week_end": report.week_end}

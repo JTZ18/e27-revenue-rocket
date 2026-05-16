@@ -194,3 +194,41 @@ def test_conflicts_digest_endpoint(client: TestClient):
     body = r.json()
     assert body["count"] == 0
     assert body["slack_blocks"]
+
+
+def test_themes_persist_endpoint(client: TestClient, tmp_path: Path, monkeypatch):
+    import subprocess
+
+    repo = tmp_path
+    subprocess.run(["git", "init", "-q"], cwd=repo, check=True)
+    subprocess.run(["git", "config", "user.email", "t@x"], cwd=repo, check=True)
+    subprocess.run(["git", "config", "user.name", "T"], cwd=repo, check=True)
+    (repo / "seed.txt").write_text("seed")
+    subprocess.run(["git", "add", "-A"], cwd=repo, check=True)
+    subprocess.run(
+        ["git", "-c", "commit.gpgsign=false", "commit", "-q", "-m", "seed"],
+        cwd=repo,
+        check=True,
+    )
+
+    r = client.post(
+        "/themes/persist",
+        json={
+            "report": {
+                "week_start": "2026-05-11",
+                "week_end": "2026-05-17",
+                "ticket_count": 1,
+                "themes": [
+                    {
+                        "slug": "x",
+                        "label": "X",
+                        "frequency": 2,
+                        "example_ticket_ids": ["T1", "T2"],
+                        "summary": "s",
+                    }
+                ],
+            }
+        },
+    )
+    assert r.status_code == 200
+    assert r.json()["week_end"] == "2026-05-17"
