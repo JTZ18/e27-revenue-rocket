@@ -14,6 +14,7 @@ def gap_log_root() -> Path:
     return Path(os.environ.get("GAP_LOG_ROOT", "./gap-log")).resolve()
 
 
+@cache
 def llm_config(provider: str) -> dict[str, str]:
     """Return base_url, api_key, model for a provider ('minimax' or 'kimi')."""
     prefix = f"LLM_{provider.upper()}"

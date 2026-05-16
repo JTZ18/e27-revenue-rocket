@@ -68,9 +68,11 @@ class LLMClient:
                 # Tolerate accidental code fences
                 stripped = text.strip()
                 if stripped.startswith("```"):
-                    stripped = stripped.split("```")[1]
-                    if stripped.startswith("json"):
-                        stripped = stripped[4:]
+                    parts = stripped.split("```", 2)
+                    if len(parts) >= 3:
+                        stripped = parts[1]
+                        if stripped.startswith("json"):
+                            stripped = stripped[4:]
                 return json.loads(stripped)
             except json.JSONDecodeError as e:
                 last_err = e
