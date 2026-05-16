@@ -2,7 +2,7 @@
 
 Generated automatically. Do not edit by hand — re-run `scripts/generate_index.py`.
 
-Total active entries: 33
+Total active entries: 34
 
 ## faq
 
@@ -28,6 +28,7 @@ Total active entries: 33
 - **synth-i-want-to-use-the-watch-for-sw-0ac468** — I want to use the watch for swimming. Do you sell a rubber or silicone strap that's suitable  _(themes: water_resistance, materials, swimming)_
 - **synth-if-i-order-today-with-engravin-df6404** — If I order today with engraving, how long will it take to ship? I need it by next Friday  _(themes: engraving, shipping, turnaround)_
 - **synth-is-the-movement-resistant-to-m-2e3633** — Is the movement resistant to magnetic fields? I work near MRI equipment  _(themes: movement_specs, materials_safety)_
+- **synth-is-the-silicone-strap-food-gra-f3fd32** — Is the silicone strap food-grade or medical-grade silicone? Asking because my skin is sensitive  _(themes: materials_safety, sensitive_skin)_
 - **synth-my-skin-reacts-to-most-watch-s-a34b3e** — My skin reacts to most watch straps. Which of your straps would you recommend for sensitive skin  _(themes: materials_safety)_
 - **synth-my-watch-is-losing-about-10-se-d9a7c1** — My watch is losing about 10 seconds per day. Would a regulation service fix this  _(themes: servicing, aftercare)_
 - **synth-what-is-the-warranty-period-on-97b1c0** — What is the warranty period on the watch? Does it cover the movement and the strap separately  _(themes: warranty, coverage)_
