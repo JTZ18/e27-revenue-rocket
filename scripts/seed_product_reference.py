@@ -9,20 +9,22 @@ from intel_engine.llm.client import LLMClient, LLMProvider
 from intel_engine.schemas.kb import KBDomain, KBEntry, KBFrontmatter
 from scripts.seed_faq import slugify
 
-PARSE_PROMPT = """\
-You are converting a Boldr product reference document into a structured list of product entries.
-
-Each entry is one product (watch model, strap, accessory) OR a related catalogue table (e.g., strap compatibility).
-
-Return JSON: {"entries": [{"sku": "BOLDR-XXX", "name": "...", "specs": "..."}, ...]}
-
-Rules:
-- "sku" should be the most distinctive identifier in the source. If absent, use a kebab-case slug of the product name.
-- "name" is the human-readable product name.
-- "specs" is a verbatim chunk of all relevant detail: materials, dimensions, water resistance, movement, compatibility notes, warnings.
-- Preserve units, standards (ISO 3157, Grade 5 Ti, EU REACH), and any ⚠ callouts.
-- Treat the strap catalogue / Q-A quick-reference table as its own entry with sku "STRAP-CATALOGUE".
-"""
+PARSE_PROMPT = (
+    "You are converting a Boldr product reference document into a structured list "
+    "of product entries.\n\n"
+    "Each entry is one product (watch model, strap, accessory) OR a related "
+    "catalogue table (e.g., strap compatibility).\n\n"
+    'Return JSON: {"entries": [{"sku": "BOLDR-XXX", "name": "...", "specs": "..."}, ...]}\n\n'
+    "Rules:\n"
+    '- "sku" should be the most distinctive identifier in the source. If absent, '
+    "use a kebab-case slug of the product name.\n"
+    '- "name" is the human-readable product name.\n'
+    '- "specs" is a verbatim chunk of all relevant detail: materials, dimensions, '
+    "water resistance, movement, compatibility notes, warnings.\n"
+    "- Preserve units, standards (ISO 3157, Grade 5 Ti, EU REACH), and any ⚠ callouts.\n"
+    '- Treat the strap catalogue / Q-A quick-reference table as its own entry with '
+    'sku "STRAP-CATALOGUE".'
+)
 
 
 def extract_docx_text(docx_path: Path) -> str:
