@@ -59,6 +59,24 @@ def write_and_commit_entry(
         check=True,
         capture_output=True,
     )
+
+    # If the file was recreated with identical content (e.g. replay snapshot),
+    # git add stages nothing. Skip the commit and return current HEAD.
+    diff_index = subprocess.run(
+        ["git", "diff", "--cached", "--quiet"],
+        cwd=repo_root,
+        capture_output=True,
+    )
+    if diff_index.returncode == 0:
+        sha = subprocess.run(
+            ["git", "rev-parse", "--short", "HEAD"],
+            cwd=repo_root,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        return sha
+
     subprocess.run(
         ["git", "-c", "commit.gpgsign=false", "commit", "-m", commit_msg],
         cwd=repo_root,
