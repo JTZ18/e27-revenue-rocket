@@ -235,3 +235,33 @@ def test_themes_persist_endpoint(client: TestClient, tmp_path: Path, monkeypatch
     assert body["week_end"] == "2026-05-17"
     assert "committed_sha" in body
     assert (repo / "kb" / "themes" / "2026-05-17.md").exists()
+
+
+def test_personas_persist_endpoint(client: TestClient, tmp_path: Path):
+    import subprocess
+    subprocess.run(["git", "init", "-q"], cwd=tmp_path, check=True)
+    subprocess.run(["git", "config", "user.email", "t@x"], cwd=tmp_path, check=True)
+    subprocess.run(["git", "config", "user.name", "T"], cwd=tmp_path, check=True)
+    (tmp_path / "seed.txt").write_text("seed")
+    subprocess.run(["git", "add", "-A"], cwd=tmp_path, check=True)
+    subprocess.run(
+        ["git", "-c", "commit.gpgsign=false", "commit", "-q", "-m", "seed"],
+        cwd=tmp_path,
+        check=True,
+    )
+
+    r = client.post(
+        "/personas/persist",
+        json={
+            "persona": {
+                "axis": "interest",
+                "slug": "sustainability_buyer",
+                "label": "Sustainability buyer",
+                "description": "d",
+                "signals": ["vegan"],
+            },
+            "approver": "cs-alice",
+        },
+    )
+    assert r.status_code == 200
+    assert r.json()["slug"] == "sustainability_buyer"

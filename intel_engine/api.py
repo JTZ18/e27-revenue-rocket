@@ -378,3 +378,20 @@ async def themes_persist(req: PersistThemeReportRequest) -> dict:
             status_code=500, detail=f"Theme report persist failed: {e}"
         ) from e
     return {"committed_sha": sha, "week_end": report.week_end}
+
+
+from intel_engine.personas.writer import write_and_commit_persona
+from intel_engine.schemas.persona import PersonaDefinition as _PersonaDef
+
+
+class PersistPersonaRequest(BaseModel):
+    persona: dict
+    approver: str = "n8n"
+
+
+@app.post("/personas/persist")
+async def personas_persist(req: PersistPersonaRequest) -> dict:
+    persona = _PersonaDef(**req.persona)
+    repo_root = Path(kb_root()).parent
+    sha = write_and_commit_persona(persona, approver=req.approver, repo_root=repo_root)
+    return {"committed_sha": sha, "slug": persona.slug}

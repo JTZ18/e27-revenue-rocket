@@ -1,0 +1,98 @@
+{
+  "name": "06_weekly_persona_drift",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {"interval": [{"field": "weeks", "weekday": 1, "triggerAtHour": 10}]}
+      },
+      "name": "Cron Mon 10:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const today = new Date();\nconst end = today.toISOString().slice(0,10);\nconst startD = new Date(today.getTime() - 42*86400000);\nconst start = startD.toISOString().slice(0,10);\nreturn [{ json: { window_start: start, window_end: end }}];"
+      },
+      "name": "Compute window",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [480, 300]
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "documentId": "={{ $env.TICKETS_SHEET_ID }}",
+        "sheetName": "tickets_input",
+        "options": {}
+      },
+      "name": "Read sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [720, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const win = $('Compute window').first().json;\nconst rows = items.filter(it => it.json.date_received >= win.window_start);\nconst tickets = rows.map(it => ({ ticket_id: it.json.ticket_id, message_body: it.json.message_body, received_at: it.json.date_received }));\nreturn [{ json: { tickets, window_start: win.window_start, window_end: win.window_end }}];"
+      },
+      "name": "Build payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [960, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.INTEL_ENGINE_URL }}/personas/drift",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {"timeout": 120000}
+      },
+      "name": "POST /personas/drift",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1200, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {"caseSensitive": true, "leftValue": "", "typeValidation": "loose"},
+          "conditions": [
+            {
+              "leftValue": "={{ $json.proposals.length }}",
+              "rightValue": 0,
+              "operator": {"type": "number", "operation": "gt"}
+            }
+          ]
+        }
+      },
+      "name": "Has proposals?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1440, 300]
+    },
+    {
+      "parameters": {
+        "channel": "={{ $env.SLACK_CS_CHANNEL }}",
+        "text": "Persona drift proposals",
+        "otherOptions": {
+          "blocks": "={{ JSON.stringify([{type:'header',text:{type:'plain_text',text:'Persona drift — ' + $json.window_start + ' → ' + $json.window_end}}, {type:'section',text:{type:'mrkdwn',text:'*' + $json.unmatched_tickets + '* unmatched tickets; *' + $json.proposals.length + '* proposed personas.'}}].concat($json.proposals.map((p,i)=>({type:'section',text:{type:'mrkdwn',text:'*'+(i+1)+'. ['+p.axis+'/'+p.slug+']* '+p.label+'\\n_Signals:_ '+p.signals.join(', ')+'\\n'+p.rationale}})))) }}"
+        }
+      },
+      "name": "Slack: post proposals",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [1680, 200]
+    }
+  ],
+  "connections": {
+    "Cron Mon 10:00": {"main": [[{"node": "Compute window", "type": "main", "index": 0}]]},
+    "Compute window": {"main": [[{"node": "Read sheet", "type": "main", "index": 0}]]},
+    "Read sheet": {"main": [[{"node": "Build payload", "type": "main", "index": 0}]]},
+    "Build payload": {"main": [[{"node": "POST /personas/drift", "type": "main", "index": 0}]]},
+    "POST /personas/drift": {"main": [[{"node": "Has proposals?", "type": "main", "index": 0}]]},
+    "Has proposals?": {"main": [[{"node": "Slack: post proposals", "type": "main", "index": 0}], []]}
+  },
+  "settings": {}
+}
