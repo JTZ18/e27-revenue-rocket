@@ -1,0 +1,141 @@
+{
+  "name": "01 — Intake and Traversal",
+  "nodes": [
+    {
+      "id": "gs-trigger",
+      "name": "Google Sheets Trigger",
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "position": [250, 300],
+      "parameters": {
+        "event": "rowAdded",
+        "sheetName": "tickets_input",
+        "options": {}
+      },
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "id": "normalize",
+      "name": "Normalise to CommonEvent",
+      "type": "n8n-nodes-base.function",
+      "position": [450, 300],
+      "parameters": {
+        "jsCode": "const row = $input.first().json;\nreturn [{\n  json: {\n    event_id: `evt_${row.ticket_id}_${Date.now()}`,\n    source: 'google_sheet',\n    channel_meta: { row_index: row.__row_number || 0 },\n    customer: { id: `anon_${row.ticket_id}`, name: row.customer_name },\n    subject: row.subject || null,\n    body: row.body,\n    ts: row.received_at || new Date().toISOString(),\n    attachments: []\n  }\n}];"
+      }
+    },
+    {
+      "id": "post-traverse",
+      "name": "POST /traverse",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [650, 300],
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8000/traverse",
+        "sendBody": true,
+        "contentType": "json",
+        "body": "={{ JSON.stringify($json) }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "if-answerable",
+      "name": "answerable?",
+      "type": "n8n-nodes-base.if",
+      "position": [850, 300],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-1",
+              "leftValue": "={{ $json.can_answer_fully }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "no-op-true",
+      "name": "NoOp True",
+      "type": "n8n-nodes-base.noOp",
+      "position": [1050, 200]
+    },
+    {
+      "id": "no-op-false",
+      "name": "NoOp False",
+      "type": "n8n-nodes-base.noOp",
+      "position": [1050, 400]
+    }
+  ],
+  "connections": {
+    "Google Sheets Trigger": {
+      "main": [
+        [
+          {
+            "node": "Normalise to CommonEvent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalise to CommonEvent": {
+      "main": [
+        [
+          {
+            "node": "POST /traverse",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "POST /traverse": {
+      "main": [
+        [
+          {
+            "node": "answerable?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "answerable?": {
+      "main": [
+        [
+          {
+            "node": "NoOp True",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "NoOp False",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null
+}
