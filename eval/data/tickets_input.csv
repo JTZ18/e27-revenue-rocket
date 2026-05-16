@@ -1,0 +1,71 @@
+ticket_id,date_received,channel,customer_name,subject,message_body
+TKT-1046,2025-11-15 16:19,chat,Lily Shah,Magnetic field resistance,Is the movement resistant to magnetic fields? I work near MRI equipment.
+TKT-1010,2025-11-19 16:19,email,Oliver Gupta,Servicing older model,I have a Boldr Expedition from 2019. Do you still service older models? Is it the same price?
+TKT-1068,2025-11-22 16:19,chat,Caleb Harris,Price match,I found the same watch cheaper on another site. Do you offer price matching?
+TKT-1016,2025-11-23 16:19,instagram_dm,Liam Jones,Strap dye safety,Are the dyes used in the coloured straps non-toxic? I tend to sweat a lot and don't want dye bleeding onto my skin.
+TKT-1035,2025-11-28 16:19,email,Alexander Thompson,Rubber strap for swimming,I want to use the watch for swimming. Do you sell a rubber or silicone strap that's suitable?
+TKT-1002,2025-11-29 16:19,chat,Luke Moore,Express shipping option,I need the watch urgently as a birthday gift. Do you offer express shipping and how much does it cost?
+TKT-1006,2025-12-01 16:19,whatsapp,Logan Taylor,Water resistance re-testing after service,"After a full service, do you re-test the water resistance? I use the watch for diving."
+TKT-1030,2025-12-03 16:19,email,Victoria Wong,Limited edition availability,I saw a limited edition collab on your Instagram. Is it still available or sold out?
+TKT-1021,2025-12-04 16:19,whatsapp,Harper Teo,Luminous material safety,What luminous material do you use on the dial? Is it Super-LumiNova? Is it safe?
+TKT-1037,2025-12-04 16:19,chat,Oliver Ong,Strap length for large wrist,"I have a 20cm wrist. Will the standard strap length fit me, or do I need an extended strap?"
+TKT-1011,2025-12-05 16:19,email,Dylan Allen,Interchangeable strap between models,I own both the Expedition and the Journey. Can I swap straps between the two models?
+TKT-1005,2025-12-08 16:19,email,Xin Joshi,Customs duties — who pays?,I'm ordering from the UK. Will I have to pay customs duties on top of the shipping cost?
+TKT-1007,2025-12-14 16:19,instagram_dm,Luke Nair,Discount code not working,I'm trying to apply discount code BOLDR10 at checkout but it says it's invalid. Can you help?
+TKT-1047,2025-12-16 16:19,instagram_dm,Dylan Teo,Engraving on watch caseback,"Hi, I'd like to get the caseback engraved as a gift. How many characters can I fit and what's the cost?"
+TKT-1033,2025-12-19 16:19,instagram_dm,Kavya Smith,Multi-line engraving,I want two lines of text engraved. Is that possible and does it cost extra?
+TKT-1065,2025-12-19 16:19,whatsapp,Aditya Johnson,Altitude performance,"I'm going on a high-altitude trek. Will the watch perform normally at 5,000m above sea level?"
+TKT-1009,2025-12-24 16:19,instagram_dm,Vikram Miller,Where is my order?,"Hi, I placed order BLD-93810 about 10 days ago and haven't received it yet. Can you check the status?"
+TKT-1001,2025-12-26 16:19,whatsapp,Jack Jones,Servicing turnaround time,How long does a full service take? I'm going on holiday in 6 weeks and want the watch back before then.
+TKT-1023,2025-12-27 16:19,whatsapp,Jing Sharma,Strap width for Expedition 40mm,"Hi, what lug width does the Expedition 40mm use? I want to buy a third-party strap."
+TKT-1051,2025-12-28 16:19,email,Ling Ong,Strap for sensitive skin,My skin reacts to most watch straps. Which of your straps would you recommend for sensitive skin?
+TKT-1049,2025-12-29 16:19,instagram_dm,Henry Koh,Engraving in Chinese characters,Can you engrave Chinese characters? I want to put my parents' names in Mandarin.
+TKT-1034,2026-01-07 16:19,instagram_dm,Logan Miller,Warranty period,What is the warranty period on the watch? Does it cover the movement and the strap separately?
+TKT-1060,2026-01-08 16:19,email,Harper Taylor,Titanium grade on the Expedition model,"Hello, could you tell me what grade of titanium is used in the case? I've seen Grade 2 and Grade 5 mentioned online and want to know which one Boldr uses."
+TKT-1015,2026-01-12 16:19,chat,Scarlett Harris,Gift wrapping,Do you offer gift wrapping or a gift box option? I'm buying this as a wedding gift.
+TKT-1022,2026-01-14 16:19,chat,James Brown,Engraving depth and visibility,How deep is the engraving? I want to make sure it's visible and won't fade over time.
+TKT-1052,2026-01-14 16:19,instagram_dm,Owen Patel,Resale value of titanium watches,How well do Boldr watches hold their resale value compared to other micro-brands?
+TKT-1058,2026-01-15 16:19,instagram_dm,Victoria Martin,Engraving turnaround time,"If I order today with engraving, how long will it take to ship? I need it by next Friday."
+TKT-1004,2026-01-17 16:19,instagram_dm,Mila Sharma,Battery replacement cost,"Hi, my watch battery has died. How much does a battery replacement cost and how do I send it in?"
+TKT-1008,2026-01-21 16:19,chat,Riley Davis,Engraving on strap,"Can the strap buckle be engraved as well, or only the watch caseback?"
+TKT-1044,2026-01-21 16:19,email,Olivia Davis,NATO strap compatibility,Does the Expedition work with standard NATO straps? What size do I need?
+TKT-1048,2026-01-29 16:19,chat,Vikram Allen,Is the watch strap BPA-free?,"Hi, I'm buying this for my young daughter and want to make sure the strap is BPA-free. Can you confirm?"
+TKT-1062,2026-01-30 16:19,whatsapp,Noah Shah,Regulation service,My watch is losing about 10 seconds per day. Would a regulation service fix this?
+TKT-1038,2026-02-01 16:19,instagram_dm,Sneha Williams,Silicone strap material,Is the silicone strap food-grade or medical-grade silicone? Asking because my skin is sensitive.
+TKT-1029,2026-02-03 16:19,chat,Hui Joshi,Wrong item received,I received my order BLD-46048 but the strap colour is wrong — I ordered olive green but received black.
+TKT-1066,2026-02-06 16:19,instagram_dm,Emily Brown,Is the watch safe for kids?,I want to gift this to my 10-year-old nephew. Are the materials safe for children? Any certifications?
+TKT-1040,2026-02-08 16:19,whatsapp,Evelyn Martin,Order not received — presumed lost,It's been 3 weeks since I placed order BLD-42098 and tracking shows it's stuck in customs. What do I do?
+TKT-1043,2026-02-25 16:19,instagram_dm,Mei Lim,Refund status,I returned my order BLD-23434 two weeks ago. I haven't received my refund yet. Can you check?
+TKT-1061,2026-03-02 16:19,whatsapp,Hui Koh,Movement service vs battery,What's the difference between a movement service and just a battery replacement? Is the movement service worth it?
+TKT-1045,2026-03-06 16:19,email,Charlotte Nair,Watch for extreme sports,I do trail running and occasional rock climbing. Which model would you recommend and what's the shock resistance rating?
+TKT-1063,2026-03-06 16:19,whatsapp,Hui Gupta,Engraving price per character,What's the per-character charge for engraving? I want to engrave a 20-character message.
+TKT-1032,2026-03-07 16:19,instagram_dm,Benjamin Lee,Alloy composition of the strap,"Hi there, I have a nickel allergy. Can you confirm whether the metal parts on the strap buckle contain any nickel?"
+TKT-1014,2026-03-10 16:19,email,Penelope Wong,Collaboration with independent watchmakers,Do you collaborate with independent watchmakers for limited editions? I'm a collector and interested in unique pieces.
+TKT-1064,2026-03-14 16:19,chat,Olivia Chan,Strap colour options,What colour options are available for the 20mm rubber strap? I can only see black and navy on the website.
+TKT-1041,2026-03-15 16:19,chat,Scarlett Moore,Can I engrave a logo or image?,"Is it possible to engrave a small logo or symbol on the caseback, or is it text only?"
+TKT-1053,2026-03-16 16:19,email,Daniel Jackson,Leather strap care,I bought the leather strap. How should I care for it? Can it get wet?
+TKT-1057,2026-03-16 16:19,whatsapp,Kai Iyer,Change delivery address,I made a mistake in my delivery address for order BLD-28289. Can I update it before it ships?
+TKT-1054,2026-03-21 16:19,whatsapp,Jun Koh,Servicing warranty,Is there a warranty on the servicing work? What if the issue comes back after a few months?
+TKT-1031,2026-03-24 16:19,instagram_dm,Jun Iyer,Quick-release strap mechanism,Do your straps have a quick-release mechanism or do I need tools to swap them?
+TKT-1026,2026-03-30 16:19,chat,Nathan Brown,Full service — what's included?,What exactly is included in a full service? I've had the watch for 3 years and it's running slightly slow.
+TKT-1020,2026-04-01 16:19,whatsapp,Sophia Wong,Engraving mistake — can it be corrected?,I submitted the wrong text for engraving. I just placed the order 10 minutes ago. Can I change it?
+TKT-1017,2026-04-02 16:19,chat,Isabella Patel,Return policy,What is your return policy? Can I return the watch if it doesn't fit my wrist?
+TKT-1025,2026-04-02 16:19,email,Evelyn Jackson,Difference between Expedition and Journey,Can you explain the main differences between the Expedition and Journey models? I can't decide which to buy.
+TKT-1059,2026-04-02 16:19,email,Kai Jones,Sending watch for service internationally,I'm based in Australia. Can I send my watch in for servicing and how does that work?
+TKT-1067,2026-04-02 16:19,email,Luke Moore,EU safety certification,Does the strap meet EU REACH or RoHS standards? I'm based in Germany and need to confirm before purchasing.
+TKT-1012,2026-04-04 16:19,chat,Rahul Jones,Watch size recommendation,I have a small wrist (15cm). Would the 40mm case look too big? Do you have a smaller option?
+TKT-1024,2026-04-06 16:19,whatsapp,Liam Chan,Sustainability practices,I care about sustainability. Can you tell me about Boldr's environmental practices and whether the packaging is recyclable?
+TKT-1039,2026-04-07 16:19,whatsapp,Ava Lee,Titanium vs stainless steel case,What's the practical difference between your titanium case and a standard stainless steel watch? Is titanium really lighter?
+TKT-1003,2026-04-09 16:19,instagram_dm,Ethan Tan,Hypoallergenic claim,Your site says the watch is hypoallergenic. Does that apply to the strap as well or just the case?
+TKT-1050,2026-04-12 16:19,instagram_dm,Mei Mehta,Scratches on case — can you polish?,My watch case has some light scratches. Can you polish it during a service?
+TKT-1070,2026-04-19 16:19,email,Mila Yeo,Engraving in Arabic script,Can you engrave in Arabic? I want to put a dedication in Arabic for my father.
+TKT-1028,2026-04-22 16:19,email,Mei Davis,Strap recycling programme,Do you have a strap recycling or take-back programme? I have three old straps I'd like to dispose of responsibly.
+TKT-1036,2026-04-27 16:19,instagram_dm,Xin Moore,Vegan-friendly materials,Are all your straps vegan-friendly? I don't use any animal products and want to make sure the leather alternative is genuinely synthetic.
+TKT-1019,2026-05-01 16:19,email,Zoey Teo,Wholesale or bulk order,We're a corporate client looking to order 20 watches as employee gifts. Do you offer bulk pricing?
+TKT-1018,2026-05-02 16:19,whatsapp,Arjun Martin,Mesh bracelet compatibility,Do you sell a mesh/milanese bracelet for the Journey model? Or can I use a third-party one?
+TKT-1042,2026-05-02 16:19,chat,Elizabeth Yeo,Water resistance and materials,"If the watch is water resistant to 100m, does that mean the strap can be submerged too? What material is the strap?"
+TKT-1056,2026-05-04 16:19,instagram_dm,Lucas Mehta,Tracking number not updating,My tracking number DHL9697354961 hasn't updated in 5 days. Is there a delay?
+TKT-1069,2026-05-05 16:19,email,Elizabeth Johnson,Font options for engraving,"Do you offer different font styles for engraving, or is it a fixed font? I'd like something more elegant."
+TKT-1027,2026-05-06 16:19,chat,Sophia Patel,Gifting — personalisation options,What personalisation options do you offer for gifting? I want to make it special.
+TKT-1013,2026-05-10 16:19,chat,Victoria Singh,Carbon footprint of shipping,Do you offer carbon-neutral shipping? I try to offset my purchases where possible.
+TKT-1055,2026-05-12 16:19,whatsapp,Scarlett Taylor,Cancel order before shipping,I just placed order BLD-39256 and want to cancel it. It hasn't shipped yet. Is that possible?
