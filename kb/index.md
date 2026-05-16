@@ -2,7 +2,7 @@
 
 Generated automatically. Do not edit by hand — re-run `scripts/generate_index.py`.
 
-Total active entries: 39
+Total active entries: 40
 
 ## faq
 
@@ -13,6 +13,7 @@ Total active entries: 39
 - **synth-hi-i-m-buying-this-for-my-youn-e0ec84** — Hi, I'm buying this for my young daughter and want to make sure the strap is BPA-free. Can you confirm  _(themes: materials_safety)_
 - **synth-hi-i-placed-order-bld-93810-ab-cafa54** — Hi, I placed order BLD-93810 about 10 days ago and haven't received it yet. Can you check the status  _(themes: order_status, shipping)_
 - **synth-hi-my-watch-battery-has-died-h-df68c6** — Hi, my watch battery has died. How much does a battery replacement cost and how do I send it in  _(themes: servicing, aftercare)_
+- **synth-hi-there-i-have-a-nickel-aller-13f4db** — Hi there, I have a nickel allergy. Can you confirm whether the metal parts on the strap buckle contain any nickel  _(themes: materials_safety)_
 - **synth-hi-what-lug-width-does-the-exp-4edb1a** — Hi, what lug width does the Expedition 40mm use? I want to buy a third-party strap  _(themes: sizing, strap_interchangeability)_
 - **synth-how-deep-is-the-engraving-i-wa-5a85e4** — How deep is the engraving? I want to make sure it's visible and won't fade over time  _(themes: engraving, durability)_
 - **synth-how-well-do-boldr-watches-hold-3ebaa8** — How well do Boldr watches hold their resale value compared to other micro-brands  _(themes: Resale value of titanium watches)_
