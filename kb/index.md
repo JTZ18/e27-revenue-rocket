@@ -2,7 +2,7 @@
 
 Generated automatically. Do not edit by hand — re-run `scripts/generate_index.py`.
 
-Total active entries: 59
+Total active entries: 60
 
 ## faq
 
@@ -50,6 +50,7 @@ Total active entries: 59
 - **synth-is-there-a-warranty-on-the-ser-bbd023** — Is there a warranty on the servicing work? What if the issue comes back after a few months  _(themes: servicing, aftercare, warranty)_
 - **synth-it-s-been-3-weeks-since-i-plac-8fe78e** — It's been 3 weeks since I placed order BLD-42098 and tracking shows it's stuck in customs. What do I do  _(themes: order_status, international_shipping)_
 - **synth-my-skin-reacts-to-most-watch-s-a34b3e** — My skin reacts to most watch straps. Which of your straps would you recommend for sensitive skin  _(themes: materials_safety)_
+- **synth-my-tracking-number-dhl96973549-0e62e0** — My tracking number DHL9697354961 hasn't updated in 5 days. Is there a delay  _(themes: Tracking number not updating)_
 - **synth-my-watch-is-losing-about-10-se-d9a7c1** — My watch is losing about 10 seconds per day. Would a regulation service fix this  _(themes: servicing, aftercare)_
 - **synth-we-re-a-corporate-client-looki-c5f53a** — We're a corporate client looking to order 20 watches as employee gifts. Do you offer bulk pricing  _(themes: pricing, bulk_orders, corporate_gifting)_
 - **synth-what-colour-options-are-availa-e82bd3** — What colour options are available for the 20mm rubber strap? I can only see black and navy on the website  _(themes: strap_options, colour_options)_
