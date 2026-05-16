@@ -297,3 +297,21 @@ def test_briefs_persist_endpoint(client: TestClient, tmp_path: Path):
     assert r.json()["month"] == "2026-05"
     assert "committed_sha" in r.json()
     assert (tmp_path / "briefs" / "2026-05-marketing-brief.md").exists()
+
+
+def test_kb_summary_endpoint(client: TestClient, tmp_path: Path, monkeypatch):
+    kb = tmp_path / "kb"
+    (kb / "faqs").mkdir(parents=True, exist_ok=True)
+    (kb / "faqs" / "bpa.md").write_text(
+        "---\nslug: bpa\ntitle: BPA?\ndomain: faq\nthemes: []\nsources: []\n"
+        "last_verified: 2026-05-17\nstatus: active\n---\n\nYes.\n"
+    )
+    monkeypatch.setenv("KB_ROOT", str(kb))
+    from intel_engine import settings
+    settings.kb_root.cache_clear()
+
+    r = client.get("/kb/summary")
+    assert r.status_code == 200
+    body = r.json()
+    assert body["count"] >= 1
+    assert any(e["title"] == "BPA?" for e in body["entries"])

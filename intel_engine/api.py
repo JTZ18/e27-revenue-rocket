@@ -27,6 +27,7 @@ from intel_engine.agents.theme_clusterer import cluster_themes
 from intel_engine.conflicts.digest import to_slack_blocks
 from intel_engine.personas.reader import load_personas
 from intel_engine.schemas.theme import ThemeReport
+from intel_engine.kb.reader import load_kb
 from intel_engine.settings import kb_root
 from intel_engine.themes.writer import write_and_commit_theme_report
 from intel_engine.personas.writer import write_and_commit_persona
@@ -443,3 +444,20 @@ async def briefs_persist(req: PersistBriefRequest) -> dict:
             status_code=500, detail=f"Brief persist failed: {e}"
         ) from e
     return {"committed_sha": sha, "month": brief.month}
+
+
+@app.get("/kb/summary")
+async def kb_summary() -> dict:
+    entries = load_kb(kb_root())
+    out = []
+    for e in entries:
+        fm = e.frontmatter
+        out.append(
+            {
+                "path": f"kb/{fm.domain.value}/{fm.slug}.md",
+                "domain": fm.domain.value,
+                "title": fm.title,
+                "excerpt": e.body[:200],
+            }
+        )
+    return {"entries": out, "count": len(out)}
