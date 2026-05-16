@@ -26,7 +26,7 @@ async def draft_kb_entry(gap: Gap) -> KBEntry:
         f"=== GAP ID (for sources field) ===\n{gap.gap_id}"
     )
 
-    client = LLMClient(provider=LLMProvider.minimax)
+    client = LLMClient(provider=LLMProvider.openrouter)
     raw = await client.complete_json(system=system_prompt, user=user_message)
     return KBEntry(
         frontmatter=KBFrontmatter.model_validate(raw["frontmatter"]),
