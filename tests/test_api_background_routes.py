@@ -267,3 +267,31 @@ def test_personas_persist_endpoint(client: TestClient, tmp_path: Path):
     assert r.json()["slug"] == "sustainability_buyer"
     assert "committed_sha" in r.json()
     assert (tmp_path / "kb" / "personas" / "interest" / "sustainability_buyer.md").exists()
+
+
+def test_briefs_persist_endpoint(client: TestClient, tmp_path: Path):
+    import subprocess
+    subprocess.run(["git", "init", "-q"], cwd=tmp_path, check=True)
+    subprocess.run(["git", "config", "user.email", "t@x"], cwd=tmp_path, check=True)
+    subprocess.run(["git", "config", "user.name", "T"], cwd=tmp_path, check=True)
+    (tmp_path / "seed.txt").write_text("seed")
+    subprocess.run(["git", "add", "-A"], cwd=tmp_path, check=True)
+    subprocess.run(
+        ["git", "-c", "commit.gpgsign=false", "commit", "-q", "-m", "seed"],
+        cwd=tmp_path,
+        check=True,
+    )
+
+    r = client.post(
+        "/briefs/persist",
+        json={
+            "brief": {
+                "month": "2026-05",
+                "headline": "May test",
+                "insights": [],
+                "recommendations": [],
+            }
+        },
+    )
+    assert r.status_code == 200
+    assert r.json()["month"] == "2026-05"

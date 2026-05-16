@@ -31,6 +31,8 @@ from intel_engine.settings import kb_root
 from intel_engine.themes.writer import write_and_commit_theme_report
 from intel_engine.personas.writer import write_and_commit_persona
 from intel_engine.schemas.persona import PersonaDefinition
+from intel_engine.briefs.writer import write_and_commit_brief
+from intel_engine.schemas.brief import MarketingBrief
 
 app = FastAPI(title="Boldr Intel Engine", version="0.1.0")
 
@@ -403,3 +405,31 @@ async def personas_persist(req: PersistPersonaRequest) -> dict:
             status_code=500, detail=f"Persona persist failed: {e}"
         ) from e
     return {"committed_sha": sha, "slug": persona.slug}
+
+
+@app.get("/themes/list")
+async def themes_list(since: str | None = None) -> dict:
+    """Return parsed theme reports from kb/themes/*.md (optionally filtered by date)."""
+    themes_dir = kb_root() / "themes"
+    if not themes_dir.exists():
+        return {"reports": []}
+
+    out: list[dict] = []
+    for path in sorted(themes_dir.glob("*.md")):
+        if since and path.stem < since:
+            continue
+        text = path.read_text()
+        out.append({"week_end": path.stem, "markdown": text})
+    return {"reports": out}
+
+
+class PersistBriefRequest(BaseModel):
+    brief: dict
+
+
+@app.post("/briefs/persist")
+async def briefs_persist(req: PersistBriefRequest) -> dict:
+    brief = MarketingBrief(**req.brief)
+    repo_root = Path(kb_root()).parent
+    sha = write_and_commit_brief(brief, repo_root=repo_root)
+    return {"committed_sha": sha, "month": brief.month}
