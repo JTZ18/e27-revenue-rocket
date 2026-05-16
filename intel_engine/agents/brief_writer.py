@@ -34,6 +34,7 @@ async def write_brief(
     personas: list[PersonaDefinition],
     kb_summary: str,
 ) -> MarketingBrief:
+    """Generate a monthly marketing brief from theme reports and personas."""
     system = load_prompt("brief-writer-agent")
     user = (
         f"=== MONTH: {month} ===\n\n"
@@ -47,7 +48,7 @@ async def write_brief(
 
     return MarketingBrief(
         month=month,
-        headline=str(raw.get("headline", "")),
+        headline=raw.get("headline"),
         insights=[BriefInsight(**i) for i in raw.get("insights", [])],
         recommendations=[
             BriefRecommendation(**r) for r in raw.get("recommendations", [])

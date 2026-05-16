@@ -5,6 +5,7 @@ from unittest.mock import AsyncMock, patch
 import pytest
 
 from intel_engine.agents.brief_writer import write_brief
+from intel_engine.schemas.brief import BriefTarget
 from intel_engine.schemas.persona import PersonaAxis, PersonaDefinition
 from intel_engine.schemas.theme import Theme, ThemeReport
 
@@ -64,7 +65,7 @@ async def test_write_brief_returns_marketing_brief(monkeypatch, tmp_path: Path):
     with patch(
         "intel_engine.agents.brief_writer.LLMClient.complete_json",
         new=AsyncMock(return_value=mock),
-    ):
+    ) as mock_complete:
         brief = await write_brief(
             month="2026-05",
             theme_reports=weekly,
@@ -74,4 +75,10 @@ async def test_write_brief_returns_marketing_brief(monkeypatch, tmp_path: Path):
 
     assert brief.month == "2026-05"
     assert "sustainability" in brief.headline.lower()
-    assert brief.recommendations[0].target.value == "product_page"
+    assert brief.recommendations[0].target == BriefTarget.product_page
+
+    _, kwargs = mock_complete.call_args
+    assert "PROMPT" in kwargs["system"]
+    assert "2026-05" in kwargs["user"]
+    assert "Sustainability" in kwargs["user"]
+    assert "sustainability_buyer" in kwargs["user"]
