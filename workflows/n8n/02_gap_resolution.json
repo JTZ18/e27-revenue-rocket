@@ -8,67 +8,177 @@
         "responseMode": "responseNode",
         "options": {}
       },
-      "id": "a1b2c3d4-e5f6-4a5b-8c9d-000000000001",
+      "id": "81a99c95-8188-43ee-90a9-6c9b85087485",
       "name": "Slack interactivity webhook",
       "type": "n8n-nodes-base.webhook",
-      "position": [-880, -320],
+      "position": [944, 2304],
       "webhookId": "slack-interactivity",
       "typeVersion": 1.1
     },
     {
       "parameters": {
-        "functionCode": "const payload = JSON.parse($input.first().json.body.payload);\nreturn [{ json: payload }];"
+        "functionCode": "const raw = $input.first().json.body;\nconst payload = typeof raw === 'string' ? JSON.parse(raw) : raw;\nconst actions = payload.actions || [];\nconst firstAction = actions[0] || {};\nconst view = payload.view || {};\nreturn [{ json: {\n  type: payload.type || '',\n  action_id: firstAction.action_id || '',\n  gap_id: firstAction.value || (view.private_metadata || ''),\n  trigger_id: payload.trigger_id || (view.trigger_id || ''),\n  user: payload.user || (view.app_metadata && view.app_metadata.user) || {},\n  callback_id: view.callback_id || '',\n  view_state: view.state?.values || {},\n  private_metadata: view.private_metadata || ''\n} }];"
       },
-      "id": "b2c3d4e5-f6a7-4b6c-9d0e-111111111111",
+      "id": "75af8a86-a497-4542-b181-3e9eb08ddd00",
       "name": "Parse Slack payload",
       "type": "n8n-nodes-base.function",
-      "position": [-680, -320],
+      "position": [1152, 2304],
       "typeVersion": 1
     },
     {
       "parameters": {
         "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 3
-          },
+          "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "loose", "version": 3 },
           "conditions": [
-            {
-              "id": "cond-type",
-              "leftValue": "{{ $json.type }}",
-              "rightValue": "block_actions",
-              "operator": {
-                "type": "string",
-                "operation": "equals"
-              }
-            }
+            { "id": "cond-type", "leftValue": "={{ $json.type }}", "rightValue": "block_actions", "operator": { "type": "string", "operation": "equals" } }
           ],
           "combinator": "and"
         },
+        "looseTypeValidation": true,
         "options": {}
       },
-      "id": "c3d4e5f6-a7b8-4c7d-0e1f-222222222222",
-      "name": "type?",
+      "id": "c0e34db2-4628-49f1-8cae-b64f71425c74",
+      "name": "block_actions or view_submission?",
       "type": "n8n-nodes-base.if",
-      "position": [-480, -320],
+      "position": [1344, 2304],
+      "typeVersion": 2.3
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "loose", "version": 3 },
+          "conditions": [
+            { "id": "cond-action", "leftValue": "={{ $json.action_id }}", "rightValue": "resolve_gap", "operator": { "type": "string", "operation": "equals" } }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "resolve-if",
+      "name": "resolve_gap vs approve/reject?",
+      "type": "n8n-nodes-base.if",
+      "position": [1568, 2304],
+      "typeVersion": 2.3
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "loose", "version": 3 },
+          "conditions": [
+            { "id": "cond-action", "leftValue": "={{ $json.action_id }}", "rightValue": "approve_kb", "operator": { "type": "string", "operation": "equals" } }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "approval-if",
+      "name": "approve_kb vs reject_kb?",
+      "type": "n8n-nodes-base.if",
+      "position": [1792, 2688],
+      "typeVersion": 2.3
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "loose", "version": 3 },
+          "conditions": [
+            { "id": "cond-callback", "leftValue": "={{ $json.callback_id }}", "rightValue": "gap_resolution", "operator": { "type": "string", "operation": "equals" } }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "resolve-modal-if",
+      "name": "gap_resolution vs edit_kb_entry (view_closed)?",
+      "type": "n8n-nodes-base.if",
+      "position": [1568, 2496],
       "typeVersion": 2.3
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "={{ $json.response_url }}",
+        "url": "https://slack.com/api/views.open",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "slackApi",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"trigger_id\": {{ $json.trigger_id }},\n  \"view\": {\n    \"type\": \"modal\",\n    \"callback_id\": \"gap_resolution\",\n    \"title\": {\"type\": \"plain_text\", \"text\": \"Resolve Gap\"},\n    \"submit\": {\"type\": \"plain_text\", \"text\": \"Submit\"},\n    \"close\": {\"type\": \"plain_text\", \"text\": \"Cancel\"},\n    \"blocks\": [\n      {\"type\": \"input\", \"block_id\": \"resolution_text\", \"element\": {\"type\": \"plain_text_input\", \"action_id\": \"resolution\", \"multiline\": true}, \"label\": {\"type\": \"plain_text\", \"text\": \"Resolution\"}},\n      {\"type\": \"input\", \"block_id\": \"source_note\", \"element\": {\"type\": \"plain_text_input\", \"action_id\": \"note\"}, \"label\": {\"type\": \"plain_text\", \"text\": \"Source / reference\"}},\n      {\"type\": \"input\", \"block_id\": \"resolved_by\", \"element\": {\"type\": \"plain_text_input\", \"action_id\": \"resolver\", \"initial_value\": {{ $json.user.name }}}, \"label\": {\"type\": \"plain_text\", \"text\": \"Resolved by\"}}\n    ]\n  }\n}",
+        "jsonBody": "={\n  \"trigger_id\": {{ JSON.stringify($json.trigger_id) }},\n  \"view\": {\n    \"type\": \"modal\",\n    \"callback_id\": \"gap_resolution\",\n    \"private_metadata\": {{ JSON.stringify($json.gap_id) }},\n    \"title\": { \"type\": \"plain_text\", \"text\": \"Resolve Gap\" },\n    \"submit\": { \"type\": \"plain_text\", \"text\": \"Submit\" },\n    \"close\": { \"type\": \"plain_text\", \"text\": \"Cancel\" },\n    \"blocks\": [\n      { \"type\": \"input\", \"block_id\": \"resolution_text\", \"element\": { \"type\": \"plain_text_input\", \"action_id\": \"resolution\", \"multiline\": true }, \"label\": { \"type\": \"plain_text\", \"text\": \"How would you answer this?\" } },\n      { \"type\": \"input\", \"block_id\": \"source_note\", \"element\": { \"type\": \"plain_text_input\", \"action_id\": \"note\" }, \"label\": { \"type\": \"plain_text\", \"text\": \"Source / reference\" } },\n      { \"type\": \"input\", \"block_id\": \"resolved_by\", \"element\": { \"type\": \"plain_text_input\", \"action_id\": \"resolver\", \"initial_value\": {{ JSON.stringify($json.user.name || '') }} }, \"label\": { \"type\": \"plain_text\", \"text\": \"Resolved by\" } }\n    ]\n  }\n}",
         "options": {}
       },
-      "id": "d4e5f6a7-b8c9-4d8e-1f2a-333333333333",
+      "id": "94e34314-3d87-44e0-bda8-31a8798fa1b0",
       "name": "Open Slack Modal",
       "type": "n8n-nodes-base.httpRequest",
-      "position": [-264, -440],
+      "position": [1792, 2304],
+      "typeVersion": 4.4,
+      "credentials": { "slackApi": { "id": "o4gmQxd8X3OYj32m", "name": "Slack account" } }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8000/gap/approve",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"gap_id\": \"{{ $json.gap_id }}\",\n  \"entry\": {{ $json.actions[0].value | json: parse }},\n  \"approver\": \"{{ $json.user.name }}\"\n}",
+        "options": {}
+      },
+      "id": "aaaa1111-0001-0001-0001-aaaa11111111",
+      "name": "POST /gap/approve",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [2016, 2624],
       "typeVersion": 4.4
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://slack.com/api/views.open",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "slackApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"trigger_id\": {{ JSON.stringify($json.trigger_id) }},\n  \"view\": {\n    \"type\": \"modal\",\n    \"callback_id\": \"edit_kb_entry\",\n    \"private_metadata\": {{ JSON.stringify($json.gap_id) }},\n    \"title\": { \"type\": \"plain_text\", \"text\": \"Edit KB draft\" },\n    \"submit\": { \"type\": \"plain_text\", \"text\": \"Submit edits\" },\n    \"close\": { \"type\": \"plain_text\", \"text\": \"Discard\" },\n    \"blocks\": [\n      { \"type\": \"input\", \"block_id\": \"edit_title\", \"element\": { \"type\": \"plain_text_input\", \"action_id\": \"title\", \"initial_value\": {{ JSON.stringify($json.actions[0].value | json: parse | _get: 'frontmatter' | _get: 'title') }} }, \"label\": { \"type\": \"plain_text\", \"text\": \"Title\" } },\n      { \"type\": \"input\", \"block_id\": \"edit_slug\", \"element\": { \"type\": \"plain_text_input\", \"action_id\": \"slug\", \"initial_value\": {{ JSON.stringify($json.actions[0].value | json: parse | _get: 'frontmatter' | _get: 'slug') }} }, \"label\": { \"type\": \"plain_text\", \"text\": \"Slug\" } },\n      { \"type\": \"input\", \"block_id\": \"edit_domain\", \"element\": { \"type\": \"plain_text_input\", \"action_id\": \"domain\", \"initial_value\": {{ JSON.stringify($json.actions[0].value | json: parse | _get: 'frontmatter' | _get: 'domain') }} }, \"label\": { \"type\": \"plain_text\", \"text\": \"Domain (spec | pricing | policy | faq)\" } },\n      { \"type\": \"input\", \"block_id\": \"edit_body\", \"element\": { \"type\": \"plain_text_input\", \"action_id\": \"body\", \"initial_value\": {{ JSON.stringify($json.actions[0].value | json: parse | _get: 'body') }}, \"multiline\": true }, \"label\": { \"type\": \"plain_text\", \"text\": \"Body\" } }\n    ]\n  }\n}",
+        "options": {}
+      },
+      "id": "bbbb2222-0001-0001-0001-bbbb22222222",
+      "name": "Open Edit Modal",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [2240, 2752],
+      "typeVersion": 4.4,
+      "credentials": { "slackApi": { "id": "o4gmQxd8X3OYj32m", "name": "Slack account" } }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8000/gap/approve",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"gap_id\": \"{{ $json.private_metadata }}\",\n  \"approver\": \"{{ $json.user.name }}\",\n  \"entry\": {\n    \"frontmatter\": {\n      \"slug\": \"{{ $json.view_state.edit_slug.slug.value }}\",\n      \"title\": \"{{ $json.view_state.edit_title.title.value }}\",\n      \"domain\": \"{{ $json.view_state.edit_domain.domain.value }}\",\n      \"themes\": [],\n      \"sources\": [],\n      \"status\": \"active\"\n    },\n    \"body\": \"{{ $json.view_state.edit_body.body.value }}\"\n  }\n}",
+        "options": {}
+      },
+      "id": "cccc3333-0001-0001-0001-cccc33333333",
+      "name": "POST /gap/approve (edit modal)",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [2464, 2752],
+      "typeVersion": 4.4
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": { "__rl": true, "value": "#boldr-intel-demo", "mode": "name" },
+        "messageType": "block",
+        "blocksUi": "={\n    \"blocks\": [\n      { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"Draft discarded — gap closed without KB update.\" } }\n    ]\n  }",
+        "text": "KB draft discarded",
+        "otherOptions": {}
+      },
+      "id": "dddd4444-0001-0001-0001-dddd44444444",
+      "name": "Notify discard",
+      "type": "n8n-nodes-base.slack",
+      "position": [1792, 2688],
+      "typeVersion": 2.4,
+      "webhookId": "f2303709-3051-4a2c-ab12-e4107316a2d0",
+      "credentials": { "slackApi": { "id": "o4gmQxd8X3OYj32m", "name": "Slack account" } }
     },
     {
       "parameters": {
@@ -76,13 +186,13 @@
         "url": "http://host.docker.internal:8000/gap/resolve",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"gap_id\": \"{{ $json.view.private_metadata }}\",\n  \"resolved_by\": \"{{ $json.user.name }}\",\n  \"resolution_text\": {{ JSON.stringify($json.view.state.values.resolution_text.resolution.value) }},\n  \"source_note\": {{ JSON.stringify($json.view.state.values.source_note.note.value) }}\n}",
+        "jsonBody": "={\n  \"gap_id\": \"{{ $json.private_metadata }}\",\n  \"resolved_by\": \"{{ $json.user.name }}\",\n  \"resolution_text\": {{ JSON.stringify($json.view_state.resolution_text.resolution.value) }},\n  \"source_note\": {{ JSON.stringify($json.view_state.source_note.note.value) }}\n}",
         "options": {}
       },
-      "id": "e5f6a7b8-c9d0-4e9f-2a3b-444444444444",
-      "name": "POST /gap/resolve",
+      "id": "9cb295c2-b876-4038-a623-a3a8680e8e7d",
+      "name": "POST /gap/resolve (modal)",
       "type": "n8n-nodes-base.httpRequest",
-      "position": [-264, -200],
+      "position": [1792, 2496],
       "typeVersion": 4.4
     },
     {
@@ -91,117 +201,69 @@
         "url": "http://host.docker.internal:8000/draft-kb-entry",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ gap_id: $('POST /gap/resolve').item.json.gap_id }) }}",
+        "jsonBody": "={{ JSON.stringify({ gap_id: $('POST /gap/resolve (modal)').item.json.gap_id }) }}",
         "options": {}
       },
-      "id": "f6a7b8c9-d0e1-4f0a-3b4c-555555555555",
+      "id": "d0c59c65-cb77-4bbf-9be9-e367c419ec5b",
       "name": "POST /draft-kb-entry",
       "type": "n8n-nodes-base.httpRequest",
-      "position": [-48, -200],
+      "position": [2016, 2496],
       "typeVersion": 4.4
     },
     {
       "parameters": {
         "select": "channel",
-        "channelId": {
-          "__rl": true,
-          "value": "#boldr-intel-demo",
-          "mode": "name"
-        },
+        "channelId": { "__rl": true, "value": "#boldr-intel-demo", "mode": "name" },
         "messageType": "block",
-        "blocksUi": "={\n    \"blocks\": [\n      {\n        \"type\": \"section\",\n        \"text\": {\n          \"type\": \"mrkdwn\",\n          \"text\": \"*KB entry drafted for approval*\\n\\n*Slug:* {{ $('POST /draft-kb-entry').item.json.frontmatter.slug }}\\n*Title:* {{ $('POST /draft-kb-entry').item.json.frontmatter.title }}\\n*Domain:* {{ $('POST /draft-kb-entry').item.json.frontmatter.domain }}\"\n        }\n      },\n      {\n        \"type\": \"actions\",\n        \"elements\": [\n          {\n            \"type\": \"button\",\n            \"text\": {\n              \"type\": \"plain_text\",\n              \"text\": \"Approve & commit to KB\",\n              \"emoji\": true\n            },\n            \"style\": \"primary\",\n            \"value\": \"{{ $('POST /draft-kb-entry').item.json.frontmatter.slug }}\",\n            \"action_id\": \"approve_kb\"\n          },\n          {\n            \"type\": \"button\",\n            \"text\": {\n              \"type\": \"plain_text\",\n              \"text\": \"Reject\",\n              \"emoji\": true\n            },\n            \"style\": \"danger\",\n            \"value\": \"reject\",\n            \"action_id\": \"reject_kb\"\n          }\n        ]\n      }\n    ]\n  }",
+        "blocksUi": "={\n    \"blocks\": [\n      { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"*KB entry drafted for approval*\\n\\n*Slug:* {{ $('POST /draft-kb-entry').item.json.frontmatter.slug }}\\n*Title:* {{ $('POST /draft-kb-entry').item.json.frontmatter.title }}\\n*Domain:* {{ $('POST /draft-kb-entry').item.json.frontmatter.domain }}\" } },\n      { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"```\\n{{ $('POST /draft-kb-entry').item.json.body }}\\n```\" } },\n      { \"type\": \"actions\", \"elements\": [\n        { \"type\": \"button\", \"text\": { \"type\": \"plain_text\", \"text\": \"Approve & commit to KB\", \"emoji\": true }, \"style\": \"primary\", \"value\": \"{{ JSON.stringify($('POST /draft-kb-entry').item.json) }}\", \"action_id\": \"approve_kb\" },\n        { \"type\": \"button\", \"text\": { \"type\": \"plain_text\", \"text\": \"Edit draft\", \"emoji\": true }, \"value\": \"{{ JSON.stringify($('POST /draft-kb-entry').item.json) }}\", \"action_id\": \"reject_kb\" }\n      ]}\n    ]\n  }",
         "text": "KB entry drafted — approve to commit?",
         "otherOptions": {}
       },
-      "id": "a7b8c9d0-e1f2-4a1b-4c5d-666666666666",
+      "id": "d002bf89-8e4c-4983-b28a-28438b8eeee0",
       "name": "Post KB Approval Message",
       "type": "n8n-nodes-base.slack",
-      "position": [160, -200],
+      "position": [2240, 2496],
       "typeVersion": 2.4,
       "webhookId": "f2303709-3051-4a2c-ab12-e4107316a2d0",
-      "credentials": {
-        "slackApi": {
-          "id": "o4gmQxd8X3OYj32m",
-          "name": "Slack account"
-        }
-      }
+      "credentials": { "slackApi": { "id": "o4gmQxd8X3OYj32m", "name": "Slack account" } }
     }
   ],
   "pinData": {},
   "connections": {
-    "Slack interactivity webhook": {
+    "Slack interactivity webhook": { "main": [ [{ "node": "Parse Slack payload", "type": "main", "index": 0 }] ] },
+    "Parse Slack payload": { "main": [ [{ "node": "block_actions or view_submission?", "type": "main", "index": 0 }] ] },
+    "block_actions or view_submission?": {
       "main": [
-        [
-          {
-            "node": "Parse Slack payload",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        [{ "node": "resolve_gap vs approve/reject?", "type": "main", "index": 0 }],
+        [{ "node": "gap_resolution vs edit_kb_entry (view_closed)?", "type": "main", "index": 0 }]
       ]
     },
-    "Parse Slack payload": {
+    "resolve_gap vs approve/reject?": {
       "main": [
-        [
-          {
-            "node": "type?",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        [{ "node": "Open Slack Modal", "type": "main", "index": 0 }],
+        [{ "node": "approve_kb vs reject_kb?", "type": "main", "index": 0 }]
       ]
     },
-    "type?": {
+    "approve_kb vs reject_kb?": {
       "main": [
-        [
-          {
-            "node": "Open Slack Modal",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "POST /gap/resolve",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        [{ "node": "POST /gap/approve", "type": "main", "index": 0 }],
+        [{ "node": "Open Edit Modal", "type": "main", "index": 0 }]
       ]
     },
-    "POST /gap/resolve": {
+    "gap_resolution vs edit_kb_entry (view_closed)?": {
       "main": [
-        [
-          {
-            "node": "POST /draft-kb-entry",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        [{ "node": "POST /gap/resolve (modal)", "type": "main", "index": 0 }],
+        [{ "node": "Notify discard", "type": "main", "index": 0 }]
       ]
     },
-    "POST /draft-kb-entry": {
-      "main": [
-        [
-          {
-            "node": "Post KB Approval Message",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    }
+    "POST /gap/resolve (modal)": { "main": [ [{ "node": "POST /draft-kb-entry", "type": "main", "index": 0 }] ] },
+    "POST /draft-kb-entry": { "main": [ [{ "node": "Post KB Approval Message", "type": "main", "index": 0 }] ] },
+    "Open Edit Modal": { "main": [ [{ "node": "POST /gap/approve (edit modal)", "type": "main", "index": 0 }] ] }
   },
   "active": false,
-  "settings": {
-    "executionOrder": "v1",
-    "binaryMode": "separate"
-  },
-  "versionId": "06c24fc7-5f1e-4ac4-903c-7bfd5755aa9b",
-  "meta": {
-    "templateCredsSetupCompleted": true,
-    "instanceId": "d751af066a0d8cdd4f0b598e2ce0c7875a49828569f2d1a9540a608562505421"
-  },
-  "id": "03d5AP3F2I8FWpon",
+  "settings": { "executionOrder": "v1", "binaryMode": "separate" },
+  "versionId": "99ef6cff-048f-49e3-b319-3fad23d7a786",
+  "meta": { "instanceId": "d751af066a0d8cdd4f0b598e2ce0c7875a49828569f2d1a9540a608562505420" },
+  "id": "GE2PPN7D2JTcTzkl",
   "tags": []
 }

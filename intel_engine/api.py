@@ -157,3 +157,95 @@ async def get_staged_draft(gap_id: str) -> KBEntry:
     if not path.exists():
         raise HTTPException(status_code=404, detail="No staged draft")
     return KBEntry.model_validate_json(path.read_text())
+
+
+class UpdateDraftRequest(BaseModel):
+    entry: KBEntry
+
+
+@app.post("/draft/update")
+async def update_draft(payload: UpdateDraftRequest, gap_id: str) -> dict[str, str]:
+    path = DRAFT_STAGE_DIR / f"{gap_id}.json"
+    path.write_text(payload.entry.model_dump_json(indent=2))
+    return {"status": "updated"}
+
+
+@app.post("/gap/approve", response_model=CommitResponse)
+async def approve_draft(payload: CommitRequest) -> CommitResponse:
+    """Approve a drafted KB entry — stage it then commit to Git."""
+    # Stage first so we have a copy
+    DRAFT_STAGE_DIR.mkdir(exist_ok=True)
+    stage_path = DRAFT_STAGE_DIR / f"{payload.gap_id}.json"
+    stage_path.write_text(payload.entry.model_dump_json(indent=2))
+
+    # Commit to Git
+    from intel_engine.settings import kb_root
+    repo_root = kb_root().parent
+    try:
+        sha = write_and_commit_entry(
+            payload.entry,
+            approver=payload.approver,
+            repo_root=repo_root,
+        )
+    except subprocess.CalledProcessError as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Git commit failed: {e.stderr.decode() if e.stderr else e}",
+        ) from e
+
+    rel_path = (
+        Path("kb") / payload.entry.frontmatter.domain.value
+        / f"{payload.entry.frontmatter.slug}.md"
+    )
+    if payload.gap_id:
+        gap = load_gap(payload.gap_id)
+        gap.drafted_kb_slug = payload.entry.frontmatter.slug
+        write_gap(gap)
+
+    return CommitResponse(sha=sha, path=str(rel_path))
+
+
+@app.post("/gap/reject")
+async def reject_draft(body: dict) -> dict[str, str]:
+    """Discard a drafted KB entry — delete staged file, leave gap open."""
+    gap_id = body.get("gap_id") or body.get("private_metadata", "")
+    stage_path = DRAFT_STAGE_DIR / f"{gap_id}.json"
+    if stage_path.exists():
+        stage_path.unlink()
+    return {"status": "rejected", "gap_id": gap_id}
+
+
+class ViewSubmissionRequest(BaseModel):
+    pass  # payload is raw JSON from Slack
+
+
+@app.post("/slack/interactive-endpoint")
+async def slack_interactive_endpoint(body: dict) -> dict:
+    """Generic endpoint that routes view_submission callbacks."""
+    view = body.get("view", {})
+    callback_id = view.get("callback_id", "")
+    private_metadata = view.get("private_metadata", "")
+    user = body.get("user", {})
+    view_state = view.get("state", {}).get("values", {})
+
+    if callback_id == "gap_resolution":
+        res_text = view_state.get("resolution_text", {}).get("resolution", {}).get("value", "")
+        source_note = view_state.get("source_note", {}).get("note", {}).get("value", "")
+        resolved_by = user.get("name", "")
+        return {"status": "processed_gap_resolution", "gap_id": private_metadata}
+
+    if callback_id == "edit_kb_entry":
+        title = view_state.get("edit_title", {}).get("title", {}).get("value", "")
+        slug = view_state.get("edit_slug", {}).get("slug", {}).get("value", "")
+        domain_val = view_state.get("edit_domain", {}).get("domain", {}).get("value", "")
+        body_text = view_state.get("edit_body", {}).get("body", {}).get("value", "")
+        return {
+            "status": "processed_edit",
+            "gap_id": private_metadata,
+            "title": title,
+            "slug": slug,
+            "domain": domain_val,
+            "body": body_text
+        }
+
+    return {"status": "unknown_callback", "callback_id": callback_id}
