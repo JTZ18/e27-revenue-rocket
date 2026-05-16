@@ -1,7 +1,7 @@
 """FastAPI service exposing intel engine endpoints to n8n."""
 import secrets
 import subprocess
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
@@ -13,7 +13,7 @@ from intel_engine.gap.logger import load_gap, write_gap
 from intel_engine.kb.writer import write_and_commit_entry
 from intel_engine.schemas.event import CommonEvent
 from intel_engine.schemas.gap import Gap, GapResolution, GapStatus
-from intel_engine.schemas.kb import KBEntry, KBFrontmatter
+from intel_engine.schemas.kb import KBEntry
 from intel_engine.schemas.traversal import TraversalResult
 
 app = FastAPI(title="Boldr Intel Engine", version="0.1.0")
@@ -42,7 +42,7 @@ class GapCreateRequest(BaseModel):
 
 @app.post("/gap", response_model=Gap)
 async def create_gap(payload: GapCreateRequest) -> Gap:
-    today = datetime.now(timezone.utc).date()
+    today = datetime.now(UTC).date()
     gap_id = f"gap_{today.isoformat()}_{secrets.token_hex(3)}"
     gap = Gap(
         gap_id=gap_id,
@@ -70,7 +70,7 @@ async def resolve_gap(payload: GapResolveRequest) -> Gap:
     gap.resolution = GapResolution(
         resolved_by=payload.resolved_by,
         resolution_text=payload.resolution_text,
-        resolved_at=datetime.now(timezone.utc),
+        resolved_at=datetime.now(UTC),
         source_note=payload.source_note,
     )
     write_gap(gap)
@@ -129,3 +129,28 @@ async def commit_endpoint(payload: CommitRequest) -> CommitResponse:
         write_gap(gap)
 
     return CommitResponse(sha=sha, path=str(rel_path))
+
+
+DRAFT_STAGE_DIR = Path("./kb-drafts-staging")
+
+
+class StageDraftRequest(BaseModel):
+    gap_id: str
+    entry: KBEntry
+
+
+@app.post("/draft/stage")
+async def stage_draft(payload: StageDraftRequest) -> dict[str, str]:
+    DRAFT_STAGE_DIR.mkdir(exist_ok=True)
+    (DRAFT_STAGE_DIR / f"{payload.gap_id}.json").write_text(
+        payload.entry.model_dump_json(indent=2)
+    )
+    return {"status": "staged"}
+
+
+@app.get("/draft/staged/{gap_id}", response_model=KBEntry)
+async def get_staged_draft(gap_id: str) -> KBEntry:
+    path = DRAFT_STAGE_DIR / f"{gap_id}.json"
+    if not path.exists():
+        raise HTTPException(status_code=404, detail="No staged draft")
+    return KBEntry.model_validate_json(path.read_text())

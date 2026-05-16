@@ -1,11 +1,13 @@
 """Test FastAPI service."""
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime
 from unittest.mock import AsyncMock, patch
 
 import pytest
 from httpx import ASGITransport, AsyncClient
 
 from intel_engine.api import app
+from intel_engine.schemas.gap import Gap, GapResolution, GapStatus
+from intel_engine.schemas.kb import KBDomain, KBEntry, KBFrontmatter
 from intel_engine.schemas.traversal import Confidence, TraversalResult
 
 
@@ -54,13 +56,6 @@ async def test_traverse_endpoint(fixtures_dir, monkeypatch):
     body = r.json()
     assert body["can_answer_fully"] is True
     assert body["confidence"] == "high"
-
-
-from datetime import date
-from unittest.mock import patch
-
-from intel_engine.schemas.gap import Gap, GapResolution, GapStatus
-from intel_engine.schemas.kb import KBDomain, KBEntry, KBFrontmatter
 
 
 @pytest.mark.asyncio
@@ -131,3 +126,29 @@ async def test_draft_kb_entry_endpoint(monkeypatch, tmp_path, fixtures_dir):
     body = r.json()
     assert body["frontmatter"]["slug"] == "mri-safe"
     assert body["frontmatter"]["domain"] == "spec"
+
+
+@pytest.mark.asyncio
+async def test_stage_and_load_draft(monkeypatch, tmp_path):
+    # Cheat: monkeypatch the global path
+    import intel_engine.api as api_mod
+    monkeypatch.setattr(api_mod, "DRAFT_STAGE_DIR", tmp_path)
+
+    entry = KBEntry(
+        frontmatter=KBFrontmatter(
+            slug="t", title="T", domain=KBDomain.faq, themes=[], sources=[],
+            last_verified=date(2026, 5, 16),
+        ),
+        body="b",
+    )
+    async with AsyncClient(
+        transport=ASGITransport(app=app), base_url="http://test"
+    ) as ac:
+        r = await ac.post(
+            "/draft/stage",
+            json={"gap_id": "g1", "entry": entry.model_dump(mode="json")},
+        )
+        assert r.status_code == 200
+        r2 = await ac.get("/draft/staged/g1")
+        assert r2.status_code == 200
+        assert r2.json()["frontmatter"]["slug"] == "t"

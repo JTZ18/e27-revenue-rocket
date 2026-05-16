@@ -16,3 +16,4 @@ context/
 CLAUDE.md
 main.py
 .n8n_data/
+kb-drafts-staging/
