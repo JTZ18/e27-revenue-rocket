@@ -2,7 +2,7 @@
 
 Generated automatically. Do not edit by hand — re-run `scripts/generate_index.py`.
 
-Total active entries: 22
+Total active entries: 23
 
 ## faq
 
@@ -20,6 +20,7 @@ Total active entries: 22
 - **synth-i-saw-a-limited-edition-collab-7be137** — I saw a limited edition collab on your Instagram. Is it still available or sold out  _(themes: limited_edition)_
 - **synth-i-want-to-use-the-watch-for-sw-0ac468** — I want to use the watch for swimming. Do you sell a rubber or silicone strap that's suitable  _(themes: water_resistance, materials, swimming)_
 - **synth-is-the-movement-resistant-to-m-2e3633** — Is the movement resistant to magnetic fields? I work near MRI equipment  _(themes: movement_specs, materials_safety)_
+- **synth-my-skin-reacts-to-most-watch-s-a34b3e** — My skin reacts to most watch straps. Which of your straps would you recommend for sensitive skin  _(themes: materials_safety)_
 - **synth-what-luminous-material-do-you-04e40c** — What luminous material do you use on the dial? Is it Super-LumiNova? Is it safe  _(themes: materials_safety)_
 
 ## persona
