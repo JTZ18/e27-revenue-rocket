@@ -2,7 +2,7 @@
 
 Generated automatically. Do not edit by hand — re-run `scripts/generate_index.py`.
 
-Total active entries: 46
+Total active entries: 47
 
 ## faq
 
@@ -11,6 +11,7 @@ Total active entries: 46
 - **synth-do-you-offer-gift-wrapping-or-7d9268** — Do you offer gift wrapping or a gift box option? I'm buying this as a wedding gift  _(themes: gifting)_
 - **synth-do-your-straps-have-a-quick-re-c859b3** — Do your straps have a quick-release mechanism or do I need tools to swap them  _(themes: strap_interchangeability, swapping_mechanism)_
 - **synth-does-the-expedition-work-with-3e4238** — Does the Expedition work with standard NATO straps? What size do I need  _(themes: strap_interchangeability, sizing)_
+- **synth-does-the-strap-meet-eu-reach-o-0538b5** — Does the strap meet EU REACH or RoHS standards? I'm based in Germany and need to confirm before purchasing  _(themes: materials_safety, regulatory_compliance)_
 - **synth-hello-could-you-tell-me-what-g-a0b768** — Hello, could you tell me what grade of titanium is used in the case? I've seen Grade 2 and Grade 5 mentioned online and   _(themes: materials, specifications)_
 - **synth-hi-i-m-buying-this-for-my-youn-e0ec84** — Hi, I'm buying this for my young daughter and want to make sure the strap is BPA-free. Can you confirm  _(themes: materials_safety)_
 - **synth-hi-i-placed-order-bld-93810-ab-cafa54** — Hi, I placed order BLD-93810 about 10 days ago and haven't received it yet. Can you check the status  _(themes: order_status, shipping)_
