@@ -17,6 +17,10 @@ def gap_log_root() -> Path:
 def llm_config(provider: str) -> dict[str, str]:
     """Return base_url, api_key, model for a provider ('minimax' or 'kimi')."""
     prefix = f"LLM_{provider.upper()}"
+    keys = (f"{prefix}_BASE_URL", f"{prefix}_API_KEY", f"{prefix}_MODEL")
+    missing = [k for k in keys if not os.environ.get(k)]
+    if missing:
+        raise ValueError(f"Missing LLM config for provider {provider!r}: {', '.join(missing)}")
     return {
         "base_url": os.environ[f"{prefix}_BASE_URL"],
         "api_key": os.environ[f"{prefix}_API_KEY"],

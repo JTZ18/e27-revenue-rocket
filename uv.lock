@@ -448,7 +448,6 @@ dependencies = [
     { name = "pandas" },
     { name = "pdfplumber" },
     { name = "pydantic" },
-    { name = "pytest-cov" },
     { name = "python-docx" },
     { name = "python-dotenv" },
     { name = "pyyaml" },
@@ -459,6 +458,7 @@ dependencies = [
 dev = [
     { name = "pytest" },
     { name = "pytest-asyncio" },
+    { name = "pytest-cov" },
     { name = "pytest-httpx" },
     { name = "pytest-mock" },
     { name = "ruff" },
@@ -471,7 +471,6 @@ requires-dist = [
     { name = "pandas", specifier = ">=2.2" },
     { name = "pdfplumber", specifier = ">=0.11" },
     { name = "pydantic", specifier = ">=2.9" },
-    { name = "pytest-cov", specifier = ">=7.1.0" },
     { name = "python-docx", specifier = ">=1.1" },
     { name = "python-dotenv", specifier = ">=1.0" },
     { name = "pyyaml", specifier = ">=6.0.3" },
@@ -482,6 +481,7 @@ requires-dist = [
 dev = [
     { name = "pytest", specifier = ">=8.3" },
     { name = "pytest-asyncio", specifier = ">=0.24" },
+    { name = "pytest-cov", specifier = ">=7.1.0" },
     { name = "pytest-httpx", specifier = ">=0.36.2" },
     { name = "pytest-mock", specifier = ">=3.14" },
     { name = "ruff", specifier = ">=0.7" },

@@ -1,6 +1,6 @@
 """OpenAI-compatible chat client for Minimax + Kimi."""
 import json
-from enum import Enum
+from enum import StrEnum
 from typing import Any
 
 import httpx
@@ -8,7 +8,7 @@ import httpx
 from intel_engine.settings import llm_config
 
 
-class LLMProvider(str, Enum):
+class LLMProvider(StrEnum):
     minimax = "minimax"
     kimi = "kimi"
 

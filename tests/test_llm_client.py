@@ -1,16 +1,5 @@
 """Test LLM client."""
-import json
-
-import httpx
-import pytest
-
 from intel_engine.llm.client import LLMClient, LLMProvider
-
-
-@pytest.fixture
-def mock_llm_response(respx_mock):
-    """Mock a chat completion response."""
-    return respx_mock
 
 
 async def test_client_calls_correct_endpoint(monkeypatch, httpx_mock):
