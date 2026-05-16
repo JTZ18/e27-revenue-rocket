@@ -249,3 +249,97 @@ async def slack_interactive_endpoint(body: dict) -> dict:
         }
 
     return {"status": "unknown_callback", "callback_id": callback_id}
+
+
+# ---------- Background loop routes (Plan 3) ----------
+from intel_engine.agents.brief_writer import write_brief
+from intel_engine.agents.conflict_detector import detect_conflicts
+from intel_engine.agents.persona_discovery import discover_personas
+from intel_engine.agents.persona_drift import detect_drift
+from intel_engine.agents.theme_clusterer import cluster_themes
+from intel_engine.conflicts.digest import to_slack_blocks
+from intel_engine.personas.reader import load_personas
+from intel_engine.schemas.persona import PersonaDefinition
+from intel_engine.schemas.theme import ThemeReport
+from intel_engine.settings import kb_root
+
+
+class TicketsRequest(BaseModel):
+    tickets: list[dict]
+
+
+class WindowedTicketsRequest(BaseModel):
+    tickets: list[dict]
+    week_start: str
+    week_end: str
+
+
+class DriftRequest(BaseModel):
+    tickets: list[dict]
+    window_start: str
+    window_end: str
+
+
+class BriefRequest(BaseModel):
+    month: str
+    theme_reports: list[dict]
+    kb_summary: str = ""
+
+
+class ConflictsRequest(BaseModel):
+    kb_entries: list[dict]
+    week_end: str
+
+
+@app.post("/personas/discover")
+async def personas_discover(req: TicketsRequest) -> dict:
+    proposals = await discover_personas(req.tickets)
+    return {"proposals": [p.model_dump(mode="json") for p in proposals]}
+
+
+@app.post("/personas/drift")
+async def personas_drift(req: DriftRequest) -> dict:
+    active = load_personas(kb_root())
+    report = await detect_drift(
+        active_personas=active,
+        tickets=req.tickets,
+        window_start=req.window_start,
+        window_end=req.window_end,
+    )
+    return report.model_dump(mode="json")
+
+
+@app.post("/themes/cluster")
+async def themes_cluster(req: WindowedTicketsRequest) -> dict:
+    report = await cluster_themes(
+        tickets=req.tickets,
+        week_start=req.week_start,
+        week_end=req.week_end,
+    )
+    return report.model_dump(mode="json")
+
+
+@app.post("/briefs/monthly")
+async def briefs_monthly(req: BriefRequest) -> dict:
+    personas = load_personas(kb_root())
+    theme_reports = [ThemeReport(**r) for r in req.theme_reports]
+    brief = await write_brief(
+        month=req.month,
+        theme_reports=theme_reports,
+        personas=personas,
+        kb_summary=req.kb_summary,
+    )
+    return brief.model_dump(mode="json")
+
+
+@app.post("/conflicts/digest")
+async def conflicts_digest(req: ConflictsRequest) -> dict:
+    digest = await detect_conflicts(
+        kb_entries=req.kb_entries,
+        week_end=req.week_end,
+    )
+    return {
+        **digest.model_dump(mode="json"),
+        "count": digest.count,
+        "slack_blocks": to_slack_blocks(digest),
+    }
