@@ -1,5 +1,6 @@
 """End-to-end smoke test for the four background loops (mocked LLM)."""
 import subprocess
+from datetime import date
 from pathlib import Path
 from unittest.mock import AsyncMock, patch
 
@@ -8,7 +9,7 @@ from fastapi.testclient import TestClient
 
 
 @pytest.fixture
-def client(monkeypatch, tmp_path: Path) -> tuple[TestClient, Path]:
+def client_and_repo(monkeypatch, tmp_path: Path) -> tuple[TestClient, Path]:
     kb = tmp_path / "kb"
     (kb / "_workflows").mkdir(parents=True)
     (kb / "personas" / "interest").mkdir(parents=True)
@@ -22,8 +23,8 @@ def client(monkeypatch, tmp_path: Path) -> tuple[TestClient, Path]:
         (kb / "_workflows" / f"{name}.md").write_text("PROMPT")
     (kb / "faqs").mkdir(parents=True)
     (kb / "faqs" / "x.md").write_text(
-        "---\nslug: x\ntitle: X\ndomain: faq\nthemes: []\nsources: []\n"
-        "last_verified: 2026-05-17\nstatus: active\n---\n\nBody.\n"
+        f"---\nslug: x\ntitle: X\ndomain: faq\nthemes: []\nsources: []\n"
+        f"last_verified: {date.today().isoformat()}\nstatus: active\n---\n\nBody.\n"
     )
     monkeypatch.setenv("KB_ROOT", str(kb))
     monkeypatch.setenv("LLM_MINIMAX_BASE_URL", "http://mock-minimax")
@@ -34,22 +35,24 @@ def client(monkeypatch, tmp_path: Path) -> tuple[TestClient, Path]:
     settings.kb_root.cache_clear()
     settings.llm_config.cache_clear()
 
-    subprocess.run(["git", "init", "-q"], cwd=tmp_path, check=True)
-    subprocess.run(["git", "config", "user.email", "t@x"], cwd=tmp_path, check=True)
-    subprocess.run(["git", "config", "user.name", "T"], cwd=tmp_path, check=True)
-    subprocess.run(["git", "add", "-A"], cwd=tmp_path, check=True)
+    subprocess.run(["git", "init", "-q"], cwd=tmp_path, check=True, capture_output=True)
+    subprocess.run(["git", "config", "user.email", "t@x"], cwd=tmp_path, check=True, capture_output=True)
+    subprocess.run(["git", "config", "user.name", "T"], cwd=tmp_path, check=True, capture_output=True)
+    subprocess.run(["git", "add", "-A"], cwd=tmp_path, check=True, capture_output=True)
     subprocess.run(
         ["git", "-c", "commit.gpgsign=false", "commit", "-q", "-m", "seed"],
         cwd=tmp_path,
         check=True,
+        capture_output=True,
     )
 
     from intel_engine.api import app
     return TestClient(app), tmp_path
 
 
-def test_themes_round_trip(client):
-    c, repo = client
+@pytest.mark.e2e
+def test_themes_round_trip(client_and_repo):
+    c, repo = client_and_repo
     mock = {
         "themes": [
             {
@@ -77,11 +80,14 @@ def test_themes_round_trip(client):
         assert r1.status_code == 200
         r2 = c.post("/themes/persist", json={"report": r1.json()})
         assert r2.status_code == 200
-        assert (repo / "kb" / "themes" / "2026-05-17.md").exists()
+        path = repo / "kb" / "themes" / "2026-05-17.md"
+        assert path.exists()
+        assert "BPA" in path.read_text()
 
 
-def test_personas_round_trip(client):
-    c, repo = client
+@pytest.mark.e2e
+def test_personas_round_trip(client_and_repo):
+    c, repo = client_and_repo
     mock = {
         "proposals": [
             {
@@ -108,11 +114,14 @@ def test_personas_round_trip(client):
 
     r2 = c.post("/personas/persist", json={"persona": {**proposal, "status": "active"}})
     assert r2.status_code == 200
-    assert (repo / "kb" / "personas" / "interest" / "sustainability_buyer.md").exists()
+    path = repo / "kb" / "personas" / "interest" / "sustainability_buyer.md"
+    assert path.exists()
+    assert "Sustainability buyer" in path.read_text()
 
 
-def test_conflicts_round_trip(client):
-    c, _ = client
+@pytest.mark.e2e
+def test_conflicts_round_trip(client_and_repo):
+    c, _ = client_and_repo
     mock = {"conflicts": []}
     with patch(
         "intel_engine.agents.conflict_detector.LLMClient.complete_json",
@@ -127,8 +136,9 @@ def test_conflicts_round_trip(client):
     assert r.json()["count"] == 0
 
 
-def test_brief_round_trip(client):
-    c, repo = client
+@pytest.mark.e2e
+def test_brief_round_trip(client_and_repo):
+    c, repo = client_and_repo
     mock = {
         "headline": "h",
         "insights": [],
@@ -145,4 +155,6 @@ def test_brief_round_trip(client):
         assert r1.status_code == 200
         r2 = c.post("/briefs/persist", json={"brief": r1.json()})
         assert r2.status_code == 200
-        assert (repo / "briefs" / "2026-05-marketing-brief.md").exists()
+        path = repo / "briefs" / "2026-05-marketing-brief.md"
+        assert path.exists()
+        assert "h" in path.read_text()
