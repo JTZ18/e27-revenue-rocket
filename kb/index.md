@@ -2,7 +2,7 @@
 
 Generated automatically. Do not edit by hand — re-run `scripts/generate_index.py`.
 
-Total active entries: 57
+Total active entries: 58
 
 ## faq
 
@@ -12,6 +12,7 @@ Total active entries: 57
 - **synth-do-you-collaborate-with-indepe-53f78d** — Do you collaborate with independent watchmakers for limited editions? I'm a collector and interested in unique pieces  _(themes: limited_edition, collaboration)_
 - **synth-do-you-have-a-strap-recycling-5bc21e** — Do you have a strap recycling or take-back programme? I have three old straps I'd like to dispose of responsibly  _(themes: sustainability)_
 - **synth-do-you-offer-gift-wrapping-or-7d9268** — Do you offer gift wrapping or a gift box option? I'm buying this as a wedding gift  _(themes: gifting)_
+- **synth-do-you-sell-a-mesh-milanese-br-369380** — Do you sell a mesh/milanese bracelet for the Journey model? Or can I use a third-party one  _(themes: strap_interchangeability, accessories)_
 - **synth-do-your-straps-have-a-quick-re-c859b3** — Do your straps have a quick-release mechanism or do I need tools to swap them  _(themes: strap_interchangeability, swapping_mechanism)_
 - **synth-does-the-expedition-work-with-3e4238** — Does the Expedition work with standard NATO straps? What size do I need  _(themes: strap_interchangeability, sizing)_
 - **synth-does-the-strap-meet-eu-reach-o-0538b5** — Does the strap meet EU REACH or RoHS standards? I'm based in Germany and need to confirm before purchasing  _(themes: materials_safety, regulatory_compliance)_
