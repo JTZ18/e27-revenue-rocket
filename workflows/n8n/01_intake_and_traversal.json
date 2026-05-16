@@ -37,7 +37,7 @@
         "url": "http://host.docker.internal:8000/traverse",
         "sendBody": true,
         "contentType": "json",
-        "body": "={{ JSON.stringify($json) }}",
+        "body": "={{ $json }}",
         "options": {}
       }
     },
@@ -99,7 +99,7 @@
         "url": "http://host.docker.internal:8000/gap",
         "sendBody": true,
         "contentType": "json",
-        "body": "={{ JSON.stringify({\n  source_event_id: $('Normalise to CommonEvent').item.json.event_id,\n  customer_question: $('Normalise to CommonEvent').item.json.body,\n  missing_info: $('POST /traverse').item.json.missing_info,\n  themes_detected: $('POST /traverse').item.json.themes_detected,\n  persona_hints: $('POST /traverse').item.json.persona_hints\n}) }}",
+        "body": "={ \"source_event_id\": \"{{ $('Normalise to CommonEvent').item.json.event_id }}\", \"customer_question\": \"{{ $('Normalise to CommonEvent').item.json.body }}\", \"missing_info\": {{ JSON.stringify($json.missing_info) }}, \"themes_detected\": {{ JSON.stringify($json.themes_detected) }}, \"persona_hints\": {{ JSON.stringify($json.persona_hints) }} }",
         "options": {}
       }
     },
@@ -111,7 +111,7 @@
       "parameters": {
         "operation": "post",
         "channel": "={{ $env.SLACK_APPROVAL_CHANNEL }}",
-        "text": "New knowledge gap — please resolve",
+        "text": "*New Knowledge Gap*\n*Customer:* {{ $('Normalise to CommonEvent').item.json.customer.name }}\n*Question:* {{ $('Normalise to CommonEvent').item.json.body }}\n*Gap ID:* {{ $json.gap_id }}",
         "blocksUi": {
           "blocksValues": [
             {
@@ -125,14 +125,21 @@
               "type": "section",
               "text": {
                 "type": "mrkdwn",
-                "text": "*Customer question:*\n> {{$('POST /gap').item.json.customer_question}}"
+                "text": "*Customer:* {{ $('Normalise to CommonEvent').item.json.customer.name }}\n*Question:* {{ $('Normalise to CommonEvent').item.json.body }}"
               }
             },
             {
               "type": "section",
               "text": {
                 "type": "mrkdwn",
-                "text": "*Missing info:*\n• {{$('POST /gap').item.json.missing_info.join('\\n• ')}}"
+                "text": "*Missing info:*\n{{ $json.missing_info.join('\\n• ') }}"
+              }
+            },
+            {
+              "type": "section",
+              "text": {
+                "type": "mrkdwn",
+                "text": "*Themes:* {{ $json.themes_detected.join(', ') }}\n*Persona:* {{ $json.persona_hints.join(', ') }}\n*Gap ID:* `{{ $json.gap_id }}`"
               }
             },
             {
@@ -145,8 +152,8 @@
                     "text": "Resolve this gap"
                   },
                   "style": "primary",
-                  "action_id": "resolve_gap",
-                  "value": "{{$('POST /gap').item.json.gap_id}}"
+                  "value": "{{ $json.gap_id }}",
+                  "action_id": "resolve_gap"
                 }
               ]
             }
