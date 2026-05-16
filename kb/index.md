@@ -2,11 +2,12 @@
 
 Generated automatically. Do not edit by hand — re-run `scripts/generate_index.py`.
 
-Total active entries: 25
+Total active entries: 26
 
 ## faq
 
 - **synth-are-the-dyes-used-in-the-colou-573829** — Are the dyes used in the coloured straps non-toxic? I tend to sweat a lot and don't want dye bleeding onto my skin  _(themes: materials_safety)_
+- **synth-do-you-offer-gift-wrapping-or-7d9268** — Do you offer gift wrapping or a gift box option? I'm buying this as a wedding gift  _(themes: gifting)_
 - **synth-hello-could-you-tell-me-what-g-a0b768** — Hello, could you tell me what grade of titanium is used in the case? I've seen Grade 2 and Grade 5 mentioned online and   _(themes: materials, specifications)_
 - **synth-hi-i-placed-order-bld-93810-ab-cafa54** — Hi, I placed order BLD-93810 about 10 days ago and haven't received it yet. Can you check the status  _(themes: order_status, shipping)_
 - **synth-hi-what-lug-width-does-the-exp-4edb1a** — Hi, what lug width does the Expedition 40mm use? I want to buy a third-party strap  _(themes: sizing, strap_interchangeability)_
