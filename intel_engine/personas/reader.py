@@ -1,9 +1,12 @@
 """Load persona definitions from kb/personas/."""
+import logging
 from pathlib import Path
 
 import yaml
 
 from intel_engine.schemas.persona import PersonaDefinition, PersonaStatus
+
+logger = logging.getLogger(__name__)
 
 
 def load_personas(kb_root: Path) -> list[PersonaDefinition]:
@@ -17,11 +20,16 @@ def load_personas(kb_root: Path) -> list[PersonaDefinition]:
         text = path.read_text()
         if not text.startswith("---\n"):
             continue
-        _, fm_str, _ = text.split("---\n", 2)
+        parts = text.split("---\n", 2)
+        if len(parts) < 3:
+            logger.warning("Skipping %s: missing closing frontmatter delimiter", path)
+            continue
+        _, fm_str, _ = parts
         data = yaml.safe_load(fm_str) or {}
         try:
             persona = PersonaDefinition(**data)
-        except (ValueError, TypeError):
+        except (ValueError, TypeError) as exc:
+            logger.warning("Skipping %s: %s", path, exc)
             continue
         if persona.status == PersonaStatus.stale:
             continue
