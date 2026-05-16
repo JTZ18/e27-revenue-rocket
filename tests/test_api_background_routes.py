@@ -295,3 +295,5 @@ def test_briefs_persist_endpoint(client: TestClient, tmp_path: Path):
     )
     assert r.status_code == 200
     assert r.json()["month"] == "2026-05"
+    assert "committed_sha" in r.json()
+    assert (tmp_path / "briefs" / "2026-05-marketing-brief.md").exists()

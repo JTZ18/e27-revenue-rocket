@@ -431,5 +431,15 @@ class PersistBriefRequest(BaseModel):
 async def briefs_persist(req: PersistBriefRequest) -> dict:
     brief = MarketingBrief(**req.brief)
     repo_root = Path(kb_root()).parent
-    sha = write_and_commit_brief(brief, repo_root=repo_root)
+    try:
+        sha = write_and_commit_brief(brief, repo_root=repo_root)
+    except subprocess.CalledProcessError as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Git commit failed: {e.stderr.decode() if e.stderr else e}",
+        ) from e
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail=f"Brief persist failed: {e}"
+        ) from e
     return {"committed_sha": sha, "month": brief.month}
