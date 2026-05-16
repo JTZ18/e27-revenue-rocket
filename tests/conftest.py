@@ -12,6 +12,8 @@ def _env_isolation(monkeypatch, tmp_path):
     monkeypatch.setenv("GAP_LOG_ROOT", str(tmp_path / "gap-log"))
     monkeypatch.setenv("LLM_MINIMAX_API_KEY", "test-key")
     monkeypatch.setenv("LLM_KIMI_API_KEY", "test-key")
+    monkeypatch.setenv("LLM_KIMI_BASE_URL", "http://test")
+    monkeypatch.setenv("LLM_KIMI_MODEL", "test-model")
     (tmp_path / "kb").mkdir()
     (tmp_path / "gap-log").mkdir()
 
