@@ -1,4 +1,4 @@
-"""Monthly marketing brief writer (Kimi)."""
+"""Monthly marketing brief writer (OpenRouter)."""
 from intel_engine.llm.client import LLMClient, LLMProvider
 from intel_engine.llm.prompts import load_prompt
 from intel_engine.schemas.brief import (
@@ -43,7 +43,7 @@ async def write_brief(
         f"=== KB SUMMARY ===\n{kb_summary}\n\n"
         f"Write the brief now."
     )
-    client = LLMClient(provider=LLMProvider.kimi)
+    client = LLMClient(provider=LLMProvider.openrouter)
     raw = await client.complete_json(system=system, user=user)
 
     return MarketingBrief(

@@ -10,7 +10,6 @@ from intel_engine.settings import llm_config
 
 class LLMProvider(StrEnum):
     minimax = "minimax"
-    kimi = "kimi"
     openrouter = "openrouter"
 
 

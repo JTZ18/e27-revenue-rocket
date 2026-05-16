@@ -56,12 +56,12 @@ async def test_complete_json_strips_markdown_fences(monkeypatch, httpx_mock):
 
 
 async def test_client_returns_plain_text(monkeypatch, httpx_mock):
-    monkeypatch.setenv("LLM_KIMI_BASE_URL", "https://test.kimi.local/v1")
-    monkeypatch.setenv("LLM_KIMI_API_KEY", "test-key")
-    monkeypatch.setenv("LLM_KIMI_MODEL", "test-model")
+    monkeypatch.setenv("LLM_OPENROUTER_BASE_URL", "https://test.openrouter.local/v1")
+    monkeypatch.setenv("LLM_OPENROUTER_API_KEY", "test-key")
+    monkeypatch.setenv("LLM_OPENROUTER_MODEL", "test-model")
 
     httpx_mock.add_response(
-        url="https://test.kimi.local/v1/chat/completions",
+        url="https://test.openrouter.local/v1/chat/completions",
         json={
             "choices": [
                 {"message": {"content": "Hello, world."}}
@@ -69,6 +69,6 @@ async def test_client_returns_plain_text(monkeypatch, httpx_mock):
         },
     )
 
-    client = LLMClient(provider=LLMProvider.kimi)
+    client = LLMClient(provider=LLMProvider.openrouter)
     result = await client.complete_text(system="You are a helper.", user="Say hi")
     assert result == "Hello, world."

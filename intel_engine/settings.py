@@ -16,7 +16,7 @@ def gap_log_root() -> Path:
 
 @cache
 def llm_config(provider: str) -> dict[str, str]:
-    """Return base_url, api_key, model for a provider ('minimax' or 'kimi')."""
+    """Return base_url, api_key, model for a provider ('minimax' or 'openrouter')."""
     prefix = f"LLM_{provider.upper()}"
     keys = (f"{prefix}_BASE_URL", f"{prefix}_API_KEY", f"{prefix}_MODEL")
     missing = [k for k in keys if not os.environ.get(k)]

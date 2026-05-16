@@ -54,7 +54,7 @@ def write_escalation_policy(body: str, out_path: Path, source_file: str) -> None
 async def main() -> None:
     src = Path("data/05a_SOP.docx")
     text = extract_docx_text(src)
-    client = LLMClient(provider=LLMProvider.kimi)
+    client = LLMClient(provider=LLMProvider.openrouter)
     result = await client.complete_json(
         system=EXTRACT_PROMPT,
         user=f"SOP:\n\n{text}",

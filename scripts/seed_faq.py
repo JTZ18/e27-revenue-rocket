@@ -47,7 +47,7 @@ def extract_pdf_text(pdf_path: Path) -> str:
 
 
 async def parse_faq_with_llm(text: str) -> list[dict[str, str]]:
-    client = LLMClient(provider=LLMProvider.kimi)
+    client = LLMClient(provider=LLMProvider.openrouter)
     result = await client.complete_json(
         system=PARSE_PROMPT,
         user=f"FAQ document:\n\n{text}",

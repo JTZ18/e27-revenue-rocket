@@ -1,4 +1,4 @@
-"""Weekly KB conflict detector (Kimi)."""
+"""Weekly KB conflict detector (OpenRouter)."""
 from intel_engine.llm.client import LLMClient, LLMProvider
 from intel_engine.llm.prompts import load_prompt
 from intel_engine.schemas.conflict import ConflictDigest, KBConflict
@@ -23,7 +23,7 @@ async def detect_conflicts(
         f"{_format_kb(kb_entries)}\n\n"
         f"Detect conflicts now."
     )
-    client = LLMClient(provider=LLMProvider.kimi)
+    client = LLMClient(provider=LLMProvider.openrouter)
     raw = await client.complete_json(system=system, user=user)
 
     return ConflictDigest(

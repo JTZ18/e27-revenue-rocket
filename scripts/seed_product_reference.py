@@ -42,7 +42,7 @@ def extract_docx_text(docx_path: Path) -> str:
 
 
 async def parse_with_llm(text: str) -> list[dict[str, str]]:
-    client = LLMClient(provider=LLMProvider.kimi)
+    client = LLMClient(provider=LLMProvider.openrouter)
     result = await client.complete_json(
         system=PARSE_PROMPT,
         user=f"Document:\n\n{text}",
