@@ -16,7 +16,10 @@ Return a JSON object with key "entries" whose value is an array of objects:
 {
   "entries": [
     {
-      "theme": "...",         // one of: materials_safety, engraving, strap_compatibility, servicing, order_status, shipping, product_general, sustainability, aftercare
+      "theme": "...",         // one of: materials_safety, engraving,
+                                // strap_compatibility, servicing, order_status,
+                                // shipping, product_general, sustainability,
+                                // aftercare
       "question": "...",      // the question verbatim
       "answer": "..."         // the answer verbatim, preserving the brand voice
     }

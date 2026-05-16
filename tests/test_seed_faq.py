@@ -1,8 +1,6 @@
 """Test FAQ seeding (LLM parsing mocked)."""
 from pathlib import Path
 
-import pytest
-
 from intel_engine.schemas.kb import KBEntry
 from scripts.seed_faq import write_faqs_from_parsed
 
