@@ -2,7 +2,7 @@
 
 Generated automatically. Do not edit by hand — re-run `scripts/generate_index.py`.
 
-Total active entries: 50
+Total active entries: 51
 
 ## faq
 
@@ -26,6 +26,7 @@ Total active entries: 50
 - **synth-i-found-the-same-watch-cheaper-c075f7** — I found the same watch cheaper on another site. Do you offer price matching  _(themes: pricing)_
 - **synth-i-have-a-20cm-wrist-will-the-s-fd6086** — I have a 20cm wrist. Will the standard strap length fit me, or do I need an extended strap  _(themes: sizing)_
 - **synth-i-have-a-boldr-expedition-from-9104e7** — I have a Boldr Expedition from 2019. Do you still service older models? Is it the same price  _(themes: servicing, aftercare)_
+- **synth-i-have-a-small-wrist-15cm-woul-393b33** — I have a small wrist (15cm). Would the 40mm case look too big? Do you have a smaller option  _(themes: sizing, fit_recommendation)_
 - **synth-i-m-based-in-australia-can-i-s-74894a** — I'm based in Australia. Can I send my watch in for servicing and how does that work  _(themes: servicing, international_shipping)_
 - **synth-i-m-going-on-a-high-altitude-t-e09cfe** — I'm going on a high-altitude trek. Will the watch perform normally at 5,000m above sea level  _(themes: altitude_performance)_
 - **synth-i-m-ordering-from-the-uk-will-33bac0** — I'm ordering from the UK. Will I have to pay customs duties on top of the shipping cost  _(themes: international_shipping, duties_taxes)_
