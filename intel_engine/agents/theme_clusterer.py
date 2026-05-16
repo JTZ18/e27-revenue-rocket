@@ -6,7 +6,7 @@ from intel_engine.schemas.theme import Theme, ThemeReport
 
 def _format_tickets(tickets: list[dict]) -> str:
     return "\n".join(
-        f"[{t['ticket_id']}] {str(t.get('message_body') or '')[:240]}"
+        f"[{t.get('ticket_id', 'UNKNOWN')}] {str(t.get('message_body') or '')[:240]}"
         for t in tickets
     )
 

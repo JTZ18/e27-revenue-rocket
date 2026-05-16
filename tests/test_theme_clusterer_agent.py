@@ -48,7 +48,7 @@ async def test_cluster_themes_returns_report(monkeypatch, tmp_path: Path):
         patch(
             "intel_engine.agents.theme_clusterer.LLMClient.complete_json",
             new=AsyncMock(return_value=mock),
-        ),
+        ) as mock_complete,
     ):
         report = await cluster_themes(
             tickets=tickets,
@@ -59,3 +59,11 @@ async def test_cluster_themes_returns_report(monkeypatch, tmp_path: Path):
     assert report.ticket_count == 5
     assert len(report.themes) == 2
     assert report.top_slug() == "bpa_safety"
+
+    # Verify prompt loading and LLM call arguments
+    call_kwargs = mock_complete.call_args.kwargs
+    assert "PROMPT" in call_kwargs["system"]
+    assert "2026-05-11" in call_kwargs["user"]
+    assert "2026-05-17" in call_kwargs["user"]
+    assert "[T1] msg 1" in call_kwargs["user"]
+    assert "[T5] msg 5" in call_kwargs["user"]
