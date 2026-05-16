@@ -1,0 +1,96 @@
+{
+  "name": "05_weekly_theme_clustering",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{"field": "weeks", "weekday": 1, "triggerAtHour": 9}]
+        }
+      },
+      "name": "Cron Mon 09:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const today = new Date();\nconst end = today.toISOString().slice(0,10);\nconst startD = new Date(today.getTime() - 7*86400000);\nconst start = startD.toISOString().slice(0,10);\nreturn [{ json: { week_start: start, week_end: end }}];"
+      },
+      "name": "Compute window",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [480, 300]
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "documentId": "={{ $env.TICKETS_SHEET_ID }}",
+        "sheetName": "tickets_input",
+        "options": {}
+      },
+      "name": "Read sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [720, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const win = $('Compute window').first().json;\nconst rows = items.filter(it => it.json.date_received >= win.week_start && it.json.date_received <= win.week_end + 'T23:59:59');\nconst tickets = rows.map(it => ({ ticket_id: it.json.ticket_id, message_body: it.json.message_body }));\nreturn [{ json: { tickets, week_start: win.week_start, week_end: win.week_end }}];"
+      },
+      "name": "Filter window",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [960, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.INTEL_ENGINE_URL }}/themes/cluster",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {"timeout": 120000}
+      },
+      "name": "POST /themes/cluster",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1200, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.INTEL_ENGINE_URL }}/themes/persist",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ report: $json }) }}",
+        "options": {"timeout": 60000}
+      },
+      "name": "POST /themes/persist",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1440, 300]
+    },
+    {
+      "parameters": {
+        "channel": "={{ $env.SLACK_CS_CHANNEL }}",
+        "text": "Weekly themes committed",
+        "otherOptions": {
+          "blocks": "={{ JSON.stringify([{type:'header',text:{type:'plain_text',text:'Weekly themes — ' + $json.week_end}},{type:'section',text:{type:'mrkdwn',text:'Committed at `' + $json.committed_sha + '`'}}]) }}"
+        }
+      },
+      "name": "Slack: notify",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [1680, 300]
+    }
+  ],
+  "connections": {
+    "Cron Mon 09:00": {"main": [[{"node": "Compute window", "type": "main", "index": 0}]]},
+    "Compute window": {"main": [[{"node": "Read sheet", "type": "main", "index": 0}]]},
+    "Read sheet": {"main": [[{"node": "Filter window", "type": "main", "index": 0}]]},
+    "Filter window": {"main": [[{"node": "POST /themes/cluster", "type": "main", "index": 0}]]},
+    "POST /themes/cluster": {"main": [[{"node": "POST /themes/persist", "type": "main", "index": 0}]]},
+    "POST /themes/persist": {"main": [[{"node": "Slack: notify", "type": "main", "index": 0}]]}
+  },
+  "settings": {}
+}

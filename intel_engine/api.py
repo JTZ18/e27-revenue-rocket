@@ -19,6 +19,22 @@ from intel_engine.schemas.gap import Gap, GapResolution, GapStatus
 from intel_engine.schemas.kb import KBEntry
 from intel_engine.schemas.traversal import TraversalResult
 
+from intel_engine.agents.brief_writer import write_brief
+from intel_engine.agents.conflict_detector import detect_conflicts
+from intel_engine.agents.persona_discovery import discover_personas
+from intel_engine.agents.persona_drift import detect_drift
+from intel_engine.agents.theme_clusterer import cluster_themes
+from intel_engine.conflicts.digest import to_slack_blocks
+from intel_engine.personas.reader import load_personas
+from intel_engine.schemas.theme import ThemeReport
+from intel_engine.kb.reader import load_kb
+from intel_engine.settings import kb_root
+from intel_engine.themes.writer import write_and_commit_theme_report
+from intel_engine.personas.writer import write_and_commit_persona
+from intel_engine.schemas.persona import PersonaDefinition
+from intel_engine.briefs.writer import write_and_commit_brief
+from intel_engine.schemas.brief import MarketingBrief
+
 app = FastAPI(title="Boldr Intel Engine", version="0.1.0")
 
 
@@ -249,3 +265,199 @@ async def slack_interactive_endpoint(body: dict) -> dict:
         }
 
     return {"status": "unknown_callback", "callback_id": callback_id}
+
+
+class TicketsRequest(BaseModel):
+    tickets: list[dict]
+
+
+class WindowedTicketsRequest(BaseModel):
+    tickets: list[dict]
+    week_start: str
+    week_end: str
+
+
+class DriftRequest(BaseModel):
+    tickets: list[dict]
+    window_start: str
+    window_end: str
+
+
+class BriefRequest(BaseModel):
+    month: str
+    theme_reports: list[dict]
+    kb_summary: str = ""
+
+
+class ConflictsRequest(BaseModel):
+    kb_entries: list[dict]
+    week_end: str
+
+
+@app.post("/personas/discover")
+async def personas_discover(req: TicketsRequest) -> dict:
+    try:
+        proposals = await discover_personas(req.tickets)
+        return {"proposals": [p.model_dump(mode="json") for p in proposals]}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Persona discovery failed: {e}") from e
+
+
+@app.post("/personas/drift")
+async def personas_drift(req: DriftRequest) -> dict:
+    try:
+        active = load_personas(kb_root())
+        report = await detect_drift(
+            active_personas=active,
+            tickets=req.tickets,
+            window_start=req.window_start,
+            window_end=req.window_end,
+        )
+        return report.model_dump(mode="json")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Persona drift detection failed: {e}") from e
+
+
+@app.post("/themes/cluster")
+async def themes_cluster(req: WindowedTicketsRequest) -> dict:
+    try:
+        report = await cluster_themes(
+            tickets=req.tickets,
+            week_start=req.week_start,
+            week_end=req.week_end,
+        )
+        return report.model_dump(mode="json")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Theme clustering failed: {e}") from e
+
+
+@app.post("/briefs/monthly")
+async def briefs_monthly(req: BriefRequest) -> dict:
+    try:
+        personas = load_personas(kb_root())
+        theme_reports = [ThemeReport(**r) for r in req.theme_reports]
+        brief = await write_brief(
+            month=req.month,
+            theme_reports=theme_reports,
+            personas=personas,
+            kb_summary=req.kb_summary,
+        )
+        return brief.model_dump(mode="json")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Brief generation failed: {e}") from e
+
+
+@app.post("/conflicts/digest")
+async def conflicts_digest(req: ConflictsRequest) -> dict:
+    try:
+        digest = await detect_conflicts(
+            kb_entries=req.kb_entries,
+            week_end=req.week_end,
+        )
+        return {
+            **digest.model_dump(mode="json"),
+            "count": digest.count,
+            "slack_blocks": to_slack_blocks(digest),
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Conflict detection failed: {e}") from e
+
+
+class PersistThemeReportRequest(BaseModel):
+    report: dict
+
+
+@app.post("/themes/persist")
+async def themes_persist(req: PersistThemeReportRequest) -> dict:
+    report = ThemeReport(**req.report)
+    repo_root = Path(kb_root()).parent
+    try:
+        sha = write_and_commit_theme_report(report, repo_root=repo_root)
+    except subprocess.CalledProcessError as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Git commit failed: {e.stderr.decode() if e.stderr else e}",
+        ) from e
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail=f"Theme report persist failed: {e}"
+        ) from e
+    return {"committed_sha": sha, "week_end": report.week_end}
+
+
+class PersistPersonaRequest(BaseModel):
+    persona: dict
+    approver: str = "n8n"
+
+
+@app.post("/personas/persist")
+async def personas_persist(req: PersistPersonaRequest) -> dict:
+    persona = PersonaDefinition(**req.persona)
+    repo_root = Path(kb_root()).parent
+    try:
+        sha = write_and_commit_persona(persona, approver=req.approver, repo_root=repo_root)
+    except subprocess.CalledProcessError as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Git commit failed: {e.stderr.decode() if e.stderr else e}",
+        ) from e
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail=f"Persona persist failed: {e}"
+        ) from e
+    return {"committed_sha": sha, "slug": persona.slug}
+
+
+@app.get("/themes/list")
+async def themes_list(since: str | None = None) -> dict:
+    """Return parsed theme reports from kb/themes/*.md (optionally filtered by date)."""
+    themes_dir = kb_root() / "themes"
+    if not themes_dir.exists():
+        return {"reports": []}
+
+    out: list[dict] = []
+    for path in sorted(themes_dir.glob("*.md")):
+        if since and path.stem < since:
+            continue
+        text = path.read_text()
+        out.append({"week_end": path.stem, "markdown": text})
+    return {"reports": out}
+
+
+class PersistBriefRequest(BaseModel):
+    brief: dict
+
+
+@app.post("/briefs/persist")
+async def briefs_persist(req: PersistBriefRequest) -> dict:
+    brief = MarketingBrief(**req.brief)
+    repo_root = Path(kb_root()).parent
+    try:
+        sha = write_and_commit_brief(brief, repo_root=repo_root)
+    except subprocess.CalledProcessError as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Git commit failed: {e.stderr.decode() if e.stderr else e}",
+        ) from e
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail=f"Brief persist failed: {e}"
+        ) from e
+    return {"committed_sha": sha, "month": brief.month}
+
+
+@app.get("/kb/summary")
+async def kb_summary() -> dict:
+    entries = load_kb(kb_root())
+    out = []
+    for e in entries:
+        fm = e.frontmatter
+        out.append(
+            {
+                "path": f"kb/{fm.domain.value}/{fm.slug}.md",
+                "domain": fm.domain.value,
+                "title": fm.title,
+                "excerpt": e.body[:200],
+            }
+        )
+    return {"entries": out, "count": len(out)}

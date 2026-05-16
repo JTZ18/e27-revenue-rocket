@@ -1,0 +1,199 @@
+{
+  "name": "07_monthly_marketing_brief",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "months",
+              "triggerAtDayOfMonth": 1,
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "name": "Cron 1st 09:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        300
+      ],
+      "id": "bb515217-ef80-4a63-87d7-f902bfeb8637"
+    },
+    {
+      "parameters": {
+        "jsCode": "const today = new Date();\nconst month = today.toISOString().slice(0,7);\nconst since = new Date(today.getTime() - 35*86400000).toISOString().slice(0,10);\nreturn [{ json: { month, since }}];"
+      },
+      "name": "Compute month",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        300
+      ],
+      "id": "8167be54-9871-41a7-806d-8c6cba822720"
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.INTEL_ENGINE_URL }}/themes/list?since={{ $json.since }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "name": "GET /themes/list",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        720,
+        300
+      ],
+      "id": "8c10b2a5-8bb2-45bd-b772-48fbbb551067"
+    },
+    {
+      "parameters": {
+        "jsCode": "const month = $('Compute month').first().json.month;\nconst payload = { month, kb_summary: '', theme_reports: [] };\nreturn [{ json: payload }];"
+      },
+      "name": "Shape brief payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        300
+      ],
+      "id": "45e7e508-9a45-4c4a-ae70-fdf28bce2f18"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.INTEL_ENGINE_URL }}/briefs/monthly",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "timeout": 180000
+        }
+      },
+      "name": "POST /briefs/monthly",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1200,
+        300
+      ],
+      "id": "a2d393e7-880d-4771-8b46-4f7f7841e868"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.INTEL_ENGINE_URL }}/briefs/persist",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({brief: $json}) }}",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "name": "POST /briefs/persist",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1440,
+        300
+      ],
+      "id": "2b1776b5-5ced-4fbd-907d-a9da73d1c486"
+    },
+    {
+      "parameters": {
+        "text": "New monthly marketing brief",
+        "operation": "post",
+        "resource": "message",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "={{ $env.SLACK_FOUNDERS_CHANNEL }}",
+          "mode": "name"
+        }
+      },
+      "name": "Slack: notify founders",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [
+        1680,
+        300
+      ],
+      "id": "428328bf-f670-44f4-b068-a78e1f0407dd"
+    }
+  ],
+  "connections": {
+    "Cron 1st 09:00": {
+      "main": [
+        [
+          {
+            "node": "Compute month",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compute month": {
+      "main": [
+        [
+          {
+            "node": "GET /themes/list",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET /themes/list": {
+      "main": [
+        [
+          {
+            "node": "Shape brief payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Shape brief payload": {
+      "main": [
+        [
+          {
+            "node": "POST /briefs/monthly",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "POST /briefs/monthly": {
+      "main": [
+        [
+          {
+            "node": "POST /briefs/persist",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "POST /briefs/persist": {
+      "main": [
+        [
+          {
+            "node": "Slack: notify founders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {}
+}
