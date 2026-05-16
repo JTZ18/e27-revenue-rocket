@@ -2,7 +2,7 @@
 
 Generated automatically. Do not edit by hand — re-run `scripts/generate_index.py`.
 
-Total active entries: 41
+Total active entries: 42
 
 ## faq
 
@@ -38,6 +38,7 @@ Total active entries: 41
 - **synth-it-s-been-3-weeks-since-i-plac-8fe78e** — It's been 3 weeks since I placed order BLD-42098 and tracking shows it's stuck in customs. What do I do  _(themes: order_status, international_shipping)_
 - **synth-my-skin-reacts-to-most-watch-s-a34b3e** — My skin reacts to most watch straps. Which of your straps would you recommend for sensitive skin  _(themes: materials_safety)_
 - **synth-my-watch-is-losing-about-10-se-d9a7c1** — My watch is losing about 10 seconds per day. Would a regulation service fix this  _(themes: servicing, aftercare)_
+- **synth-what-colour-options-are-availa-e82bd3** — What colour options are available for the 20mm rubber strap? I can only see black and navy on the website  _(themes: strap_options, colour_options)_
 - **synth-what-is-the-warranty-period-on-97b1c0** — What is the warranty period on the watch? Does it cover the movement and the strap separately  _(themes: warranty, coverage)_
 - **synth-what-luminous-material-do-you-04e40c** — What luminous material do you use on the dial? Is it Super-LumiNova? Is it safe  _(themes: materials_safety)_
 
