@@ -69,16 +69,96 @@
       }
     },
     {
-      "id": "no-op-true",
-      "name": "NoOp True",
-      "type": "n8n-nodes-base.noOp",
-      "position": [1050, 200]
+      "id": "gmail-draft",
+      "name": "Create Gmail Draft",
+      "type": "n8n-nodes-base.gmail",
+      "position": [1050, 200],
+      "parameters": {
+        "operation": "createDraft",
+        "to": "={{ $('Normalise to CommonEvent').item.json.customer.name }} <customer@example.com>",
+        "subject": "Re: {{ $('Normalise to CommonEvent').item.json.subject || 'Your enquiry' }}",
+        "message": "={{ $('POST /traverse').item.json.draft_reply }}",
+        "options": {
+          "labelIds": ["agent-drafts"]
+        }
+      },
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "",
+          "name": "Gmail account"
+        }
+      }
     },
     {
-      "id": "no-op-false",
-      "name": "NoOp False",
-      "type": "n8n-nodes-base.noOp",
-      "position": [1050, 400]
+      "id": "post-gap",
+      "name": "POST /gap",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [1050, 400],
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8000/gap",
+        "sendBody": true,
+        "contentType": "json",
+        "body": "={{ JSON.stringify({\n  source_event_id: $('Normalise to CommonEvent').item.json.event_id,\n  customer_question: $('Normalise to CommonEvent').item.json.body,\n  missing_info: $('POST /traverse').item.json.missing_info,\n  themes_detected: $('POST /traverse').item.json.themes_detected,\n  persona_hints: $('POST /traverse').item.json.persona_hints\n}) }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "slack-gap-card",
+      "name": "Post Slack Gap Card",
+      "type": "n8n-nodes-base.slack",
+      "position": [1250, 400],
+      "parameters": {
+        "operation": "post",
+        "channel": "={{ $env.SLACK_APPROVAL_CHANNEL }}",
+        "text": "New knowledge gap — please resolve",
+        "blocksUi": {
+          "blocksValues": [
+            {
+              "type": "header",
+              "text": {
+                "type": "plain_text",
+                "text": "New Knowledge Gap"
+              }
+            },
+            {
+              "type": "section",
+              "text": {
+                "type": "mrkdwn",
+                "text": "*Customer question:*\n> {{$('POST /gap').item.json.customer_question}}"
+              }
+            },
+            {
+              "type": "section",
+              "text": {
+                "type": "mrkdwn",
+                "text": "*Missing info:*\n• {{$('POST /gap').item.json.missing_info.join('\\n• ')}}"
+              }
+            },
+            {
+              "type": "actions",
+              "elements": [
+                {
+                  "type": "button",
+                  "text": {
+                    "type": "plain_text",
+                    "text": "Resolve this gap"
+                  },
+                  "style": "primary",
+                  "action_id": "resolve_gap",
+                  "value": "{{$('POST /gap').item.json.gap_id}}"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "credentials": {
+        "slackApi": {
+          "id": "",
+          "name": "Slack account"
+        }
+      }
     }
   ],
   "connections": {
@@ -119,14 +199,25 @@
       "main": [
         [
           {
-            "node": "NoOp True",
+            "node": "Create Gmail Draft",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "NoOp False",
+            "node": "POST /gap",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "POST /gap": {
+      "main": [
+        [
+          {
+            "node": "Post Slack Gap Card",
             "type": "main",
             "index": 0
           }

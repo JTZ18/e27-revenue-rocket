@@ -4,8 +4,11 @@ import subprocess
 from datetime import UTC, datetime
 from pathlib import Path
 
+from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+
+load_dotenv()  # Load .env file
 
 from intel_engine.agents.kb_drafter import draft_kb_entry
 from intel_engine.agents.traversal import traverse
