@@ -1,0 +1,15 @@
+ticket_index,ticket_id,grounded,brand_voice,completeness,no_hallucination,tone_fit,overall,notes
+43,TKT-1041,1,1,1,1,1,1.0,Draft reply and KB excerpt content are both empty. Cannot evaluate.
+37,TKT-1061,1,1,1,1,1,1.0,No draft reply provided to evaluate.
+20,TKT-1049,1,1,1,1,1,1.0,Draft is empty; cannot evaluate. Agent must submit a reply.
+28,TKT-1008,1,1,1,1,1,1.0,Draft reply is empty; cannot evaluate. Agent must provide a response to assess.
+58,TKT-1050,1,1,1,1,1,1.0,Draft reply is empty; no content to score. KB excerpt provided only as file path with no actual content.
+14,TKT-1033,1,1,1,1,1,1.0,Draft is empty; cannot evaluate any dimension. Full reply required.
+48,TKT-1026,1,1,1,1,1,1.0,No draft reply provided. Unable to evaluate.
+6,TKT-1006,1,1,1,1,1,1.0,Draft reply is empty; cannot evaluate. Customer asked about water resistance re-testing after full service.
+59,TKT-1070,1,1,1,1,1,1.0,Draft is empty; cannot evaluate. All dimensions scored 1.
+13,TKT-1047,1,1,1,1,1,1.0,Draft reply is empty; cannot evaluate. No KB content cited—just a file path.
+17,TKT-1001,1,1,1,1,1,1.0,"Draft reply is empty. KB citations contain only file paths, no actual excerpts. Cannot evaluate."
+66,TKT-1069,1,1,1,1,1,1.0,Draft reply is empty; cannot evaluate. Agent must draft a response before scoring.
+39,TKT-1063,1,1,1,1,1,1.0,Draft reply is empty. Cannot evaluate any rubric dimension.
+49,TKT-1020,1,1,1,1,1,1.0,Draft reply is empty. Cannot evaluate.
