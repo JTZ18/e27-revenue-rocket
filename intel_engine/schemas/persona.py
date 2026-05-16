@@ -33,7 +33,7 @@ class PersonaProposal(BaseModel):
     label: str
     description: str
     signals: list[str] = Field(min_length=1)
-    example_ticket_ids: list[str] = Field(default_factory=list)
+    example_ticket_ids: list[str] = Field(default_factory=list, min_length=2)
     rationale: str
 
 
