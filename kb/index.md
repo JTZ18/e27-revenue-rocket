@@ -2,7 +2,7 @@
 
 Generated automatically. Do not edit by hand — re-run `scripts/generate_index.py`.
 
-Total active entries: 13
+Total active entries: 14
 
 ## faq
 
@@ -10,6 +10,7 @@ Total active entries: 13
 - **synth-i-found-the-same-watch-cheaper-c075f7** — I found the same watch cheaper on another site. Do you offer price matching  _(themes: pricing)_
 - **synth-i-have-a-boldr-expedition-from-9104e7** — I have a Boldr Expedition from 2019. Do you still service older models? Is it the same price  _(themes: servicing, aftercare)_
 - **synth-i-need-the-watch-urgently-as-a-ea2850** — I need the watch urgently as a birthday gift. Do you offer express shipping and how much does it cost  _(themes: shipping)_
+- **synth-i-saw-a-limited-edition-collab-7be137** — I saw a limited edition collab on your Instagram. Is it still available or sold out  _(themes: limited_edition)_
 - **synth-i-want-to-use-the-watch-for-sw-0ac468** — I want to use the watch for swimming. Do you sell a rubber or silicone strap that's suitable  _(themes: water_resistance, materials, swimming)_
 - **synth-is-the-movement-resistant-to-m-2e3633** — Is the movement resistant to magnetic fields? I work near MRI equipment  _(themes: movement_specs, materials_safety)_
 
