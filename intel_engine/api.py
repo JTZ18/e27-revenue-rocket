@@ -19,6 +19,16 @@ from intel_engine.schemas.gap import Gap, GapResolution, GapStatus
 from intel_engine.schemas.kb import KBEntry
 from intel_engine.schemas.traversal import TraversalResult
 
+from intel_engine.agents.brief_writer import write_brief
+from intel_engine.agents.conflict_detector import detect_conflicts
+from intel_engine.agents.persona_discovery import discover_personas
+from intel_engine.agents.persona_drift import detect_drift
+from intel_engine.agents.theme_clusterer import cluster_themes
+from intel_engine.conflicts.digest import to_slack_blocks
+from intel_engine.personas.reader import load_personas
+from intel_engine.schemas.theme import ThemeReport
+from intel_engine.settings import kb_root
+
 app = FastAPI(title="Boldr Intel Engine", version="0.1.0")
 
 
@@ -251,19 +261,6 @@ async def slack_interactive_endpoint(body: dict) -> dict:
     return {"status": "unknown_callback", "callback_id": callback_id}
 
 
-# ---------- Background loop routes (Plan 3) ----------
-from intel_engine.agents.brief_writer import write_brief
-from intel_engine.agents.conflict_detector import detect_conflicts
-from intel_engine.agents.persona_discovery import discover_personas
-from intel_engine.agents.persona_drift import detect_drift
-from intel_engine.agents.theme_clusterer import cluster_themes
-from intel_engine.conflicts.digest import to_slack_blocks
-from intel_engine.personas.reader import load_personas
-from intel_engine.schemas.persona import PersonaDefinition
-from intel_engine.schemas.theme import ThemeReport
-from intel_engine.settings import kb_root
-
-
 class TicketsRequest(BaseModel):
     tickets: list[dict]
 
@@ -293,53 +290,68 @@ class ConflictsRequest(BaseModel):
 
 @app.post("/personas/discover")
 async def personas_discover(req: TicketsRequest) -> dict:
-    proposals = await discover_personas(req.tickets)
-    return {"proposals": [p.model_dump(mode="json") for p in proposals]}
+    try:
+        proposals = await discover_personas(req.tickets)
+        return {"proposals": [p.model_dump(mode="json") for p in proposals]}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Persona discovery failed: {e}") from e
 
 
 @app.post("/personas/drift")
 async def personas_drift(req: DriftRequest) -> dict:
-    active = load_personas(kb_root())
-    report = await detect_drift(
-        active_personas=active,
-        tickets=req.tickets,
-        window_start=req.window_start,
-        window_end=req.window_end,
-    )
-    return report.model_dump(mode="json")
+    try:
+        active = load_personas(kb_root())
+        report = await detect_drift(
+            active_personas=active,
+            tickets=req.tickets,
+            window_start=req.window_start,
+            window_end=req.window_end,
+        )
+        return report.model_dump(mode="json")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Persona drift detection failed: {e}") from e
 
 
 @app.post("/themes/cluster")
 async def themes_cluster(req: WindowedTicketsRequest) -> dict:
-    report = await cluster_themes(
-        tickets=req.tickets,
-        week_start=req.week_start,
-        week_end=req.week_end,
-    )
-    return report.model_dump(mode="json")
+    try:
+        report = await cluster_themes(
+            tickets=req.tickets,
+            week_start=req.week_start,
+            week_end=req.week_end,
+        )
+        return report.model_dump(mode="json")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Theme clustering failed: {e}") from e
 
 
 @app.post("/briefs/monthly")
 async def briefs_monthly(req: BriefRequest) -> dict:
-    personas = load_personas(kb_root())
-    theme_reports = [ThemeReport(**r) for r in req.theme_reports]
-    brief = await write_brief(
-        month=req.month,
-        theme_reports=theme_reports,
-        personas=personas,
-        kb_summary=req.kb_summary,
-    )
-    return brief.model_dump(mode="json")
+    try:
+        personas = load_personas(kb_root())
+        theme_reports = [ThemeReport(**r) for r in req.theme_reports]
+        brief = await write_brief(
+            month=req.month,
+            theme_reports=theme_reports,
+            personas=personas,
+            kb_summary=req.kb_summary,
+        )
+        return brief.model_dump(mode="json")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Brief generation failed: {e}") from e
 
 
 @app.post("/conflicts/digest")
 async def conflicts_digest(req: ConflictsRequest) -> dict:
-    digest = await detect_conflicts(
-        kb_entries=req.kb_entries,
-        week_end=req.week_end,
-    )
-    return {
-        **digest.model_dump(mode="json"),
-        "count": digest.count,
-        "slack_blocks": to_slack_blocks(digest),
-    }
+    try:
+        digest = await detect_conflicts(
+            kb_entries=req.kb_entries,
+            week_end=req.week_end,
+        )
+        return {
+            **digest.model_dump(mode="json"),
+            "count": digest.count,
+            "slack_blocks": to_slack_blocks(digest),
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Conflict detection failed: {e}") from e
