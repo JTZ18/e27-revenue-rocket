@@ -33,7 +33,7 @@ async def judge_draft(
         f"=== CITED KB EXCERPTS ===\n{excerpts_block}"
     )
 
-    client = LLMClient(provider=LLMProvider.kimi)
+    client = LLMClient(provider=LLMProvider.openrouter)
     raw = await client.complete_json(system=system, user=user)
 
     return RubricScore(

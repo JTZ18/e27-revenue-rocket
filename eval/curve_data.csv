@@ -1,71 +1,113 @@
-ticket_index,ticket_id,received_at,pages_read,can_answer_fully,themes_detected,persona_hints,confidence,gap_created,kb_entry_added_slug,kb_commit_sha
-0,TKT-1046,2025-11-15T16:19:00,,False,movement_specs|materials_safety,health_conscious,low,True,synth-is-the-movement-resistant-to-m-2e3633,43fb1d4
-1,TKT-1010,2025-11-19T16:19:00,kb/pricing/servicing-rate-card.md,False,servicing|aftercare,enthusiast_collector,low,True,synth-i-have-a-boldr-expedition-from-9104e7,0e219b6
-2,TKT-1068,2025-11-22T16:19:00,,False,pricing,,low,True,synth-i-found-the-same-watch-cheaper-c075f7,9aca6fb
-3,TKT-1016,2025-11-23T16:19:00,kb/persona/health-conscious-buyer.md,False,materials_safety,health_conscious|active_outdoor,low,True,synth-are-the-dyes-used-in-the-colou-573829,dcda994
-4,TKT-1035,2025-11-28T16:19:00,kb/persona/active-outdoor-buyer.md,False,water_resistance|materials|swimming,active_outdoor,low,True,synth-i-want-to-use-the-watch-for-sw-0ac468,5b21eb7
-5,TKT-1002,2025-11-29T16:19:00,,False,shipping,gifter,low,True,synth-i-need-the-watch-urgently-as-a-ea2850,e39ccbb
-6,TKT-1006,2025-12-01T16:19:00,kb/pricing/servicing-rate-card.md,True,water_resistance|servicing|aftercare,active_outdoor,high,False,,
-7,TKT-1030,2025-12-03T16:19:00,,False,limited_edition,enthusiast_collector,low,True,synth-i-saw-a-limited-edition-collab-7be137,03f2da1
-8,TKT-1021,2025-12-04T16:19:00,,False,materials_safety,health_conscious,low,True,synth-what-luminous-material-do-you-04e40c,a59de6b
-9,TKT-1037,2025-12-04T16:19:00,,False,sizing,general,low,True,synth-i-have-a-20cm-wrist-will-the-s-fd6086,635397a
-10,TKT-1011,2025-12-05T16:19:00,,False,strap_interchangeability|compatibility,enthusiast_collector,low,True,synth-i-own-both-the-expedition-and-865f26,cdd7621
-11,TKT-1005,2025-12-08T16:19:00,,False,international_shipping|duties_taxes,international_buyer,low,True,synth-i-m-ordering-from-the-uk-will-33bac0,e0f8091
-12,TKT-1007,2025-12-14T16:19:00,,False,checkout|discount_code,,low,True,synth-i-m-trying-to-apply-discount-c-10c144,39aefed
-13,TKT-1047,2025-12-16T16:19:00,kb/pricing/engraving-rate-card.md,True,engraving|pricing,gifter,high,False,,
-14,TKT-1033,2025-12-19T16:19:00,kb/pricing/engraving-rate-card.md,True,engraving,gifter,high,False,,
-15,TKT-1065,2025-12-19T16:19:00,,False,altitude_performance,active_outdoor,low,True,synth-i-m-going-on-a-high-altitude-t-e09cfe,d19854c
-16,TKT-1009,2025-12-24T16:19:00,,False,order_status|shipping,,low,True,synth-hi-i-placed-order-bld-93810-ab-cafa54,0cc6c9c
-17,TKT-1001,2025-12-26T16:19:00,kb/pricing/servicing-rate-card.md,True,servicing|pricing|aftercare,gifter,high,False,,
-18,TKT-1023,2025-12-27T16:19:00,,False,sizing|strap_interchangeability,,low,True,synth-hi-what-lug-width-does-the-exp-4edb1a,677bc5f
-19,TKT-1051,2025-12-28T16:19:00,kb/persona/health-conscious-buyer.md,False,materials_safety,health_conscious,low,True,synth-my-skin-reacts-to-most-watch-s-a34b3e,7f6fc06
-20,TKT-1049,2025-12-29T16:19:00,kb/pricing/engraving-rate-card.md,True,engraving,gifter,high,False,,
-21,TKT-1034,2026-01-07T16:19:00,,False,warranty|coverage,,low,True,synth-what-is-the-warranty-period-on-97b1c0,86d57b1
-22,TKT-1060,2026-01-08T16:19:00,kb/persona/enthusiast-collector.md,False,materials|specifications,enthusiast,low,True,synth-hello-could-you-tell-me-what-g-a0b768,d05be02
-23,TKT-1015,2026-01-12T16:19:00,kb/persona/gifter.md,False,gifting,gifter,low,True,synth-do-you-offer-gift-wrapping-or-7d9268,a63d0a1
-24,TKT-1052,2026-01-14T16:19:00,,False,,enthusiast_collector,low,True,synth-how-well-do-boldr-watches-hold-3ebaa8,211d607
-25,TKT-1022,2026-01-14T16:19:00,kb/pricing/engraving-rate-card.md,False,engraving|durability,enthusiast_collector,low,True,synth-how-deep-is-the-engraving-i-wa-5a85e4,ab98000
-26,TKT-1058,2026-01-15T16:19:00,kb/pricing/engraving-rate-card.md|kb/persona/gifter.md,False,engraving|shipping|turnaround,gifter,low,True,synth-if-i-order-today-with-engravin-df6404,4b890a2
-27,TKT-1004,2026-01-17T16:19:00,kb/pricing/servicing-rate-card.md,False,servicing|aftercare,,high,True,synth-hi-my-watch-battery-has-died-h-df68c6,3cb41aa
-28,TKT-1008,2026-01-21T16:19:00,kb/pricing/engraving-rate-card.md,True,engraving,gifter|enthusiast,high,False,,
-29,TKT-1044,2026-01-21T16:19:00,kb/faq/synth-hi-what-lug-width-does-the-exp-4edb1a.md,False,strap_interchangeability|sizing,,low,True,synth-does-the-expedition-work-with-3e4238,25bf2c8
-30,TKT-1048,2026-01-29T16:19:00,kb/persona/health-conscious-buyer.md,False,materials_safety,health_conscious|gifter,low,True,synth-hi-i-m-buying-this-for-my-youn-e0ec84,6eb3fd3
-31,TKT-1062,2026-01-30T16:19:00,kb/pricing/servicing-rate-card.md,False,servicing|aftercare,enthusiast_collector,med,True,synth-my-watch-is-losing-about-10-se-d9a7c1,bb1317e
-32,TKT-1038,2026-02-01T16:19:00,kb/faq/synth-my-skin-reacts-to-most-watch-s-a34b3e.md|kb/persona/health-conscious-buyer.md,False,materials_safety|sensitive_skin,health_conscious,low,True,synth-is-the-silicone-strap-food-gra-f3fd32,82f8b44
-33,TKT-1029,2026-02-03T16:19:00,,False,fulfillment_error|wrong_item,,low,True,synth-i-received-my-order-bld-46048-7c1714,1bb647d
-34,TKT-1066,2026-02-06T16:19:00,kb/persona/health-conscious-buyer.md|kb/faq/synth-hi-i-m-buying-this-for-my-youn-e0ec84.md|kb/faq/synth-are-the-dyes-used-in-the-colou-573829.md|kb/faq/synth-is-the-silicone-strap-food-gra-f3fd32.md|kb/faq/synth-my-skin-reacts-to-most-watch-s-a34b3e.md|kb/faq/synth-what-luminous-material-do-you-04e40c.md,False,materials_safety|gifting,gifter|health_conscious,low,True,synth-i-want-to-gift-this-to-my-10-y-e7b5a7,2368f4a
-35,TKT-1040,2026-02-08T16:19:00,,False,order_status|international_shipping,,low,True,synth-it-s-been-3-weeks-since-i-plac-8fe78e,e8dbd1b
-36,TKT-1043,2026-02-25T16:19:00,,False,refunds|returns|order_status,,low,True,synth-i-returned-my-order-bld-23434-f50788,abfac79
-37,TKT-1061,2026-03-02T16:19:00,kb/pricing/servicing-rate-card.md,True,servicing|aftercare,enthusiast_collector,high,False,,
-38,TKT-1045,2026-03-06T16:19:00,kb/persona/active-outdoor-buyer.md,False,extreme_sports|shock_resistance|durability,active_outdoor,low,True,synth-i-do-trail-running-and-occasio-6d273c,5d2ad56
-39,TKT-1063,2026-03-06T16:19:00,kb/pricing/engraving-rate-card.md,True,engraving|pricing,gifter,high,False,,
-40,TKT-1032,2026-03-07T16:19:00,kb/persona/health-conscious-buyer.md,False,materials_safety,health_conscious,low,True,synth-hi-there-i-have-a-nickel-aller-13f4db,8a77584
-41,TKT-1014,2026-03-10T16:19:00,kb/persona/enthusiast-collector.md|kb/faq/synth-i-saw-a-limited-edition-collab-7be137.md,False,limited_edition|collaboration,enthusiast_collector,low,True,synth-do-you-collaborate-with-indepe-53f78d,62eef18
-42,TKT-1064,2026-03-14T16:19:00,,False,strap_options|colour_options,,low,True,synth-what-colour-options-are-availa-e82bd3,9bbe07f
-43,TKT-1041,2026-03-15T16:19:00,kb/pricing/engraving-rate-card.md,True,engraving,gifter|enthusiast_collector,high,False,,
-44,TKT-1053,2026-03-16T16:19:00,,False,strap_care|materials,,low,True,synth-i-bought-the-leather-strap-how-cdc315,d2e231e
-45,TKT-1057,2026-03-16T16:19:00,,False,order_management|shipping,,low,True,synth-i-made-a-mistake-in-my-deliver-c63ae3,0a2782c
-46,TKT-1054,2026-03-21T16:19:00,kb/pricing/servicing-rate-card.md,False,servicing|aftercare|warranty,,med,True,synth-is-there-a-warranty-on-the-ser-bbd023,6d3c300
-47,TKT-1031,2026-03-24T16:19:00,,False,strap_interchangeability|swapping_mechanism,active_outdoor|enthusiast,low,True,synth-do-your-straps-have-a-quick-re-c859b3,f609106
-48,TKT-1026,2026-03-30T16:19:00,kb/pricing/servicing-rate-card.md,True,servicing|aftercare|pricing,enthusiast_collector,high,False,,
-49,TKT-1020,2026-04-01T16:19:00,kb/pricing/engraving-rate-card.md,True,engraving,,high,False,,
-50,TKT-1067,2026-04-02T16:19:00,kb/persona/health-conscious-buyer.md,False,materials_safety|regulatory_compliance,health_conscious,low,True,synth-does-the-strap-meet-eu-reach-o-0538b5,dcdb8d9
-51,TKT-1059,2026-04-02T16:19:00,kb/pricing/servicing-rate-card.md,False,servicing|international_shipping,enthusiast_collector,med,True,synth-i-m-based-in-australia-can-i-s-74894a,bb29ac5
-52,TKT-1017,2026-04-02T16:19:00,kb/faq/synth-i-returned-my-order-bld-23434-f50788.md|kb/faq/synth-i-received-my-order-bld-46048-7c1714.md,False,returns|sizing_fit,,low,True,synth-what-is-your-return-policy-can-fa5771,040c158
-53,TKT-1025,2026-04-02T16:19:00,,False,model_comparison,,low,True,synth-can-you-explain-the-main-diffe-584501,df296db
-54,TKT-1012,2026-04-04T16:19:00,,False,sizing|fit_recommendation,,low,True,synth-i-have-a-small-wrist-15cm-woul-393b33,db2760c
-55,TKT-1024,2026-04-06T16:19:00,kb/persona/sustainability-advocate.md,False,sustainability|eco_packaging,sustainability_advocate,low,True,synth-i-care-about-sustainability-ca-55df0b,ecdbdfe
-56,TKT-1039,2026-04-07T16:19:00,kb/faq/synth-hello-could-you-tell-me-what-g-a0b768.md|kb/persona/enthusiast-collector.md,False,materials|specifications|model_comparison,enthusiast_collector,low,True,synth-what-s-the-practical-differenc-a2ba43,0937678
-57,TKT-1003,2026-04-09T16:19:00,kb/faq/synth-hi-there-i-have-a-nickel-aller-13f4db.md|kb/persona/health-conscious-buyer.md|kb/faq/synth-hi-i-m-buying-this-for-my-youn-e0ec84.md,False,materials_safety|hypoallergenic,health_conscious,low,True,synth-your-site-says-the-watch-is-hy-2a4a9d,4ad31a6
-58,TKT-1050,2026-04-12T16:19:00,kb/pricing/servicing-rate-card.md,True,servicing|aftercare,,high,False,,
-59,TKT-1070,2026-04-19T16:19:00,kb/pricing/engraving-rate-card.md,True,engraving,gifter,high,False,,
-60,TKT-1028,2026-04-22T16:19:00,kb/persona/sustainability-advocate.md|kb/faq/synth-i-care-about-sustainability-ca-55df0b.md,False,sustainability,sustainability_advocate,low,True,synth-do-you-have-a-strap-recycling-5bc21e,ac2f739
-61,TKT-1036,2026-04-27T16:19:00,,False,vegan_friendly|materials_safety|sustainability,sustainability_advocate|health_conscious,low,True,synth-are-all-your-straps-vegan-frie-ebfe7d,22591f3
-62,TKT-1019,2026-05-01T16:19:00,,False,pricing|bulk_orders|corporate_gifting,gifter|corporate_buyer,low,True,synth-we-re-a-corporate-client-looki-c5f53a,df76bae
-63,TKT-1018,2026-05-02T16:19:00,kb/faq/synth-i-own-both-the-expedition-and-865f26.md|kb/pricing/servicing-rate-card.md,False,strap_interchangeability|accessories,enthusiast_collector,low,True,synth-do-you-sell-a-mesh-milanese-br-369380,d5288fa
-64,TKT-1042,2026-05-02T16:19:00,kb/faq/synth-i-want-to-use-the-watch-for-sw-0ac468.md|kb/faq/synth-i-bought-the-leather-strap-how-cdc315.md,False,water_resistance|materials,active_outdoor,low,True,synth-if-the-watch-is-water-resistan-245ef8,577b8db
-65,TKT-1056,2026-05-04T16:19:00,,False,,,low,True,synth-my-tracking-number-dhl96973549-0e62e0,841479d
-66,TKT-1069,2026-05-05T16:19:00,kb/pricing/engraving-rate-card.md|kb/persona/gifter.md,True,engraving,gifter,high,False,,
-67,TKT-1027,2026-05-06T16:19:00,kb/pricing/engraving-rate-card.md|kb/persona/gifter.md|kb/faq/synth-do-you-offer-gift-wrapping-or-7d9268.md,False,engraving|gifting|personalisation,gifter,med,True,synth-what-personalisation-options-d-761be4,5db00a6
-68,TKT-1013,2026-05-10T16:19:00,kb/persona/sustainability-advocate.md,False,sustainability|carbon_shipping,sustainability,low,True,synth-do-you-offer-carbon-neutral-sh-2b4dc8,8e03c90
-69,TKT-1055,2026-05-12T16:19:00,,False,order_management,,low,True,synth-i-just-placed-order-bld-39256-b5e5f0,d0ce9e8
+ticket_index,ticket_id,received_at,pages_read,can_answer_fully,themes_detected,persona_hints,confidence,draft_reply,gap_created,kb_entry_added_slug,kb_commit_sha
+0,TKT-1046,2025-11-15T16:19:00,kb/persona/enthusiast-collector.md,False,movement,enthusiast,low,,True,synth-is-the-movement-resistant-to-m-2e3633,21a6e5c
+1,TKT-1010,2025-11-19T16:19:00,kb/pricing/servicing-rate-card.md,False,servicing|pricing|aftercare,enthusiast,low,,True,synth-i-have-a-boldr-expedition-from-9104e7,c8a43fc
+2,TKT-1068,2025-11-22T16:19:00,,False,pricing,,low,,True,synth-i-found-the-same-watch-cheaper-c075f7,95437b3
+3,TKT-1016,2025-11-23T16:19:00,kb/persona/active-outdoor-buyer.md|kb/persona/health-conscious-buyer.md,False,materials_safety,health_conscious|active_outdoor,low,,True,synth-are-the-dyes-used-in-the-colou-573829,c012a6c
+4,TKT-1035,2025-11-28T16:19:00,kb/persona/active-outdoor-buyer.md,False,materials_suitability,active_outdoor,low,,True,synth-i-want-to-use-the-watch-for-sw-0ac468,b91aa46
+5,TKT-1002,2025-11-29T16:19:00,kb/persona/gifter.md,False,pricing,gifter,low,,True,synth-i-need-the-watch-urgently-as-a-ea2850,5f10194
+6,TKT-1006,2025-12-01T16:19:00,kb/pricing/servicing-rate-card.md|kb/persona/active-outdoor-buyer.md,True,servicing|aftercare,active_outdoor,high,"Hi Logan, thanks for reaching out — happy to help with that. Yes. After a Full Service — Standard, we re-test water resistance to 100m, and Full Service — Premium includes all Standard items as well, so that water resistance test is included there too. If you want an additional standalone check, we also offer a Water Resistance Re-test for SGD 20, which includes a pressure test to rated depth and gasket inspection.
+
+Since you use the watch for diving, it may also help to confirm your watch’s rated depth before use, as the included full-service test is listed at 100m.
+
+Sources: kb/pricing/servicing-rate-card.md",False,,
+7,TKT-1030,2025-12-03T16:19:00,kb/persona/enthusiast-collector.md,False,availability|limited_edition,enthusiast,low,,True,synth-i-saw-a-limited-edition-collab-7be137,862f5de
+8,TKT-1021,2025-12-04T16:19:00,kb/persona/health-conscious-buyer.md,False,materials_safety,health_conscious,low,,True,synth-what-luminous-material-do-you-04e40c,697b5b2
+9,TKT-1037,2025-12-04T16:19:00,,False,materials_suitability,,low,,True,synth-i-have-a-20cm-wrist-will-the-s-fd6086,25acd50
+10,TKT-1011,2025-12-05T16:19:00,,False,straps|compatibility,,low,,True,synth-i-own-both-the-expedition-and-865f26,70a3b78
+11,TKT-1005,2025-12-08T16:19:00,,False,pricing,,low,,True,synth-i-m-ordering-from-the-uk-will-33bac0,013b89a
+12,TKT-1007,2025-12-14T16:19:00,,False,pricing,,low,,True,synth-i-m-trying-to-apply-discount-c-10c144,85f57c3
+13,TKT-1047,2025-12-16T16:19:00,kb/pricing/engraving-rate-card.md|kb/persona/gifter.md,True,engraving|pricing,gifter,high,"Hi Dylan, thanks for reaching out — happy to help with that. Yes, we offer caseback engraving.
+
+For standard Roman/Latin script, you can fit up to 60 characters total:
+- Up to 20 characters: SGD 25
+- 21 to 40 characters: SGD 40
+- Beyond 40 characters: SGD 1.5 per additional character, up to a maximum of 60 characters
+
+If you’re looking at Chinese, Japanese, Korean, or Arabic script, the limit is up to 15 characters at SGD 3.0 per character.
+
+Source: kb/pricing/engraving-rate-card.md",False,,
+14,TKT-1033,2025-12-19T16:19:00,kb/pricing/engraving-rate-card.md|kb/persona/gifter.md,True,engraving|pricing,gifter,high,"Hi Kavya, thanks for reaching out — happy to help with that. Yes, 2-line engraving is available. Multi-line engraving is priced at SGD 35, and that includes up to 30 characters total across both lines. I used kb/pricing/engraving-rate-card.md.",False,,
+15,TKT-1065,2025-12-19T16:19:00,kb/persona/active-outdoor-buyer.md,False,performance|active_outdoor,active_outdoor,low,,True,synth-i-m-going-on-a-high-altitude-t-e09cfe,a281723
+16,TKT-1009,2025-12-24T16:19:00,,False,order_status,,low,,True,synth-hi-i-placed-order-bld-93810-ab-cafa54,4c3f1a0
+17,TKT-1001,2025-12-26T16:19:00,kb/pricing/servicing-rate-card.md,True,servicing|aftercare|pricing,,high,"Hi Jack, thanks for reaching out — happy to help with that. Yes. A full service typically takes 14–21 days. Based on that turnaround, 6 weeks should generally be enough time to have the watch back before your holiday. If this is an international service, please allow an additional 7–14 days for insured return shipping. For reference, Full Service — Standard is SGD 160 and Full Service — Premium is SGD 220. Source: kb/pricing/servicing-rate-card.md",False,,
+18,TKT-1023,2025-12-27T16:19:00,,False,straps|compatibility,enthusiast,low,,True,synth-hi-what-lug-width-does-the-exp-4edb1a,3be3b21
+19,TKT-1051,2025-12-28T16:19:00,kb/persona/health-conscious-buyer.md,False,materials_safety|materials_suitability,health_conscious,low,,True,synth-my-skin-reacts-to-most-watch-s-a34b3e,b66ccca
+20,TKT-1049,2025-12-29T16:19:00,kb/pricing/engraving-rate-card.md|kb/persona/gifter.md,True,engraving|pricing,gifter,high,"Hi Henry, thanks for reaching out — happy to help with that. Yes, we can engrave Chinese characters on the caseback. For Chinese/Japanese/Korean engraving, the rate is SGD 3.0 per character, with a maximum of 15 CJK characters. If you’d like, you can send over the exact characters you want engraved and we can help you confirm the count before you place the order.
+
+Sources: kb/pricing/engraving-rate-card.md",False,,
+21,TKT-1034,2026-01-07T16:19:00,,False,aftercare,,low,,True,synth-what-is-the-warranty-period-on-97b1c0,2b11539
+22,TKT-1060,2026-01-08T16:19:00,kb/persona/enthusiast-collector.md,False,materials_safety,enthusiast,low,,True,synth-hello-could-you-tell-me-what-g-a0b768,b183e13
+23,TKT-1015,2026-01-12T16:19:00,kb/persona/gifter.md,False,gifting,gifter,low,,True,synth-do-you-offer-gift-wrapping-or-7d9268,f8484b9
+24,TKT-1052,2026-01-14T16:19:00,kb/persona/enthusiast-collector.md,False,limited_edition,enthusiast,low,,True,synth-how-well-do-boldr-watches-hold-3ebaa8,6846f2f
+25,TKT-1022,2026-01-14T16:19:00,kb/pricing/engraving-rate-card.md|kb/persona/gifter.md,False,engraving,gifter,low,,True,synth-how-deep-is-the-engraving-i-wa-5a85e4,a34477a
+26,TKT-1058,2026-01-15T16:19:00,kb/pricing/engraving-rate-card.md|kb/persona/gifter.md,False,engraving|pricing,gifter,high,,True,synth-if-i-order-today-with-engravin-df6404,fc7c148
+27,TKT-1004,2026-01-17T16:19:00,kb/pricing/servicing-rate-card.md,False,servicing|pricing|aftercare,,high,,True,synth-hi-my-watch-battery-has-died-h-df68c6,b0c2189
+28,TKT-1008,2026-01-21T16:19:00,kb/pricing/engraving-rate-card.md,True,engraving,gifter,high,"Hi Riley, thanks for reaching out — happy to help with that. Yes, the strap buckle can be engraved as well, not only the watch caseback. Strap buckle engraving is available at SGD 15 for up to 10 characters, but only on metal buckles. It is not available on rubber or NATO straps. Caseback engraving is also available separately if you’d prefer that option.
+
+Source: kb/pricing/engraving-rate-card.md",False,,
+29,TKT-1044,2026-01-21T16:19:00,kb/faq/synth-hi-what-lug-width-does-the-exp-4edb1a.md|kb/faq/synth-i-own-both-the-expedition-and-865f26.md,False,straps|compatibility,active_outdoor,low,,True,synth-does-the-expedition-work-with-3e4238,5a03c48
+30,TKT-1048,2026-01-29T16:19:00,kb/persona/health-conscious-buyer.md,False,materials_safety,health_conscious,low,,True,synth-hi-i-m-buying-this-for-my-youn-e0ec84,4e09830
+31,TKT-1062,2026-01-30T16:19:00,kb/pricing/servicing-rate-card.md,False,servicing|aftercare,enthusiast,med,,True,synth-my-watch-is-losing-about-10-se-d9a7c1,3af7443
+32,TKT-1038,2026-02-01T16:19:00,,False,materials_safety,health_conscious,low,,True,synth-is-the-silicone-strap-food-gra-f3fd32,006db78
+33,TKT-1029,2026-02-03T16:19:00,,False,order_issue,,low,,True,synth-i-received-my-order-bld-46048-7c1714,8728056
+34,TKT-1066,2026-02-06T16:19:00,kb/persona/health-conscious-buyer.md|kb/persona/gifter.md,False,materials_safety|gifting,health_conscious|gifter,low,,True,synth-i-want-to-gift-this-to-my-10-y-e7b5a7,7888482
+35,TKT-1040,2026-02-08T16:19:00,,False,order_status,,low,,True,synth-it-s-been-3-weeks-since-i-plac-8fe78e,f2c49a5
+36,TKT-1043,2026-02-25T16:19:00,,False,refund|order_status|returns,,low,,True,synth-i-returned-my-order-bld-23434-f50788,7aa2db4
+37,TKT-1061,2026-03-02T16:19:00,kb/pricing/servicing-rate-card.md,False,servicing|aftercare|pricing,enthusiast,med,,True,synth-what-s-the-difference-between-3a77d4,1ce0f7b
+38,TKT-1045,2026-03-06T16:19:00,kb/persona/active-outdoor-buyer.md,False,active_outdoor|performance,active_outdoor,low,,True,synth-i-do-trail-running-and-occasio-6d273c,dbfdc7e
+39,TKT-1063,2026-03-06T16:19:00,kb/pricing/engraving-rate-card.md|kb/persona/gifter.md,True,engraving|pricing,gifter,high,"Hi Hui, thanks for reaching out — happy to help with that. No. There isn’t a per-character charge for a 20-character standard caseback engraving. The price is SGD 25 for up to 20 characters total. Per-character pricing only applies for caseback engraving beyond 40 characters at SGD 1.5 per additional character, or for Chinese/Japanese/Korean and Arabic script at SGD 3.0 per character. Source: kb/pricing/engraving-rate-card.md",False,,
+40,TKT-1032,2026-03-07T16:19:00,kb/persona/health-conscious-buyer.md,False,materials_safety,health_conscious,low,,True,synth-hi-there-i-have-a-nickel-aller-13f4db,1538829
+41,TKT-1014,2026-03-10T16:19:00,kb/persona/enthusiast-collector.md,False,limited_edition,enthusiast,low,,True,synth-do-you-collaborate-with-indepe-53f78d,c85f187
+42,TKT-1064,2026-03-14T16:19:00,kb/faq/synth-i-received-my-order-bld-46048-7c1714.md,False,straps|availability,,low,,True,synth-what-colour-options-are-availa-e82bd3,5a869d8
+43,TKT-1041,2026-03-15T16:19:00,kb/pricing/engraving-rate-card.md|kb/persona/gifter.md,True,engraving,gifter,high,"Hi Scarlett, thanks for reaching out — happy to help with that. Yes, it is possible to engrave a small logo or symbol on the caseback, not just text. Custom logo/symbol engraving is available at SGD 60, and you would need to supply the artwork as a vector file in .ai or .svg format. Please note that approval is required before proceeding. For standard text engraving, the caseback options are priced separately. Sources: kb/pricing/engraving-rate-card.md",False,,
+44,TKT-1053,2026-03-16T16:19:00,,False,aftercare|straps,,low,,True,synth-i-bought-the-leather-strap-how-cdc315,7dac0e3
+45,TKT-1057,2026-03-16T16:19:00,,False,order_update|shipping,,low,,True,synth-i-made-a-mistake-in-my-deliver-c63ae3,2693756
+46,TKT-1054,2026-03-21T16:19:00,kb/pricing/servicing-rate-card.md,False,servicing|aftercare,,high,,True,synth-is-there-a-warranty-on-the-ser-bbd023,a6ae3d0
+47,TKT-1031,2026-03-24T16:19:00,,False,straps|compatibility,,low,,True,synth-do-your-straps-have-a-quick-re-c859b3,89e1ba0
+48,TKT-1026,2026-03-30T16:19:00,kb/pricing/servicing-rate-card.md,True,servicing|pricing|aftercare,enthusiast,high,"Hi Nathan, thanks for reaching out — happy to help with that. Yes, a Full Service is recommended every 3–5 years, so at 3 years your watch is within the usual servicing window.
+
+Here’s what is included in the Full Service — Standard at SGD 160:
+- full movement disassembly
+- ultrasonic cleaning
+- lubrication
+- regulation
+- water resistance test (100m)
+- light case polish
+- new gaskets
+
+Turnaround is 14–21 days.
+
+If you’re considering the Premium option at SGD 220, that includes everything in the Standard service, plus:
+- deep case polish
+- crystal replacement if scratched
+- new crown and pushers if worn
+- 12-month service warranty
+
+Since you mentioned the watch is running slightly slow, a Regulation Service may also be relevant if your watch has an automatic movement. That service is SGD 85, takes 7–10 days, and includes movement cleaning, regulation to +/-5 s/day, and a timing machine report.
+
+Source: kb/pricing/servicing-rate-card.md",False,,
+49,TKT-1020,2026-04-01T16:19:00,kb/pricing/engraving-rate-card.md|kb/persona/gifter.md,True,engraving|pricing,gifter,high,"Hi Sophia, thanks for reaching out — happy to help with that. Yes. You can change the engraving text if you requested the correction within 1 hour of placing the order, and there is no charge for that. Since you placed the order 10 minutes ago, your engraving correction would fall within that free window. If the correction is requested after 1 hour, the fee is SGD 15.
+
+Sources: kb/pricing/engraving-rate-card.md",False,,
+50,TKT-1067,2026-04-02T16:19:00,kb/persona/health-conscious-buyer.md,False,materials_safety,health_conscious,low,,True,synth-does-the-strap-meet-eu-reach-o-0538b5,44db953
+51,TKT-1059,2026-04-02T16:19:00,kb/pricing/servicing-rate-card.md,False,servicing|aftercare|pricing,,med,,True,synth-i-m-based-in-australia-can-i-s-74894a,79a974c
+52,TKT-1017,2026-04-02T16:19:00,,False,returns,,low,,True,synth-what-is-your-return-policy-can-fa5771,a536b8b
+53,TKT-1025,2026-04-02T16:19:00,,False,product_comparison,,low,,True,synth-can-you-explain-the-main-diffe-584501,f81f696
+54,TKT-1012,2026-04-04T16:19:00,,False,product_fit|size_recommendation,,low,,True,synth-i-have-a-small-wrist-15cm-woul-393b33,d65ca2a
+55,TKT-1024,2026-04-06T16:19:00,kb/persona/sustainability-advocate.md,False,sustainability,sustainability,low,,True,synth-i-care-about-sustainability-ca-55df0b,30de5a5
+56,TKT-1039,2026-04-07T16:19:00,kb/persona/enthusiast-collector.md,False,product_comparison,enthusiast,low,,True,synth-what-s-the-practical-differenc-a2ba43,8c6395b
+57,TKT-1003,2026-04-09T16:19:00,,False,materials_safety|straps,health_conscious,low,,True,synth-your-site-says-the-watch-is-hy-2a4a9d,af43f41
+58,TKT-1050,2026-04-12T16:19:00,kb/pricing/servicing-rate-card.md,True,servicing|aftercare|pricing,,high,"Hi Mei, thanks for reaching out — happy to help with that. Yes. We can polish light case scratches during servicing. Our Full Service — Standard includes a light case polish, and Full Service — Premium includes a deep case polish. If you only want the exterior refinished, we also offer a Case & Bracelet Polish service for SGD 45. For reference, Full Service — Standard is SGD 160 and Full Service — Premium is SGD 220. Turnaround is 14–21 days for the full service tiers, or 3–5 days for the Case & Bracelet Polish add-on/service.
+
+Source: kb/pricing/servicing-rate-card.md",False,,
+59,TKT-1070,2026-04-19T16:19:00,kb/pricing/engraving-rate-card.md,True,engraving|pricing,gifter,high,"Hi Mila, thanks for reaching out — happy to help with that. Yes, we can engrave in Arabic script. Arabic engraving is priced at SGD 3.0 per character, with a maximum of 15 characters. If you'd like, you can send us the exact Arabic text you want engraved and we can help confirm it fits within the limit.",False,,
+60,TKT-1028,2026-04-22T16:19:00,kb/persona/sustainability-advocate.md,False,sustainability|straps,sustainability,low,,True,synth-do-you-have-a-strap-recycling-5bc21e,83749fc
+61,TKT-1036,2026-04-27T16:19:00,kb/persona/sustainability-advocate.md,False,sustainability|straps,sustainability,low,,True,synth-are-all-your-straps-vegan-frie-ebfe7d,1290f21
+62,TKT-1019,2026-05-01T16:19:00,,False,pricing|gifting,gifter,low,,True,synth-we-re-a-corporate-client-looki-c5f53a,3661967
+63,TKT-1018,2026-05-02T16:19:00,kb/faq/synth-i-own-both-the-expedition-and-865f26.md|kb/faq/synth-hi-what-lug-width-does-the-exp-4edb1a.md|kb/faq/synth-does-the-expedition-work-with-3e4238.md|kb/faq/synth-do-your-straps-have-a-quick-re-c859b3.md,False,straps|compatibility,enthusiast,low,,True,synth-do-you-sell-a-mesh-milanese-br-369380,9fab27a
+64,TKT-1042,2026-05-02T16:19:00,kb/persona/active-outdoor-buyer.md,False,materials_suitability|straps|active_outdoor,active_outdoor,low,,True,synth-if-the-watch-is-water-resistan-245ef8,3054486
+65,TKT-1056,2026-05-04T16:19:00,,False,order_status|shipping,,low,,True,synth-my-tracking-number-dhl96973549-0e62e0,5400e1d
+66,TKT-1069,2026-05-05T16:19:00,kb/pricing/engraving-rate-card.md,True,engraving,gifter,high,"Hi Elizabeth, thanks for reaching out — happy to help with that. No. Our engraving uses a fixed font rather than offering multiple font styles. The current engraving service is Standard Roman/Latin script only for caseback engraving. We do also support Chinese/Japanese/Korean characters and Arabic script pricing formats, but the KB does not list alternative decorative or elegant font choices. If you're considering a more custom look, we do offer logo/symbol engraving with customer-supplied vector art, subject to approval. Source: kb/pricing/engraving-rate-card.md",False,,
+67,TKT-1027,2026-05-06T16:19:00,kb/pricing/engraving-rate-card.md|kb/persona/gifter.md,False,gifting|engraving|pricing,gifter,med,,True,synth-what-personalisation-options-d-761be4,f0fb2a1
+68,TKT-1013,2026-05-10T16:19:00,kb/persona/sustainability-advocate.md|kb/faq/synth-i-care-about-sustainability-ca-55df0b.md,False,sustainability|shipping,sustainability,low,,True,synth-do-you-offer-carbon-neutral-sh-2b4dc8,947e737
+69,TKT-1055,2026-05-12T16:19:00,,False,order_update,,low,,True,synth-i-just-placed-order-bld-39256-b5e5f0,1dafe69
