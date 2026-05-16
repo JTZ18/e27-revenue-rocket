@@ -2,7 +2,7 @@
 
 Generated automatically. Do not edit by hand — re-run `scripts/generate_index.py`.
 
-Total active entries: 48
+Total active entries: 49
 
 ## faq
 
@@ -46,6 +46,7 @@ Total active entries: 48
 - **synth-my-watch-is-losing-about-10-se-d9a7c1** — My watch is losing about 10 seconds per day. Would a regulation service fix this  _(themes: servicing, aftercare)_
 - **synth-what-colour-options-are-availa-e82bd3** — What colour options are available for the 20mm rubber strap? I can only see black and navy on the website  _(themes: strap_options, colour_options)_
 - **synth-what-is-the-warranty-period-on-97b1c0** — What is the warranty period on the watch? Does it cover the movement and the strap separately  _(themes: warranty, coverage)_
+- **synth-what-is-your-return-policy-can-fa5771** — What is your return policy? Can I return the watch if it doesn't fit my wrist  _(themes: returns, sizing_fit)_
 - **synth-what-luminous-material-do-you-04e40c** — What luminous material do you use on the dial? Is it Super-LumiNova? Is it safe  _(themes: materials_safety)_
 
 ## persona
