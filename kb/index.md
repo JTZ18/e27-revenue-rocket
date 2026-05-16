@@ -2,7 +2,7 @@
 
 Generated automatically. Do not edit by hand — re-run `scripts/generate_index.py`.
 
-Total active entries: 26
+Total active entries: 27
 
 ## faq
 
@@ -11,6 +11,7 @@ Total active entries: 26
 - **synth-hello-could-you-tell-me-what-g-a0b768** — Hello, could you tell me what grade of titanium is used in the case? I've seen Grade 2 and Grade 5 mentioned online and   _(themes: materials, specifications)_
 - **synth-hi-i-placed-order-bld-93810-ab-cafa54** — Hi, I placed order BLD-93810 about 10 days ago and haven't received it yet. Can you check the status  _(themes: order_status, shipping)_
 - **synth-hi-what-lug-width-does-the-exp-4edb1a** — Hi, what lug width does the Expedition 40mm use? I want to buy a third-party strap  _(themes: sizing, strap_interchangeability)_
+- **synth-how-well-do-boldr-watches-hold-3ebaa8** — How well do Boldr watches hold their resale value compared to other micro-brands  _(themes: Resale value of titanium watches)_
 - **synth-i-found-the-same-watch-cheaper-c075f7** — I found the same watch cheaper on another site. Do you offer price matching  _(themes: pricing)_
 - **synth-i-have-a-20cm-wrist-will-the-s-fd6086** — I have a 20cm wrist. Will the standard strap length fit me, or do I need an extended strap  _(themes: sizing)_
 - **synth-i-have-a-boldr-expedition-from-9104e7** — I have a Boldr Expedition from 2019. Do you still service older models? Is it the same price  _(themes: servicing, aftercare)_
