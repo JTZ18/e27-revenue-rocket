@@ -1,4 +1,5 @@
 """FastAPI service exposing intel engine endpoints to n8n."""
+import json
 import secrets
 import subprocess
 from datetime import UTC, datetime
@@ -35,6 +36,17 @@ from intel_engine.schemas.persona import PersonaDefinition
 from intel_engine.briefs.writer import write_and_commit_brief
 from intel_engine.schemas.brief import MarketingBrief
 from intel_engine.schemas.sentiment import SentimentComparison
+
+from intel_engine.agents.sentiment_comparator import compare_sentiment
+from intel_engine.agents.sentiment_planner import plan_query_for_theme
+from intel_engine.schemas.sentiment import (
+    ExternalSentimentReport,
+    SentimentComparison,
+    SentimentQueryPlan,
+)
+from intel_engine.schemas.theme import Theme
+from intel_engine.sentiment.runner import RunnerError, run_last30days
+from intel_engine.sentiment.writer import write_and_commit_sentiment
 
 app = FastAPI(title="Boldr Intel Engine", version="0.1.0")
 
@@ -465,3 +477,119 @@ async def kb_summary() -> dict:
             }
         )
     return {"entries": out, "count": len(out)}
+
+
+class SentimentPlanRequest(BaseModel):
+    theme: dict
+    kb_excerpt: str = ""
+
+
+@app.post("/sentiment/plan")
+async def sentiment_plan(req: SentimentPlanRequest) -> dict:
+    try:
+        theme = Theme(**req.theme)
+        plan = await plan_query_for_theme(theme=theme, kb_excerpt=req.kb_excerpt)
+        return plan.model_dump(mode="json")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Sentiment planning failed: {e}") from e
+
+
+class SentimentRunRequest(BaseModel):
+    theme_slug: str
+    ran_at: str
+    plan: dict
+
+
+@app.post("/sentiment/run")
+async def sentiment_run(req: SentimentRunRequest) -> dict:
+    try:
+        plan = SentimentQueryPlan(**req.plan)
+        report = run_last30days(
+            theme_slug=req.theme_slug,
+            plan=plan,
+            ran_at=req.ran_at,
+        )
+        return report.model_dump(mode="json")
+    except RunnerError as e:
+        raise HTTPException(status_code=502, detail=f"last30days failed: {e}") from e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Sentiment run failed: {e}") from e
+
+
+class SentimentCompareRequest(BaseModel):
+    theme: dict
+    external: dict
+
+
+@app.post("/sentiment/compare")
+async def sentiment_compare(req: SentimentCompareRequest) -> dict:
+    try:
+        theme = Theme(**req.theme)
+        external = ExternalSentimentReport(**req.external)
+        cmp = await compare_sentiment(theme=theme, external=external)
+        return cmp.model_dump(mode="json")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Sentiment comparison failed: {e}") from e
+
+
+class SentimentPersistRequest(BaseModel):
+    report: dict
+    comparison: dict
+
+
+@app.post("/sentiment/persist")
+async def sentiment_persist(req: SentimentPersistRequest) -> dict:
+    repo_root = Path(kb_root()).parent
+    try:
+        report = ExternalSentimentReport(**req.report)
+        comparison = SentimentComparison(**req.comparison)
+        sha = write_and_commit_sentiment(
+            report=report, comparison=comparison, repo_root=repo_root,
+        )
+    except subprocess.CalledProcessError as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Git commit failed: {e.stderr.decode() if e.stderr else e}",
+        ) from e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Sentiment persist failed: {e}") from e
+    return {
+        "committed_sha": sha,
+        "theme_slug": report.theme_slug,
+        "month": report.ran_at[:7],
+    }
+
+
+@app.get("/sentiment/list")
+async def sentiment_list(since: str | None = None) -> dict:
+    repo_root = Path(kb_root()).parent
+    base = repo_root / "external-intel"
+    if not base.exists():
+        return {"reports": []}
+
+    out: list[dict] = []
+    for month_dir in sorted(base.iterdir()):
+        if not month_dir.is_dir():
+            continue
+        if since and month_dir.name < since:
+            continue
+        for path in sorted(month_dir.glob("*.json")):
+            try:
+                payload = json.loads(path.read_text())
+            except json.JSONDecodeError:
+                continue
+            report = payload.get("report", {})
+            cmp = payload.get("comparison", {})
+            out.append({
+                "month": month_dir.name,
+                "theme_slug": report.get("theme_slug", path.stem),
+                "topic": report.get("topic", ""),
+                "external_mentions": report.get("external_mentions", 0),
+                "internal_frequency": cmp.get("internal_frequency", 0),
+                "verdict": cmp.get("verdict", "insufficient_data"),
+                "reasoning": cmp.get("reasoning", ""),
+                "suggested_action": cmp.get("suggested_action", ""),
+                "top_sources": report.get("top_sources", []),
+                "ran_at": report.get("ran_at", ""),
+            })
+    return {"reports": out}

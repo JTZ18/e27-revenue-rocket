@@ -79,7 +79,10 @@ def test_render_includes_external_sentiment_section(tmp_path: Path):
     brief = MarketingBrief(
         month="2026-05",
         headline="May highlights.",
-        insights=[BriefInsight(theme="vegan", ticket_count=4, persona_segments=[], observation="x")],
+<<<<<<< HEAD
+        insights=[
+            BriefInsight(theme="vegan", ticket_count=4, persona_segments=[], observation="x")
+        ],
         recommendations=[
             BriefRecommendation(
                 target=BriefTarget.product_page,

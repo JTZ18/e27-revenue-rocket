@@ -1,0 +1,141 @@
+{
+  "name": "09_weekly_external_sentiment",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{"field": "weeks", "weekday": 1, "triggerAtHour": 12}]
+        }
+      },
+      "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "name": "Cron Mon 12:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.INTEL_ENGINE_URL }}/themes/list",
+        "options": {"timeout": 30000}
+      },
+      "id": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+      "name": "GET /themes/list",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [480, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Pick the most recent theme report and surface its top 3 themes.\nconst reports = $json.reports || [];\nif (reports.length === 0) {\n  return [];\n}\nconst latest = reports[reports.length - 1];\nconst md = latest.markdown || '';\n// Parse the markdown the writer produced (### Label / - slug / - frequency / examples / summary)\nconst themes = [];\nconst blocks = md.split(/\\n### /).slice(1);\nfor (const block of blocks) {\n  const label = block.split('\\n')[0].trim();\n  const slug = (block.match(/slug: `([^`]+)`/) || [null, null])[1];\n  const freq = parseInt((block.match(/frequency: (\\d+)/) || [null, '0'])[1], 10);\n  const examplesRaw = (block.match(/examples: ([^\\n]+)/) || [null, ''])[1];\n  const examples = examplesRaw.split(',').map(s => s.trim()).filter(Boolean);\n  const summaryLines = block.split('\\n').slice(5).join('\\n').trim();\n  if (slug) themes.push({ slug, label, frequency: freq, example_ticket_ids: examples.length ? examples : ['UNKNOWN'], summary: summaryLines });\n}\nthemes.sort((a, b) => b.frequency - a.frequency);\nconst top = themes.slice(0, 3);\nconst ranAt = new Date().toISOString();\nreturn top.map(t => ({ json: { theme: t, ran_at: ranAt, week_end: latest.week_end }}));"
+      },
+      "id": "c3d4e5f6-a7b8-9012-cdef-123456789012",
+      "name": "Pick top 3 themes",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [720, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.INTEL_ENGINE_URL }}/sentiment/plan",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({theme: $json.theme, kb_excerpt: ''}) }}",
+        "options": {"timeout": 60000}
+      },
+      "id": "d4e5f6a7-b8c9-0123-defa-234567890123",
+      "name": "POST /sentiment/plan",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [960, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Carry plan forward together with theme + ran_at from previous step.\nconst plan = $json;\nconst theme = $('Pick top 3 themes').item.json.theme;\nconst ran_at = $('Pick top 3 themes').item.json.ran_at;\nreturn [{ json: { theme, ran_at, plan }}];"
+      },
+      "id": "e5f6a7b8-c9d0-1234-efab-345678901234",
+      "name": "Merge plan + theme",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1200, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.INTEL_ENGINE_URL }}/sentiment/run",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({theme_slug: $json.theme.slug, plan: $json.plan, ran_at: $json.ran_at}) }}",
+        "options": {"timeout": 300000}
+      },
+      "id": "f6a7b8c9-d0e1-2345-fabc-456789012345",
+      "name": "POST /sentiment/run",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1440, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Carry external report forward with the original theme.\nconst external = $json;\nconst theme = $('Merge plan + theme').item.json.theme;\nreturn [{ json: { theme, external }}];"
+      },
+      "id": "a7b8c9d0-e1f2-3456-abcd-567890123456",
+      "name": "Merge external + theme",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1680, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.INTEL_ENGINE_URL }}/sentiment/compare",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({theme: $json.theme, external: $json.external}) }}",
+        "options": {"timeout": 120000}
+      },
+      "id": "b8c9d0e1-f2a3-4567-bcde-678901234567",
+      "name": "POST /sentiment/compare",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1920, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const comparison = $json;\nconst external = $('Merge external + theme').item.json.external;\nreturn [{ json: { report: external, comparison }}];"
+      },
+      "id": "c9d0e1f2-a3b4-5678-cdef-789012345678",
+      "name": "Shape persist payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2160, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.INTEL_ENGINE_URL }}/sentiment/persist",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {"timeout": 60000}
+      },
+      "id": "d0e1f2a3-b4c5-6789-defa-890123456789",
+      "name": "POST /sentiment/persist",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2400, 300]
+    }
+  ],
+  "connections": {
+    "Cron Mon 12:00": {"main": [[{"node": "GET /themes/list", "type": "main", "index": 0}]]},
+    "GET /themes/list": {"main": [[{"node": "Pick top 3 themes", "type": "main", "index": 0}]]},
+    "Pick top 3 themes": {"main": [[{"node": "POST /sentiment/plan", "type": "main", "index": 0}]]},
+    "POST /sentiment/plan": {"main": [[{"node": "Merge plan + theme", "type": "main", "index": 0}]]},
+    "Merge plan + theme": {"main": [[{"node": "POST /sentiment/run", "type": "main", "index": 0}]]},
+    "POST /sentiment/run": {"main": [[{"node": "Merge external + theme", "type": "main", "index": 0}]]},
+    "Merge external + theme": {"main": [[{"node": "POST /sentiment/compare", "type": "main", "index": 0}]]},
+    "POST /sentiment/compare": {"main": [[{"node": "Shape persist payload", "type": "main", "index": 0}]]},
+    "Shape persist payload": {"main": [[{"node": "POST /sentiment/persist", "type": "main", "index": 0}]]}
+  },
+  "settings": {}
+}

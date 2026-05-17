@@ -1,0 +1,530 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Boldr Self-Improving Customer Intelligence Engine — E27 Echelon 2026</title>
+<style>
+:root{
+  --paper:#f5f4ed; --ivory:#faf9f5; --sand:#e8e6dc; --border:#e8e6dc; --border2:#d8d5c9;
+  --ink:#141413; --muted:#5e5d59; --stone:#87867f;
+  --terra:#c96442; --coral:#d97757; --green:#78866b; --gold:#b48a4a; --red:#a94b3d;
+  --serif: Georgia, 'Times New Roman', serif;
+  --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --mono: 'SFMono-Regular', ui-monospace, Menlo, Monaco, Consolas, monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#1d1c1a;font-family:var(--sans);color:var(--ink)}
+body{display:grid;place-items:center}
+.shell{width:100vw;height:100vh;display:grid;place-items:center;background:radial-gradient(circle at 20% 10%,rgba(201,100,66,.16),transparent 28%),#1d1c1a}
+.deck{width:1920px;height:1080px;position:relative;transform-origin:center;overflow:hidden;border-radius:18px;background:var(--paper);box-shadow:0 30px 90px rgba(0,0,0,.45)}
+.slide{position:absolute;inset:0;padding:76px 104px 70px;background:var(--paper);opacity:0;transform:translateX(40px) scale(.985);pointer-events:none;transition:.36s ease;overflow:hidden}
+.slide.active{opacity:1;transform:none;pointer-events:auto;z-index:2}
+.slide.prev{transform:translateX(-40px) scale(.985)}
+.slide:before{content:"";position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(rgba(20,20,19,.035) 1px, transparent 1px);background-size:18px 18px;opacity:.34;mix-blend-mode:multiply}
+.slide:after{content:"";position:absolute;right:-240px;bottom:-310px;width:650px;height:650px;border:2px solid rgba(201,100,66,.17);border-radius:47% 53% 42% 58%;transform:rotate(-18deg);pointer-events:none}
+.eyebrow{font-family:var(--mono);font-size:18px;letter-spacing:.18em;text-transform:uppercase;color:var(--terra);margin-bottom:18px}
+h1{font-family:var(--serif);font-size:96px;line-height:1.04;margin:0 0 18px;font-weight:500;letter-spacing:-.01em;max-width:1500px}
+h2{font-family:var(--serif);font-size:72px;line-height:1.06;margin:0 0 18px;font-weight:500;letter-spacing:-.01em;max-width:1500px}
+h3{font-family:var(--sans);font-size:28px;margin:0 0 10px;font-weight:600}
+.subtitle{font-size:32px;line-height:1.32;color:var(--muted);max-width:1400px;margin:0 0 28px;font-weight:400}
+.kicker{font-size:22px;line-height:1.45;color:var(--muted)}
+.big{font-size:44px;line-height:1.18;color:var(--ink);font-family:var(--serif);font-weight:500}
+.accent{color:var(--terra)}
+.num{position:absolute;left:104px;bottom:36px;font-family:var(--mono);font-size:16px;color:var(--stone);letter-spacing:.1em}
+.brand{position:absolute;right:104px;bottom:36px;font-family:var(--mono);font-size:14px;color:var(--stone);letter-spacing:.1em;text-transform:uppercase}
+.brand .dot{display:inline-block;width:8px;height:8px;background:var(--terra);border-radius:50%;margin-right:10px;vertical-align:1px}
+.rule{height:2px;background:linear-gradient(90deg,var(--terra) 0,var(--terra) 90px,rgba(0,0,0,.08) 90px,rgba(0,0,0,.08) 100%);margin:0 0 32px;border:0}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:36px;margin-top:24px}
+.cols3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:28px;margin-top:24px}
+.card{background:var(--ivory);border:1px solid var(--border);border-radius:12px;padding:28px 30px;box-shadow:0 2px 0 rgba(0,0,0,.02)}
+.card h3{color:var(--ink);margin-bottom:8px}
+.card .kicker{font-size:20px}
+.card.accent{border-left:5px solid var(--terra)}
+.card.sage{border-left:5px solid var(--green)}
+.card.gold{border-left:5px solid var(--gold)}
+.tag{display:inline-block;font-family:var(--mono);font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--terra);background:rgba(201,100,66,.08);padding:3px 9px;border-radius:4px;margin-right:8px}
+ul.clean{list-style:none;margin:8px 0;padding:0}
+ul.clean li{padding:10px 0;font-size:22px;color:var(--ink);border-bottom:1px dashed var(--border2)}
+ul.clean li:last-child{border-bottom:0}
+ul.clean li b{color:var(--terra);font-weight:600}
+table.kv{width:100%;border-collapse:collapse;font-size:22px;margin-top:14px}
+table.kv th,table.kv td{padding:14px 18px;text-align:left;border-bottom:1px solid var(--border2);vertical-align:top}
+table.kv th{font-family:var(--mono);font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:500}
+table.kv td:first-child{color:var(--terra);font-weight:500;width:34%}
+.flow{display:flex;align-items:stretch;gap:14px;margin-top:36px;flex-wrap:wrap}
+.flow .step{flex:1 1 0;min-width:200px;background:var(--ivory);border:1px solid var(--border);border-radius:10px;padding:18px 18px}
+.flow .step h3{font-size:20px;color:var(--terra)}
+.flow .step p{font-size:17px;color:var(--muted);line-height:1.4;margin:6px 0 0}
+.flow .arrow{font-size:26px;color:var(--terra);align-self:center}
+code, .mono{font-family:var(--mono)}
+.codeblock{font-family:var(--mono);font-size:18px;background:#1d1c1a;color:#f5f4ed;padding:22px 26px;border-radius:10px;white-space:pre-wrap;margin-top:18px;line-height:1.5}
+.codeblock .c-key{color:#d97757}
+.codeblock .c-val{color:#b9d4a3}
+.codeblock .c-com{color:#87867f}
+.quote{font-family:var(--serif);font-style:italic;font-size:44px;line-height:1.25;color:var(--ink);max-width:1500px;border-left:6px solid var(--terra);padding:6px 0 6px 28px;margin-top:18px}
+.controls{position:fixed;bottom:18px;right:18px;display:flex;gap:8px;z-index:10;font-family:var(--mono);font-size:13px;color:var(--paper)}
+.controls button{background:rgba(245,244,237,.12);color:var(--paper);border:1px solid rgba(245,244,237,.25);border-radius:8px;padding:6px 12px;cursor:pointer;font-family:var(--mono);font-size:13px}
+.controls button:hover{background:rgba(245,244,237,.22)}
+#counter{padding:6px 12px;background:rgba(245,244,237,.06);border-radius:8px;align-self:center;letter-spacing:.1em}
+.progress{position:fixed;left:0;top:0;height:3px;background:var(--terra);width:0;z-index:11;transition:width .4s ease}
+.notes{position:fixed;bottom:60px;right:18px;width:380px;max-height:50vh;overflow:auto;background:rgba(20,20,19,.92);color:#f5f4ed;border-radius:10px;padding:16px 18px;display:none;font-size:14px;line-height:1.5;font-family:var(--sans);z-index:9}
+.notes.show{display:block}
+.notes h4{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--terra);margin:0 0 8px}
+.cite{font-family:var(--mono);font-size:14px;color:var(--terra)}
+.kpi{display:flex;gap:28px;margin-top:14px}
+.kpi .box{flex:1;background:var(--ivory);border:1px solid var(--border);border-radius:10px;padding:22px 24px}
+.kpi .box .num-big{font-family:var(--serif);font-size:64px;line-height:1;color:var(--terra)}
+.kpi .box .lbl{font-family:var(--mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:8px}
+</style>
+</head>
+<body>
+<div class="shell"><div class="deck" id="deck">
+
+<!-- 1: Title -->
+<section class="slide" data-notes="Open with the title. We built a self-improving customer-intelligence engine for Boldr Watch. 5 active loops, 1 HITL primitive, longitudinal proof. The two USPs are Karpathy LLM wiki and last30days skill integration.">
+  <div class="eyebrow">E27 Echelon 2026 · Boldr Watch Challenge</div>
+  <hr class="rule"/>
+  <h1>The knowledge base that compounds itself.</h1>
+  <p class="subtitle">A self-improving customer-intelligence engine for an SME Shopify brand. Five loops, one human-in-the-loop primitive, every commit visible in Git.</p>
+  <div class="kpi">
+    <div class="box"><div class="num-big">5</div><div class="lbl">active self-improving loops</div></div>
+    <div class="box"><div class="num-big">70</div><div class="lbl">tickets replayed for the headline curve</div></div>
+    <div class="box"><div class="num-big">1</div><div class="lbl">HITL primitive across every loop</div></div>
+  </div>
+  <div class="num">01 / 16</div><div class="brand"><span class="dot"></span>Boldr Intel</div>
+</section>
+
+<!-- 2: Problem -->
+<section class="slide" data-notes="Boldr's CS team answers dozens of tickets weekly. The SOP §6 New Questions Log is manual. Every novel question is answered and forgotten. Marketing-relevant patterns evaporate into inboxes.">
+  <div class="eyebrow">The problem</div>
+  <hr class="rule"/>
+  <h2>The current system is lossy.</h2>
+  <p class="subtitle">A 3-person team answers dozens of enquiries a week using a hand-maintained FAQ, two rate cards, and a &quot;New Questions Log&quot; they update by hand.</p>
+  <div class="cols">
+    <div class="card accent">
+      <h3>What gets answered</h3>
+      <p class="kicker">28 FAQs · 2 rate cards · 1 product reference · 1 SOP. Everything else is goodwill.</p>
+    </div>
+    <div class="card">
+      <h3>What gets lost</h3>
+      <p class="kicker">BPA-free strap demand. Vegan-material requests. MRI safety. Carbon-neutral shipping. These show up in inboxes and disappear.</p>
+    </div>
+  </div>
+  <p class="big" style="margin-top:46px">The knowledge base grows by goodwill, not by process.</p>
+  <div class="num">02 / 16</div><div class="brand"><span class="dot"></span>Boldr Intel</div>
+</section>
+
+<!-- 3: Thesis -->
+<section class="slide" data-notes="Thesis: every novel question is information. If we capture it once and structure it, the system gets smarter every week. This is the self-improving loop the brief asks for.">
+  <div class="eyebrow">The thesis</div>
+  <hr class="rule"/>
+  <h2>Treat every novel question as fuel.</h2>
+  <p class="subtitle">Capture it once. Resolve it once. Commit it once. The KB compounds — answer rate climbs, marketing surfaces patterns, the team stops re-answering the same question.</p>
+  <div class="flow">
+    <div class="step"><h3>Ticket</h3><p>Customer asks. Common Event Schema normalises across Gmail, Sheet, IG, WhatsApp.</p></div>
+    <div class="arrow">→</div>
+    <div class="step"><h3>Traverse</h3><p>Agent reads the KB wiki, cites file paths, returns structured output.</p></div>
+    <div class="arrow">→</div>
+    <div class="step"><h3>Gap</h3><p>Can't answer? Slack thread for the human. No hallucination.</p></div>
+    <div class="arrow">→</div>
+    <div class="step"><h3>Resolve</h3><p>Human resolves once. Agent auto-drafts the KB entry in brand voice.</p></div>
+    <div class="arrow">→</div>
+    <div class="step"><h3>Commit</h3><p>One Slack click → n8n commits to Git. The KB grew.</p></div>
+  </div>
+  <div class="num">03 / 16</div><div class="brand"><span class="dot"></span>Boldr Intel</div>
+</section>
+
+<!-- 4: USP 1 — Karpathy wiki -->
+<section class="slide" data-notes="USP 1. We deliberately do not use a vector DB at 50-100 entries. Karpathy popularised the LLM-readable wiki pattern: agent reads an index, drills into files. Four wins: auditable citations, deterministic reads, zero infra, self-documenting taxonomy.">
+  <div class="eyebrow">Frontier-tech bet #1</div>
+  <hr class="rule"/>
+  <h2>A Karpathy-style LLM wiki — <span class="accent">not</span> embeddings RAG.</h2>
+  <p class="subtitle">At MVP scale the wiki IS the retrieval system. The agent reads <code>kb/index.md</code>, drills into files, and cites the paths it read. Markdown in Git is the entire stack.</p>
+  <div class="cols">
+    <div class="card accent">
+      <h3>Why this beats a vector DB at our scale</h3>
+      <ul class="clean">
+        <li><b>Auditable</b> — &quot;I read <code>kb/faqs/bpa-straps.md</code>&quot; beats a cosine score.</li>
+        <li><b>Deterministic</b> — same input, same file-read path. No embedding drift.</li>
+        <li><b>Zero infra</b> — no index pipeline, no re-embed cost, no vector DB.</li>
+        <li><b>Self-documenting</b> — the file tree IS the taxonomy.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>The frontmatter contract</h3>
+      <div class="codeblock"><span class="c-com">---</span>
+<span class="c-key">slug</span>: bpa-free-straps
+<span class="c-key">domain</span>: spec
+<span class="c-key">themes</span>: [materials_safety, sustainability]
+<span class="c-key">last_verified</span>: 2026-05-16
+<span class="c-key">status</span>: active
+<span class="c-com">---</span>
+
+Yes. All Boldr FKM rubber and silicone
+straps are 100% BPA-free.</div>
+    </div>
+  </div>
+  <div class="num">04 / 16</div><div class="brand"><span class="dot"></span>Boldr Intel</div>
+</section>
+
+<!-- 5: USP 2 — last30days skill -->
+<section class="slide" data-notes="USP 2. The last30days skill is a frontier agent skill — installable, prompt-driven, multi-source. Most submissions either ignore external signal or write a brittle scraper. We use the skill the way it is designed: LLM planner emits a plan.json, the skill runs, an LLM comparator emits a verdict that feeds the monthly brief.">
+  <div class="eyebrow">Frontier-tech bet #2</div>
+  <hr class="rule"/>
+  <h2>External sentiment as a first-class skill.</h2>
+  <p class="subtitle">We use the <code>last30days</code> skill — an installable agent tool that pulls live signal from Reddit, X, YouTube, TikTok, HN, and the web in one shot — driven by an LLM-emitted <code>--plan.json</code> per top theme.</p>
+  <div class="flow">
+    <div class="step"><h3>Theme</h3><p>&quot;Vegan straps&quot; — internal frequency = 8 this week.</p></div>
+    <div class="arrow">→</div>
+    <div class="step"><h3>Plan</h3><p>Minimax emits <code>{topic, search_terms, subreddits}</code>.</p></div>
+    <div class="arrow">→</div>
+    <div class="step"><h3>Run</h3><p><code>last30days --plan plan.json --emit json</code></p></div>
+    <div class="arrow">→</div>
+    <div class="step"><h3>Compare</h3><p>OpenRouter verdict: <span class="accent">market_wide</span> — 42 external vs 8 internal.</p></div>
+    <div class="arrow">→</div>
+    <div class="step"><h3>Brief</h3><p>&quot;Add a vegan-strap PDP block&quot; lands in the monthly brief.</p></div>
+  </div>
+  <p class="big" style="margin-top:42px">The system tells you which questions are <span class="accent">Boldr-specific</span> and which are <span class="accent">market-wide</span> — without writing a scraper.</p>
+  <div class="num">05 / 16</div><div class="brand"><span class="dot"></span>Boldr Intel</div>
+</section>
+
+<!-- 6: Architecture -->
+<section class="slide" data-notes="Architecture overview. One HITL primitive (Wait for Webhook), five active loops, plus a brand-voice loop in architecture only. Humans never see PRs — n8n commits on their behalf.">
+  <div class="eyebrow">Architecture</div>
+  <hr class="rule"/>
+  <h2>One primitive. Five loops. Zero PRs.</h2>
+  <div class="cols">
+    <div class="card sage">
+      <h3>The single HITL primitive</h3>
+      <p class="kicker">n8n's <code>Wait for Webhook</code> shows up everywhere a human signs off: Slack buttons, Gmail send events, email form submissions. One shape across every loop.</p>
+    </div>
+    <div class="card accent">
+      <h3>Storage = Git</h3>
+      <p class="kicker">Every KB entry, persona, theme report, brief, sentiment verdict is a real Git commit with approver + timestamp. Humans never open GitHub — n8n commits on their behalf.</p>
+    </div>
+  </div>
+  <table class="kv" style="margin-top:30px">
+    <thead><tr><th>Loop</th><th>Trigger</th><th>Persisted to</th></tr></thead>
+    <tbody>
+      <tr><td>Gap → KB (hero)</td><td>Sheet row / Gmail / IG / WA</td><td><code>kb/faqs/&lt;slug&gt;.md</code> + <code>gap-log/</code></td></tr>
+      <tr><td>Persona discovery + drift</td><td>Manual + weekly cron</td><td><code>kb/personas/&lt;axis&gt;/&lt;slug&gt;.md</code></td></tr>
+      <tr><td>Weekly theme clusterer</td><td>Cron Mon 09:00</td><td><code>kb/themes/&lt;date&gt;.md</code></td></tr>
+      <tr><td>Monthly marketing brief</td><td>Cron 1st 09:00</td><td><code>briefs/&lt;YYYY-MM&gt;-marketing-brief.md</code></td></tr>
+      <tr><td>Weekly conflict digest</td><td>Cron Mon 11:00</td><td>Slack Block Kit digest</td></tr>
+      <tr><td>External sentiment (bonus)</td><td>Cron Mon 12:00</td><td><code>external-intel/&lt;YYYY-MM&gt;/&lt;theme&gt;.json</code></td></tr>
+    </tbody>
+  </table>
+  <div class="num">06 / 16</div><div class="brand"><span class="dot"></span>Boldr Intel</div>
+</section>
+
+<!-- 7: Workflow logic deep dive -->
+<section class="slide" data-notes="Judging criterion 1: workflow logic. The structured output gate is what prevents hallucination. The agent emits can_answer_fully — if false, we branch to gap creation, never to a fabricated reply.">
+  <div class="eyebrow">Judging criterion · Workflow logic</div>
+  <hr class="rule"/>
+  <h2>Structured output as the safety gate.</h2>
+  <p class="subtitle">Every traversal call returns the same shape. <code>can_answer_fully</code> decides which branch runs. There is no path to a fabricated answer.</p>
+  <div class="codeblock"><span class="c-com">// TraversalResult — the contract between the agent and the rest of the system</span>
+{
+  <span class="c-key">"can_answer_fully"</span>: <span class="c-val">true</span>,
+  <span class="c-key">"answer_draft"</span>: <span class="c-val">"Yes. All Boldr FKM rubber straps are 100% BPA-free…"</span>,
+  <span class="c-key">"cited_paths"</span>: [<span class="c-val">"kb/faqs/bpa-straps.md"</span>, <span class="c-val">"kb/products/expedition.md"</span>],
+  <span class="c-key">"missing_info"</span>: [],
+  <span class="c-key">"themes_detected"</span>: [<span class="c-val">"materials_safety"</span>, <span class="c-val">"sustainability"</span>],
+  <span class="c-key">"persona_hints"</span>: [<span class="c-val">"health_conscious"</span>],
+  <span class="c-key">"escalation_required"</span>: <span class="c-val">false</span>
+}</div>
+  <p class="big" style="margin-top:30px">If <code>can_answer_fully = false</code>, the pipeline creates a gap. Never a draft.</p>
+  <div class="num">07 / 16</div><div class="brand"><span class="dot"></span>Boldr Intel</div>
+</section>
+
+<!-- 8: Business impact -->
+<section class="slide" data-notes="Judging criterion 2: business impact. Before vs after. The headline business impact is: novel questions stop disappearing. Marketing-relevant signal surfaces in the monthly brief with internal-vs-external context. Generalises to any SME with a growing FAQ.">
+  <div class="eyebrow">Judging criterion · Business impact</div>
+  <hr class="rule"/>
+  <h2>Knowledge stops evaporating.</h2>
+  <div class="cols">
+    <div class="card">
+      <h3>Today</h3>
+      <ul class="clean">
+        <li>Every novel question answered and forgotten</li>
+        <li>FAQ grows by goodwill</li>
+        <li>Sustainability demand stays in inboxes</li>
+        <li>KB contradictions silently accumulate</li>
+        <li>Campaigns rely on intuition</li>
+      </ul>
+    </div>
+    <div class="card accent">
+      <h3>With the engine</h3>
+      <ul class="clean">
+        <li>Every novel question <b>becomes a KB entry</b></li>
+        <li>FAQ grows by <b>process</b></li>
+        <li>Patterns surface in the <b>monthly brief</b></li>
+        <li>Weekly <b>conflict digest</b> with 1-click resolution</li>
+        <li>Briefs cite <b>internal + external</b> signal per theme</li>
+      </ul>
+    </div>
+  </div>
+  <p class="big" style="margin-top:36px">Channel adapters are the only Boldr-specific layer. The rest is brand-agnostic — deploys to <span class="accent">any SME with a growing FAQ</span>.</p>
+  <div class="num">08 / 16</div><div class="brand"><span class="dot"></span>Boldr Intel</div>
+</section>
+
+<!-- 9: Cost realism -->
+<section class="slide" data-notes="Judging criterion 3: cost realism. The killer line is no re-embedding cost. Storage is markdown in Git, orchestration is self-hosted n8n, hot path is Minimax (cheap), strategic path is OpenRouter (sparse), external sentiment uses last30days free tier.">
+  <div class="eyebrow">Judging criterion · Cost realism</div>
+  <hr class="rule"/>
+  <h2>No vector DB. No re-embedding bill.</h2>
+  <p class="subtitle">Every infra choice keeps recurring cost flat. The engine runs on Boldr volumes for well under USD 50/month.</p>
+  <table class="kv">
+    <thead><tr><th>Layer</th><th>Choice</th><th>Cost shape</th></tr></thead>
+    <tbody>
+      <tr><td>Storage</td><td>Markdown in Git</td><td>Free, forever</td></tr>
+      <tr><td>Orchestration</td><td>Self-hosted n8n (Docker)</td><td>Free</td></tr>
+      <tr><td>Hot LLM path</td><td>Minimax 2.7 (Sonnet-tier)</td><td>Per-call · cheap · ~hundreds/month at Boldr volume</td></tr>
+      <tr><td>Strategic LLM path</td><td>OpenRouter (Kimi-tier)</td><td>Weekly/monthly only · negligible</td></tr>
+      <tr><td>External sentiment</td><td><code>last30days</code> + 10k free ScrapeCreators</td><td>~2 years of weekly scans, zero cost</td></tr>
+      <tr><td>Dashboard</td><td>Next.js read-only</td><td>Vercel free tier or any Node host</td></tr>
+    </tbody>
+  </table>
+  <p class="big" style="margin-top:26px">Competitors who chose vector RAG signed up for an ongoing index-maintenance bill. <span class="accent">We didn't.</span></p>
+  <div class="num">09 / 16</div><div class="brand"><span class="dot"></span>Boldr Intel</div>
+</section>
+
+<!-- 10: Safeguards -->
+<section class="slide" data-notes="Judging criterion 4: safeguards. The structured output gate prevents hallucination. Every KB write requires Slack approval. Stale entries are marked not deleted. Conflict detector runs weekly. Approval fatigue is mitigated by batching low-urgency digests.">
+  <div class="eyebrow">Judging criterion · Safeguards</div>
+  <hr class="rule"/>
+  <h2>The agent never writes alone.</h2>
+  <table class="kv">
+    <thead><tr><th>Risk</th><th>Mitigation</th></tr></thead>
+    <tbody>
+      <tr><td>Hallucinated answers</td><td><code>can_answer_fully=false</code> branches to gap creation — never to a fabricated reply</td></tr>
+      <tr><td>Bad KB entries committed</td><td>Auto-drafter <i>stages</i>; the Slack Approve button triggers the commit</td></tr>
+      <tr><td>Brand-voice drift</td><td><code>kb/_schema.md</code> loaded into every drafter call as the voice contract</td></tr>
+      <tr><td>Stale entries</td><td><code>status: stale</code> in frontmatter; agent prompt filters them out (never deletes)</td></tr>
+      <tr><td>Same-fact contradictions</td><td>Weekly conflict detector + per-domain hierarchy (<code>pricing → rate card</code>, <code>policy → SOP</code>, <code>spec → product reference</code>)</td></tr>
+      <tr><td>Approval fatigue</td><td>Low-urgency loops batch into weekly Slack digests, not per-event pings</td></tr>
+      <tr><td>Unbounded LLM cost</td><td><code>complete_json</code> wraps structured-output mode + a single retry, no infinite loops</td></tr>
+      <tr><td>PII</td><td>MVP relies on Gmail/Sheet native handling; production roadmap adds a dedicated redaction layer</td></tr>
+    </tbody>
+  </table>
+  <div class="num">10 / 16</div><div class="brand"><span class="dot"></span>Boldr Intel</div>
+</section>
+
+<!-- 11: Proof of execution — curve -->
+<section class="slide" data-notes="Judging criterion 5: proof of execution. The longitudinal replay harness is the headline proof. 70 tickets replayed chronologically against an empty KB. Real LLM calls, real Git commits, every commit visible on the curve as a short SHA annotation.">
+  <div class="eyebrow">Judging criterion · Proof of execution</div>
+  <hr class="rule"/>
+  <h2>The headline curve is reproducible.</h2>
+  <p class="subtitle">Start with an empty KB. Replay 70 tickets in order. Real LLM calls. Real Git commits. Plot the answer rate. Annotate each KB-growth event with its short SHA.</p>
+  <div class="cols">
+    <div class="card accent">
+      <h3>What's in <code>eval/</code></h3>
+      <ul class="clean">
+        <li><b>curve.png</b> — answer rate over ticket index, with SHA annotations</li>
+        <li><b>curve_data.csv</b> — raw data, publishable</li>
+        <li><b>quality_curve.png</b> — LLM-judge quality over time</li>
+        <li><b>ground_truth_report.md</b> — precision/recall/F1 vs held-out labels</li>
+        <li><b>calibration_report.md</b> — Cohen's kappa, human vs LLM judge</li>
+      </ul>
+    </div>
+    <div class="card sage">
+      <h3>Reproduce on a clean checkout</h3>
+      <div class="codeblock"><span class="c-com">$</span> git checkout -b eval/repro-$(date +%F)
+<span class="c-com">$</span> uv run python -m eval all
+<span class="c-com">$</span> open eval/curve.png</div>
+      <p class="kicker" style="margin-top:14px">~5–15 min wall clock · 70 traversal calls + 50 judge calls.</p>
+    </div>
+  </div>
+  <div class="num">11 / 16</div><div class="brand"><span class="dot"></span>Boldr Intel</div>
+</section>
+
+<!-- 12: Proof of execution — eval discipline -->
+<section class="slide" data-notes="Beyond the curve, we run ground-truth accuracy and quality eval. Held-out CSV labels the agent never sees. 20 hand-rated drafts plus 50 LLM-judge drafts on a published 5-dimension rubric. Calibration kappa quantifies trust in the judge.">
+  <div class="eyebrow">Judging criterion · Proof of execution</div>
+  <hr class="rule"/>
+  <h2>Three independent quality signals.</h2>
+  <div class="cols3">
+    <div class="card accent">
+      <h3>Ground truth</h3>
+      <p class="kicker">CSV ships with held-out labels (<code>question_type</code>, <code>buyer_persona</code>, <code>answered_by_kb</code>, <code>requires_escalation</code>). Agent never sees them. Per-class precision/recall/F1 reported.</p>
+    </div>
+    <div class="card sage">
+      <h3>Hand rating</h3>
+      <p class="kicker">20 drafts hand-rated on a 5-dimension rubric: grounded, brand_voice, completeness, no_hallucination, tone_fit. Named reviewer credited.</p>
+    </div>
+    <div class="card gold">
+      <h3>LLM-as-judge</h3>
+      <p class="kicker">50 more drafts judged by Kimi against the same published rubric. Cohen's kappa + per-dimension MAE on the 20 overlap.</p>
+    </div>
+  </div>
+  <p class="big" style="margin-top:36px">If the judge disagrees with humans, the kappa tells you. <span class="accent">Nothing is trust-me.</span></p>
+  <div class="num">12 / 16</div><div class="brand"><span class="dot"></span>Boldr Intel</div>
+</section>
+
+<!-- 13: Dashboard -->
+<section class="slide" data-notes="Read-only Next.js dashboard. Seven pages. Server-side fetched from the FastAPI service. No client-side state. No auth surface. The judges can see system state without us guiding them.">
+  <div class="eyebrow">The view</div>
+  <hr class="rule"/>
+  <h2>One dashboard. Every loop's output.</h2>
+  <p class="subtitle">Next.js 15 + Tailwind v4, read-only, server-rendered. Seven pages over the full state machine.</p>
+  <div class="cols3">
+    <div class="card"><h3>Status</h3><p class="kicker">KB count · open gaps · personas · latest brief · latest sentiment</p></div>
+    <div class="card"><h3>KB</h3><p class="kicker">Entries grouped by domain (faq · spec · pricing · policy · persona)</p></div>
+    <div class="card"><h3>Gaps</h3><p class="kicker">Open + resolved gaps with cited themes and drafted KB slug</p></div>
+    <div class="card"><h3>Themes</h3><p class="kicker">Weekly theme reports, rendered straight from <code>kb/themes/</code></p></div>
+    <div class="card"><h3>Personas</h3><p class="kicker">Three axes: lifecycle, interest, behaviour. Status-filtered.</p></div>
+    <div class="card"><h3>Briefs</h3><p class="kicker">Monthly marketing briefs with embedded sentiment verdicts</p></div>
+  </div>
+  <p class="big" style="margin-top:32px">Plus a <code>Sentiment</code> page surfacing every <span class="accent">market_wide</span> / <span class="accent">boldr_specific</span> / <span class="accent">aligned</span> verdict.</p>
+  <div class="num">13 / 16</div><div class="brand"><span class="dot"></span>Boldr Intel</div>
+</section>
+
+<!-- 14: Model routing -->
+<section class="slide" data-notes="Model routing. Minimax (Sonnet-tier) for the hot path. OpenRouter (Kimi-tier) for strategic. Same LLMClient wrapper, OpenAI-compatible API, base URL switched by an enum. Both use complete_json with structured output mode.">
+  <div class="eyebrow">Model routing</div>
+  <hr class="rule"/>
+  <h2>The right model for the right path.</h2>
+  <div class="cols">
+    <div class="card accent">
+      <h3>Minimax 2.7 · hot path</h3>
+      <ul class="clean">
+        <li>Wiki-traversal agent (every ticket)</li>
+        <li>Gap detection + clarification drafts</li>
+        <li>Theme clusterer (weekly)</li>
+        <li>Persona drift detector (weekly)</li>
+        <li>Sentiment query planner (weekly)</li>
+      </ul>
+    </div>
+    <div class="card sage">
+      <h3>OpenRouter · strategic path</h3>
+      <ul class="clean">
+        <li>Cold-start persona discovery (once)</li>
+        <li>Monthly marketing brief</li>
+        <li>KB conflict detector (weekly)</li>
+        <li>Sentiment comparator verdicts</li>
+        <li>LLM-as-judge for eval</li>
+      </ul>
+    </div>
+  </div>
+  <p class="big" style="margin-top:30px">Same <code>LLMClient</code> wrapper. OpenAI-compatible API. Provider swappable via <code>LLMProvider</code> enum.</p>
+  <div class="num">14 / 16</div><div class="brand"><span class="dot"></span>Boldr Intel</div>
+</section>
+
+<!-- 15: Generalisation + roadmap -->
+<section class="slide" data-notes="Generalisation: channel adapters are the only Boldr-specific layer. Everything downstream of the Common Event Schema is brand-agnostic. Roadmap: qmd nav-accelerator for KB > 200, live IG/WhatsApp, Shopify Admin API, multi-language, brand-voice loop activation.">
+  <div class="eyebrow">What's deferred</div>
+  <hr class="rule"/>
+  <h2>The roadmap is short and honest.</h2>
+  <div class="cols">
+    <div class="card accent">
+      <h3>In MVP today</h3>
+      <ul class="clean">
+        <li>Five active self-improving loops</li>
+        <li>Wiki traversal with file-path citations</li>
+        <li>External sentiment via <code>last30days</code></li>
+        <li>Read-only Next.js dashboard</li>
+        <li>Reproducible longitudinal eval with Git-SHA provenance</li>
+      </ul>
+    </div>
+    <div class="card sage">
+      <h3>Production roadmap</h3>
+      <ul class="clean">
+        <li><code>qmd</code> nav-accelerator when KB &gt; 200 entries</li>
+        <li>Live IG + WhatsApp (architecture-only stubs today)</li>
+        <li>Shopify Admin API (order lookup, inventory signal)</li>
+        <li>Multi-language (Singlish, Bahasa, Mandarin)</li>
+        <li>Brand-voice loop activation (architecture in place)</li>
+        <li>PII redaction layer</li>
+      </ul>
+    </div>
+  </div>
+  <div class="num">15 / 16</div><div class="brand"><span class="dot"></span>Boldr Intel</div>
+</section>
+
+<!-- 16: Close -->
+<section class="slide" data-notes="Close. The thesis in one line. Pointers to the repo, the eval, the dashboard, the spec.">
+  <div class="eyebrow">Thank you</div>
+  <hr class="rule"/>
+  <h1>Knowledge that compounds beats knowledge that evaporates.</h1>
+  <div class="quote">&quot;The wiki IS the retrieval system. The audit trail IS the database. The skill IS the integration.&quot;</div>
+  <div class="cols3" style="margin-top:46px">
+    <div class="card"><h3>Repo</h3><p class="cite">github.com/&lt;org&gt;/e27-revenue-rocket</p></div>
+    <div class="card"><h3>Headline proof</h3><p class="cite">eval/curve.png + docs/EVAL.md</p></div>
+    <div class="card"><h3>Submission writeup</h3><p class="cite">docs/SUBMISSION.md</p></div>
+  </div>
+  <div class="num">16 / 16</div><div class="brand"><span class="dot"></span>Boldr Intel · E27 Echelon 2026</div>
+</section>
+
+</div></div>
+
+<div class="progress" id="progress"></div>
+<div class="controls">
+  <button id="prev">← Prev</button>
+  <span id="counter">1 / 16</span>
+  <button id="next">Next →</button>
+  <button id="notesBtn">Notes</button>
+  <button id="fsBtn">⛶</button>
+</div>
+<aside class="notes" id="notes"><h4>Speaker notes</h4><p id="notesText"></p></aside>
+
+<script>
+(() => {
+  const deck = document.getElementById('deck');
+  const slides = [...document.querySelectorAll('.slide')];
+  const counter = document.getElementById('counter');
+  const progress = document.getElementById('progress');
+  const notes = document.getElementById('notes');
+  const notesText = document.getElementById('notesText');
+  let index = Math.min(
+    Math.max(parseInt(localStorage.getItem('boldrPitchSlide') || '0', 10), 0),
+    slides.length - 1,
+  );
+
+  function scale() {
+    const s = Math.min(innerWidth / 1920, innerHeight / 1080);
+    deck.style.transform = `scale(${s})`;
+  }
+
+  function render() {
+    slides.forEach((s, i) => {
+      s.classList.toggle('active', i === index);
+      s.classList.toggle('prev', i < index);
+    });
+    counter.textContent = `${index + 1} / ${slides.length}`;
+    progress.style.width = `${((index + 1) / slides.length) * 100}%`;
+    notesText.textContent = slides[index].dataset.notes || '';
+    localStorage.setItem('boldrPitchSlide', String(index));
+  }
+
+  function next() { if (index < slides.length - 1) { index++; render(); } }
+  function prev() { if (index > 0) { index--; render(); } }
+
+  document.getElementById('next').onclick = next;
+  document.getElementById('prev').onclick = prev;
+  document.getElementById('notesBtn').onclick = () => notes.classList.toggle('show');
+  document.getElementById('fsBtn').onclick = () =>
+    document.fullscreenElement
+      ? document.exitFullscreen()
+      : document.documentElement.requestFullscreen();
+
+  addEventListener('resize', scale);
+  addEventListener('keydown', (e) => {
+    if (['ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); next(); }
+    if (['ArrowLeft', 'PageUp', 'Backspace'].includes(e.key)) { e.preventDefault(); prev(); }
+    if (e.key === 'Home') { index = 0; render(); }
+    if (e.key === 'End') { index = slides.length - 1; render(); }
+    if (e.key.toLowerCase() === 'n') notes.classList.toggle('show');
+    if (e.key.toLowerCase() === 'f') {
+      document.fullscreenElement
+        ? document.exitFullscreen()
+        : document.documentElement.requestFullscreen();
+    }
+  });
+
+  scale();
+  render();
+})();
+</script>
+</body>
+</html>

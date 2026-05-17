@@ -10,7 +10,7 @@ def _render(brief: MarketingBrief) -> str:
     lines = [
         f"# Marketing Brief — {brief.month}",
         "",
-        f"## Headline",
+        "## Headline",
         "",
         brief.headline,
         "",
@@ -64,7 +64,13 @@ def write_and_commit_brief(brief: MarketingBrief, repo_root: Path) -> str:
     out_path.write_text(_render(brief))
 
     env = os.environ.copy()
-    subprocess.run(["git", "add", str(out_path)], cwd=repo_root, env=env, check=True, capture_output=True)
+    subprocess.run(
+        ["git", "add", str(out_path)],
+        cwd=repo_root,
+        env=env,
+        check=True,
+        capture_output=True,
+    )
     subprocess.run(
         [
             "git", "-c", "commit.gpgsign=false", "commit",
