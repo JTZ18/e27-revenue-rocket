@@ -11,7 +11,7 @@ over the whole state machine. All audit trail is in Git; humans never see a PR.
 
 ## 60-second tour
 
-1. **Open the pitch deck:** <https://<github-pages-domain>/> — 16 slides, judging-rubric aligned. (Source: [`pitch/index.html`](pitch/index.html).)
+1. **Open the pitch deck:** <https://jtz18.github.io/e27-revenue-rocket/> — 16 slides, judging-rubric aligned. (Source: [`pitch/index.html`](pitch/index.html).)
 2. **Read the submission writeup:** [`docs/SUBMISSION.md`](docs/SUBMISSION.md) — workflow logic, business impact, cost realism, safeguards, proof of execution.
 3. **Read the spec:** [`docs/superpowers/specs/2026-05-16-customer-intelligence-engine-design.md`](docs/superpowers/specs/2026-05-16-customer-intelligence-engine-design.md) — the design contract this repo implements.
 4. **Watch the video:** see the linked Loom / YouTube URL on the submission form.
