@@ -3,6 +3,8 @@ from enum import Enum
 
 from pydantic import BaseModel, Field
 
+from intel_engine.schemas.sentiment import SentimentComparison
+
 
 class BriefTarget(str, Enum):
     product_page = "product_page"
@@ -30,3 +32,4 @@ class MarketingBrief(BaseModel):
     headline: str
     insights: list[BriefInsight] = Field(default_factory=list)
     recommendations: list[BriefRecommendation] = Field(default_factory=list)
+    external_sentiment: list[SentimentComparison] = Field(default_factory=list)

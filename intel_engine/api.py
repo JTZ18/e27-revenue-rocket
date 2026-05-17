@@ -299,6 +299,7 @@ class BriefRequest(BaseModel):
     month: str
     theme_reports: list[dict]
     kb_summary: str = ""
+    sentiment: list[dict] = []
 
 
 class ConflictsRequest(BaseModel):
@@ -348,11 +349,13 @@ async def briefs_monthly(req: BriefRequest) -> dict:
     try:
         personas = load_personas(kb_root())
         theme_reports = [ThemeReport(**r) for r in req.theme_reports]
+        sentiment = [SentimentComparison(**s) for s in req.sentiment]
         brief = await write_brief(
             month=req.month,
             theme_reports=theme_reports,
             personas=personas,
             kb_summary=req.kb_summary,
+            sentiment=sentiment,
         )
         return brief.model_dump(mode="json")
     except Exception as e:

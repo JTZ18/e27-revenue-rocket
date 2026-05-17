@@ -64,3 +64,45 @@ def test_writer_renders_and_commits(tmp_path: Path):
         cwd=repo, capture_output=True, text=True, check=True,
     ).stdout
     assert "briefs: monthly marketing brief 2026-05" in log
+
+
+def test_render_includes_external_sentiment_section(tmp_path: Path):
+    from intel_engine.briefs.writer import _render
+    from intel_engine.schemas.brief import (
+        BriefInsight,
+        BriefRecommendation,
+        BriefTarget,
+        MarketingBrief,
+    )
+    from intel_engine.schemas.sentiment import SentimentComparison, SentimentVerdict
+
+    brief = MarketingBrief(
+        month="2026-05",
+        headline="May highlights.",
+        insights=[
+            BriefInsight(theme="vegan", ticket_count=4, persona_segments=[], observation="x")
+        ],
+        recommendations=[
+            BriefRecommendation(
+                target=BriefTarget.product_page,
+                action="Add PDP block.",
+                expected_impact="lower CS load",
+                evidence_themes=["vegan"],
+            )
+        ],
+        external_sentiment=[
+            SentimentComparison(
+                theme_slug="vegan",
+                internal_frequency=4,
+                external_mentions=27,
+                verdict=SentimentVerdict.market_wide,
+                reasoning="external dwarfs internal",
+                suggested_action="Add a vegan-strap PDP block.",
+            )
+        ],
+    )
+    md = _render(brief)
+    assert "## External Sentiment" in md
+    assert "vegan" in md
+    assert "market_wide" in md
+    assert "Add a vegan-strap PDP block." in md

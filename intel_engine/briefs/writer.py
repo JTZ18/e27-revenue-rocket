@@ -10,7 +10,7 @@ def _render(brief: MarketingBrief) -> str:
     lines = [
         f"# Marketing Brief — {brief.month}",
         "",
-        f"## Headline",
+        "## Headline",
         "",
         brief.headline,
         "",
@@ -37,6 +37,23 @@ def _render(brief: MarketingBrief) -> str:
                 "",
             ]
         )
+
+    if brief.external_sentiment:
+        lines.extend(["## External Sentiment (last30days)", ""])
+        for cmp in brief.external_sentiment:
+            lines.extend(
+                [
+                    f"### {cmp.theme_slug} — `{cmp.verdict.value}`",
+                    "",
+                    f"- Internal frequency: {cmp.internal_frequency}",
+                    f"- External mentions (last 30 days): {cmp.external_mentions}",
+                    "",
+                    cmp.reasoning,
+                    "",
+                    f"**Suggested action:** {cmp.suggested_action}",
+                    "",
+                ]
+            )
     return "\n".join(lines)
 
 
@@ -47,7 +64,13 @@ def write_and_commit_brief(brief: MarketingBrief, repo_root: Path) -> str:
     out_path.write_text(_render(brief))
 
     env = os.environ.copy()
-    subprocess.run(["git", "add", str(out_path)], cwd=repo_root, env=env, check=True, capture_output=True)
+    subprocess.run(
+        ["git", "add", str(out_path)],
+        cwd=repo_root,
+        env=env,
+        check=True,
+        capture_output=True,
+    )
     subprocess.run(
         [
             "git", "-c", "commit.gpgsign=false", "commit",
