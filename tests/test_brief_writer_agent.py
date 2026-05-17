@@ -7,6 +7,7 @@ import pytest
 from intel_engine.agents.brief_writer import write_brief
 from intel_engine.schemas.brief import BriefTarget
 from intel_engine.schemas.persona import PersonaAxis, PersonaDefinition
+from intel_engine.schemas.sentiment import SentimentComparison, SentimentVerdict
 from intel_engine.schemas.theme import Theme, ThemeReport
 
 
@@ -43,6 +44,16 @@ async def test_write_brief_returns_marketing_brief(monkeypatch, tmp_path: Path):
             signals=["vegan"],
         )
     ]
+    sentiment = [
+        SentimentComparison(
+            theme_slug="sustainability",
+            internal_frequency=4,
+            external_mentions=27,
+            verdict=SentimentVerdict.market_wide,
+            reasoning="27 external vs 4 internal — broad signal.",
+            suggested_action="Add a vegan-strap PDP block.",
+        )
+    ]
     mock = {
         "headline": "May: sustainability dominates.",
         "insights": [
@@ -50,7 +61,7 @@ async def test_write_brief_returns_marketing_brief(monkeypatch, tmp_path: Path):
                 "theme": "sustainability",
                 "ticket_count": 4,
                 "persona_segments": ["sustainability_buyer"],
-                "observation": "Cluster on vegan straps.",
+                "observation": "Market_wide verdict on vegan straps.",
             }
         ],
         "recommendations": [
@@ -63,22 +74,28 @@ async def test_write_brief_returns_marketing_brief(monkeypatch, tmp_path: Path):
         ],
     }
     with patch(
-        "intel_engine.agents.brief_writer.LLMClient.complete_json",
-        new=AsyncMock(return_value=mock),
-    ) as mock_complete:
+        "intel_engine.agents.brief_writer.LLMClient",
+        autospec=True,
+    ) as mock_cls:
+        instance = mock_cls.return_value
+        instance.complete_json = AsyncMock(return_value=mock)
         brief = await write_brief(
             month="2026-05",
             theme_reports=weekly,
             personas=personas,
             kb_summary="(50 entries)",
+            sentiment=sentiment,
         )
 
     assert brief.month == "2026-05"
     assert "sustainability" in brief.headline.lower()
     assert brief.recommendations[0].target == BriefTarget.product_page
+    assert len(brief.external_sentiment) == 1
+    assert brief.external_sentiment[0].verdict == SentimentVerdict.market_wide
 
-    _, kwargs = mock_complete.call_args
+    _, kwargs = instance.complete_json.call_args
     assert "PROMPT" in kwargs["system"]
     assert "2026-05" in kwargs["user"]
     assert "Sustainability" in kwargs["user"]
     assert "sustainability_buyer" in kwargs["user"]
+    assert "market_wide" in kwargs["user"]

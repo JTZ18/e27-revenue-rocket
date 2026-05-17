@@ -7,6 +7,7 @@ from intel_engine.schemas.brief import (
     MarketingBrief,
 )
 from intel_engine.schemas.persona import PersonaDefinition
+from intel_engine.schemas.sentiment import SentimentComparison
 from intel_engine.schemas.theme import ThemeReport
 
 
@@ -27,21 +28,36 @@ def _format_personas(personas: list[PersonaDefinition]) -> str:
     )
 
 
+def _format_sentiment(comparisons: list[SentimentComparison]) -> str:
+    if not comparisons:
+        return "(no external sentiment data this month)"
+    return "\n".join(
+        f"- [{c.theme_slug}] verdict={c.verdict.value} "
+        f"internal={c.internal_frequency} external={c.external_mentions} — "
+        f"{c.suggested_action}"
+        for c in comparisons
+    )
+
+
 async def write_brief(
     *,
     month: str,
     theme_reports: list[ThemeReport],
     personas: list[PersonaDefinition],
     kb_summary: str,
+    sentiment: list[SentimentComparison] | None = None,
 ) -> MarketingBrief:
-    """Generate a monthly marketing brief from theme reports and personas."""
+    """Generate a monthly marketing brief from theme reports, personas, and sentiment."""
+    sentiment = sentiment or []
     system = load_prompt("brief-writer-agent")
     user = (
         f"=== MONTH: {month} ===\n\n"
         f"=== WEEKLY THEME REPORTS ===\n{_format_themes(theme_reports)}\n\n"
         f"=== ACTIVE PERSONAS ===\n{_format_personas(personas)}\n\n"
+        f"=== EXTERNAL SENTIMENT (last30days) ===\n{_format_sentiment(sentiment)}\n\n"
         f"=== KB SUMMARY ===\n{kb_summary}\n\n"
-        f"Write the brief now."
+        f"Write the brief now. When citing a theme that has external sentiment data, "
+        f"reference the verdict in your recommendation."
     )
     client = LLMClient(provider=LLMProvider.openrouter)
     raw = await client.complete_json(system=system, user=user)
@@ -53,4 +69,5 @@ async def write_brief(
         recommendations=[
             BriefRecommendation(**r) for r in raw.get("recommendations", [])
         ],
+        external_sentiment=sentiment,
     )

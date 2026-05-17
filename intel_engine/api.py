@@ -34,6 +34,7 @@ from intel_engine.personas.writer import write_and_commit_persona
 from intel_engine.schemas.persona import PersonaDefinition
 from intel_engine.briefs.writer import write_and_commit_brief
 from intel_engine.schemas.brief import MarketingBrief
+from intel_engine.schemas.sentiment import SentimentComparison
 
 app = FastAPI(title="Boldr Intel Engine", version="0.1.0")
 
@@ -287,6 +288,7 @@ class BriefRequest(BaseModel):
     month: str
     theme_reports: list[dict]
     kb_summary: str = ""
+    sentiment: list[dict] = []
 
 
 class ConflictsRequest(BaseModel):
@@ -336,11 +338,13 @@ async def briefs_monthly(req: BriefRequest) -> dict:
     try:
         personas = load_personas(kb_root())
         theme_reports = [ThemeReport(**r) for r in req.theme_reports]
+        sentiment = [SentimentComparison(**s) for s in req.sentiment]
         brief = await write_brief(
             month=req.month,
             theme_reports=theme_reports,
             personas=personas,
             kb_summary=req.kb_summary,
+            sentiment=sentiment,
         )
         return brief.model_dump(mode="json")
     except Exception as e:

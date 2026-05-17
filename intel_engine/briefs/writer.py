@@ -37,6 +37,23 @@ def _render(brief: MarketingBrief) -> str:
                 "",
             ]
         )
+
+    if brief.external_sentiment:
+        lines.extend(["## External Sentiment (last30days)", ""])
+        for cmp in brief.external_sentiment:
+            lines.extend(
+                [
+                    f"### {cmp.theme_slug} — `{cmp.verdict.value}`",
+                    "",
+                    f"- Internal frequency: {cmp.internal_frequency}",
+                    f"- External mentions (last 30 days): {cmp.external_mentions}",
+                    "",
+                    cmp.reasoning,
+                    "",
+                    f"**Suggested action:** {cmp.suggested_action}",
+                    "",
+                ]
+            )
     return "\n".join(lines)
 
 
