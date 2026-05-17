@@ -52,3 +52,24 @@ Today's dashboard is read-only. Future work: action affordances (approve from da
 ### Provider redundancy
 
 OpenRouter handles strategic calls; Minimax handles hot path. Future: Anthropic / OpenAI fallback when either provider is degraded. The `LLMClient` enum makes the swap trivial.
+
+## Deferred from Plan 4
+
+The following items were scoped in Plan 4 but deliberately deferred so write-ups and the pitch deck could ship first:
+
+### Dashboard development
+
+- Next.js 15 dashboard scaffold (`dashboard/`)
+- Dashboard API client + TypeScript types
+- Dashboard pages: Status home, KB, Gaps, Themes, Personas, Briefs, Sentiment
+- Dashboard-supporting API endpoints (`/gaps/list`, `/personas/list`, `/briefs/list`)
+
+### Final integration check
+
+- Full test suite run + dashboard smoke build
+- All n8n workflow JSON validation
+- Pitch deck 16-slide sanity check
+- GitHub Pages live confirmation
+- Tag `plan-4-complete`
+
+These will be picked up in a follow-up Plan 5 or merged ad-hoc once the dashboard is ready.
