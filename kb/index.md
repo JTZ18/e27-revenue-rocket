@@ -2,7 +2,7 @@
 
 Generated automatically. Do not edit by hand — re-run `scripts/generate_index.py`.
 
-Total active entries: 97
+Total active entries: 98
 
 ## faq
 
@@ -16,6 +16,7 @@ Total active entries: 97
 - **can-the-strap-buckle-be-engraved** — Can the strap buckle be engraved?  _(themes: engraving)_
 - **do-the-straps-contain-nickel** — Do the straps contain nickel?  _(themes: materials_safety)_
 - **do-you-offer-bulkcorporate-pricing** — Do you offer bulk/corporate pricing?  _(themes: product_general)_
+- **do-you-offer-carbon-neutral-shipping** — Do you offer carbon-neutral shipping?  _(themes: sustainability, carbon_shipping, shipping)_
 - **do-you-offer-gift-wrapping** — Do you offer gift wrapping?  _(themes: product_general)_
 - **do-you-ship-internationally** — Do you ship internationally?  _(themes: shipping)_
 - **does-the-watch-meet-eu-safety-standards** — Does the watch meet EU safety standards?  _(themes: materials_safety)_
