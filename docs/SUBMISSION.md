@@ -99,7 +99,7 @@ Reviewers can run `uv run python -m eval all` on a clean checkout to reproduce t
 | The system live | `docker compose up -d n8n && uv run uvicorn intel_engine.api:app --port 8000 && cd dashboard && npm run dev` |
 | The headline proof | `eval/curve.png` + `docs/EVAL.md` |
 | The architecture diagram | `docs/ARCHITECTURE.md` |
-| The pitch deck | https://<github-pages-domain>/ (see `pitch/index.html`) |
+| The pitch deck | https://jtz18.github.io/e27-revenue-rocket/ (see `pitch/index.html`) |
 | The design contract | `docs/superpowers/specs/2026-05-16-customer-intelligence-engine-design.md` |
 | The five-minute video | See submission form |
 
