@@ -29,7 +29,7 @@ from intel_engine.conflicts.digest import to_slack_blocks
 from intel_engine.personas.reader import load_personas
 from intel_engine.schemas.theme import ThemeReport
 from intel_engine.kb.reader import load_kb
-from intel_engine.settings import kb_root
+from intel_engine.settings import gap_log_root, kb_root
 from intel_engine.themes.writer import write_and_commit_theme_report
 from intel_engine.personas.writer import write_and_commit_persona
 from intel_engine.schemas.persona import PersonaDefinition
@@ -593,3 +593,74 @@ async def sentiment_list(since: str | None = None) -> dict:
                 "ran_at": report.get("ran_at", ""),
             })
     return {"reports": out}
+
+
+@app.get("/gaps/list")
+async def gaps_list(status: str | None = None) -> dict:
+    """Surface all gap-log entries (optionally filtered by status)."""
+    base = gap_log_root()
+    if not base.exists():
+        return {"gaps": []}
+
+    out: list[dict] = []
+    for path in sorted(base.glob("*.md")):
+        try:
+            text = path.read_text()
+            start = text.find("```json\n") + len("```json\n")
+            end = text.find("\n```", start)
+            payload = text[start:end]
+            gap = Gap.model_validate_json(payload)
+        except Exception:
+            continue
+        if status and gap.status.value != status:
+            continue
+        out.append({
+            "gap_id": gap.gap_id,
+            "source_event_id": gap.source_event_id,
+            "customer_question": gap.customer_question,
+            "missing_info": gap.missing_info,
+            "themes_detected": gap.themes_detected,
+            "persona_hints": gap.persona_hints,
+            "status": gap.status.value,
+            "drafted_kb_slug": gap.drafted_kb_slug,
+            "resolved_at": gap.resolution.resolved_at.isoformat() if gap.resolution else None,
+        })
+    return {"gaps": out}
+
+
+@app.get("/personas/list")
+async def personas_list() -> dict:
+    """Return all active persona definitions."""
+    personas = load_personas(kb_root())
+    return {
+        "personas": [
+            {
+                "axis": p.axis.value,
+                "slug": p.slug,
+                "label": p.label,
+                "description": p.description,
+                "signals": p.signals,
+                "status": p.status.value,
+            }
+            for p in personas
+        ]
+    }
+
+
+@app.get("/briefs/list")
+async def briefs_list() -> dict:
+    """Return all persisted marketing briefs (raw markdown)."""
+    repo_root = Path(kb_root()).parent
+    base = repo_root / "briefs"
+    if not base.exists():
+        return {"briefs": []}
+
+    out: list[dict] = []
+    for path in sorted(base.glob("*-marketing-brief.md")):
+        month = path.stem.removesuffix("-marketing-brief")
+        out.append({
+            "month": month,
+            "path": str(path.relative_to(repo_root)),
+            "markdown": path.read_text(),
+        })
+    return {"briefs": out}
